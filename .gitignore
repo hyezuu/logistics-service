@@ -256,8 +256,7 @@ gradle-app.setting
 *.hprof
 
 ### application.yml
-application.yml
-application.yaml
+
 
 ### bat
 gradlew.bat
