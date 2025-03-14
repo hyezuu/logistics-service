@@ -32,7 +32,7 @@ public class StockInternalController {
 		stockService.prepareStock(requestDto);
 	}
 
-	@PostMapping
+	@PostMapping("/abort")
 	public void abortStock(@RequestBody AbortStockRequestDto requestDto) {
 		stockService.abortStock(requestDto);
 	}
