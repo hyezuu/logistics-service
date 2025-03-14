@@ -15,7 +15,7 @@ public record PostContentsResponseDto(String message,
     public static PostContentsResponseDto from(Contents contents) {
         return PostContentsResponseDto.builder()
             .message(contents.getMessage())
-            .sent_At(contents.getSent_At())
+            .sent_At(contents.getSentAt())
             .build();
     }
 

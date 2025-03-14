@@ -22,16 +22,16 @@ public class Contents {
     private String message;
 
     @Column(name = "sent_at")
-    private LocalDateTime sent_At;
+    private LocalDateTime sentAt;
 
     // 정적 팩토리 메서드
     //builder 사용시 jpa 리플렉션 동작 안 할 수 있음.
-    public static Contents createContents(String message) {
+    public static Contents create(String message) {
         return new Contents(message,LocalDateTime.now());
     }
-    private Contents(String message, LocalDateTime sent_At) {
+    private Contents(String message, LocalDateTime sentAt) {
         this.message = message;
-        this.sent_At = sent_At;
+        this.sentAt = sentAt;
     }
 
     //메세지 수정 메서드

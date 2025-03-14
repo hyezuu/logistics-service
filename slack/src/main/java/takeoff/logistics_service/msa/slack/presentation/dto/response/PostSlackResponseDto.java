@@ -21,13 +21,6 @@ public record PostSlackResponseDto(UUID slackId,
             .postContentsResponseDto(postContentsResponseDto)
             .build();
     }
-    public static PostSlackResponseDto from(Slack slack) {
-        return PostSlackResponseDto.builder()
-            .slackId(slack.getId())
-            .userId(slack.getId())
-            .postContentsResponseDto(PostContentsResponseDto.from(slack.getContents()))
-            .build();
-    }
 
 
 }

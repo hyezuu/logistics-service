@@ -14,13 +14,6 @@ public record SearchSlackResponseDto(UUID slackId,
                                      SearchContentsResponseDto searchContentsResponseDto) {
 
 
-    public static SearchSlackResponseDto from(Slack slack, SearchContentsResponseDto searchContentsResponseDto) {
-        return SearchSlackResponseDto.builder()
-            .slackId(slack.getId())
-            .userId(slack.getId())
-            .searchContentsResponseDto(searchContentsResponseDto)
-            .build();
-    }
     public static SearchSlackResponseDto from(Slack slack) {
         return SearchSlackResponseDto.builder()
             .slackId(slack.getId())

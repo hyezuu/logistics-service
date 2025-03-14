@@ -15,7 +15,7 @@ public record SearchContentsResponseDto(String message,
     public static SearchContentsResponseDto from(Contents contents) {
         return SearchContentsResponseDto.builder()
             .message(contents.getMessage())
-            .sent_At(contents.getSent_At())
+            .sent_At(contents.getSentAt())
             .build();
     }
 

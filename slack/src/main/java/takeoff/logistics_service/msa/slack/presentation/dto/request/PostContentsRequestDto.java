@@ -10,7 +10,7 @@ import takeoff.logistics_service.msa.slack.model.entity.Contents;
 public record PostContentsRequestDto(String message) {
 
     public Contents toVo() {
-        return Contents.createContents(message);
+        return Contents.create(message);
     }
 
 }

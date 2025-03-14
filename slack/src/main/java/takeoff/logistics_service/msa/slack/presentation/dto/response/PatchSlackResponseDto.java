@@ -14,13 +14,6 @@ public record PatchSlackResponseDto(UUID slackId,
                                     PatchContentsResponseDto patchContentsResponseDto) {
 
 
-    public static PatchSlackResponseDto from(Slack slack, PatchContentsResponseDto patchContentsResponseDto) {
-        return PatchSlackResponseDto.builder()
-            .slackId(slack.getId())
-            .userId(slack.getId())
-            .patchContentsResponseDto(patchContentsResponseDto)
-            .build();
-    }
     public static PatchSlackResponseDto from(Slack slack) {
         return PatchSlackResponseDto.builder()
             .slackId(slack.getId())
