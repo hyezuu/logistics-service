@@ -33,6 +33,10 @@ public class Hub {
     @Embedded
     private Location location;
 
+    public void modifyHubName(String hubName) {
+        this.hubName = hubName;
+    }
+
     @Builder
     private Hub(String hubName, Location location) {
         this.hubName = hubName;
