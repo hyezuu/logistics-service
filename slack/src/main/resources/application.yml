@@ -37,4 +37,4 @@ management:
       probability: 1.0
 
 server:
-  port: 1941
+  port: 19041

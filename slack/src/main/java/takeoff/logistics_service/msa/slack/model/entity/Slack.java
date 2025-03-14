@@ -2,6 +2,7 @@ package takeoff.logistics_service.msa.slack.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,6 +20,7 @@ import takeoff.logistics_service.msa.slack.presentation.dto.request.SlackRequest
  * @Date : 2025. 03. 13.
  */
 @Getter
+@Entity
 @Table(name = "p_slack")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Slack {
