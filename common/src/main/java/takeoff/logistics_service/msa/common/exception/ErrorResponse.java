@@ -11,11 +11,22 @@ import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 
 public record ErrorResponse(String code, String message, int status, List<ValidationError> errors) {
 
+	static final String ILLEGAL_ERROR_CODE = "ILL_001";
+
 	public static ErrorResponse of(ErrorCode errorCode) {
 		return new ErrorResponse(
 			errorCode.getCode(),
 			errorCode.getMessage(),
 			errorCode.getStatus(),
+			Collections.emptyList()
+		);
+	}
+
+	public static ErrorResponse of(String message, int status) {
+		return new ErrorResponse(
+			ILLEGAL_ERROR_CODE,
+			message,
+			status,
 			Collections.emptyList()
 		);
 	}
