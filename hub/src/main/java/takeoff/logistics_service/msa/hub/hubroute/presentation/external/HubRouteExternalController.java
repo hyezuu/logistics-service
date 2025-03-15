@@ -40,5 +40,6 @@ public class HubRouteExternalController {
     @DeleteMapping("{/hubRouteId}")
     public ResponseEntity<Void> deleteHubRoute(@PathVariable("hubRouteId")UUID hubRouteId) {
         hubRouteService.deleteHubRoute(hubRouteId);
+        return ResponseEntity.noContent().build();
     }
 }
