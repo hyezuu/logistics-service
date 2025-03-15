@@ -27,17 +27,17 @@ public class HubRouteExternalController {
     private final HubRouteService hubRouteService;
 
 
-    @GetMapping("{/hubRouteId}")
+    @GetMapping("/{hubRouteId}")
     public ResponseEntity<GetHubRouteResponseDto> findByHubRoute(@PathVariable("hubRouteId")UUID hubRouteId) {
         return ResponseEntity.ok(hubRouteService.findByHubRoute(hubRouteId));
     }
 
-    @PutMapping("{/hubRouteId}")
+    @PutMapping("/{hubRouteId}")
     public ResponseEntity<PutHubRouteResponseDto> updateHubRoute(@PathVariable("hubRouteId")UUID hubRouteId,
         PutHubRouteRequestDto requestDto) {
         return ResponseEntity.ok(hubRouteService.updateHubRoute(hubRouteId, requestDto));
     }
-    @DeleteMapping("{/hubRouteId}")
+    @DeleteMapping("/{hubRouteId}")
     public ResponseEntity<Void> deleteHubRoute(@PathVariable("hubRouteId")UUID hubRouteId) {
         hubRouteService.deleteHubRoute(hubRouteId);
         return ResponseEntity.noContent().build();
