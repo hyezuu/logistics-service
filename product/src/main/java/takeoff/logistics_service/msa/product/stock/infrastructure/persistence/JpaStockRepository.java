@@ -14,6 +14,8 @@ public interface JpaStockRepository
 	extends JpaRepository<Stock, StockId>, StockRepository, JpaStockRepositoryCustom {
 
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
-	@Query("SELECT s FROM Stock s WHERE s.id = :id")
+	@Query("SELECT s FROM Stock s WHERE s.id = :id AND s.deletedAt is null")
 	Optional<Stock> findByIdWithLock(@Param("id") StockId id);
+
+	Optional<Stock> findByIdAndDeletedAtIsNull(StockId id);
 }

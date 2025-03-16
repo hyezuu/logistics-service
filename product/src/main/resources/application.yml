@@ -1,6 +1,37 @@
 spring:
+  profiles:
+    group:
+      "local": "localDB, common"
+      "text": "testDB, common"
+    active: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "common"
   application:
     name: product
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:18999/eureka/
+management:
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:9411/api/v2/spans"
+  tracing:
+    sampling:
+      probability: 1.0
+
+server:
+  port: 19001
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "localDB"
   datasource:
     url: jdbc:postgresql://localhost:5432/product
     username: sa
@@ -15,19 +46,35 @@ spring:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 30
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18999/eureka/
+      jakarta:
+        persistence:
+          lock:
+            timeout: 3000
 
-
-management:
-  zipkin:
-    tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
-  tracing:
-    sampling:
-      probability: 1.0
-
-server:
-  port: 19001
+---
+spring:
+  config:
+    activate:
+      on-profile: "testDB"
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  sql:
+    init:
+      mode: never
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    sql: DEBUG

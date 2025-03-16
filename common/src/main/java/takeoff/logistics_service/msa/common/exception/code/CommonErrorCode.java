@@ -1,8 +1,7 @@
-package takeoff.logistics_service.msa.common.exception.errorcodes.enums;
+package takeoff.logistics_service.msa.common.exception.code;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-import takeoff.logistics_service.msa.common.exception.errorcodes.ErrorCode;
 
 @Getter
 public enum CommonErrorCode implements ErrorCode {

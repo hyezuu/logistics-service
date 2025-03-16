@@ -1,21 +1,32 @@
 package takeoff.logistics_service.msa.common.exception;
 
-import static takeoff.logistics_service.msa.common.exception.errorcodes.enums.CommonErrorCode.*;
+import static takeoff.logistics_service.msa.common.exception.code.CommonErrorCode.*;
 
 import jakarta.validation.ConstraintViolation;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.springframework.validation.BindingResult;
-import takeoff.logistics_service.msa.common.exception.errorcodes.ErrorCode;
+import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 
 public record ErrorResponse(String code, String message, int status, List<ValidationError> errors) {
+
+	static final String ILLEGAL_ERROR_CODE = "ILL_001";
 
 	public static ErrorResponse of(ErrorCode errorCode) {
 		return new ErrorResponse(
 			errorCode.getCode(),
 			errorCode.getMessage(),
 			errorCode.getStatus(),
+			Collections.emptyList()
+		);
+	}
+
+	public static ErrorResponse of(String message, int status) {
+		return new ErrorResponse(
+			ILLEGAL_ERROR_CODE,
+			message,
+			status,
 			Collections.emptyList()
 		);
 	}
