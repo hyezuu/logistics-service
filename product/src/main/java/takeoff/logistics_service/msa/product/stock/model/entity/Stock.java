@@ -7,12 +7,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import takeoff.logistics_service.msa.common.domain.BaseEntity;
 
 @Getter
 @Entity
 @Table(name = "p_stock")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Stock {
+public class Stock extends BaseEntity {
 
 	@EmbeddedId
 	private StockId id;
@@ -31,15 +32,11 @@ public class Stock {
 
 	public void decreaseStock(Integer quantity) {
 		if (quantity == null || quantity <= 0) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("수량은 양수여야 합니다.");
 		}
 		if (this.quantity < quantity) {
 			throw new IllegalStateException("재고가 부족합니다.");
 		}
 		this.quantity -= quantity;
-	}
-
-	public void delete(String username) {
-//		super.delete(username);
 	}
 }

@@ -1,0 +1,70 @@
+### 환경 변수 설정
+@host = http://localhost:19001
+@contentType = application/json
+
+### 재고 조회 API
+GET {{host}}/api/v1/stock
+Content-Type: {{contentType}}
+
+{
+    "productId": "550e8400-e29b-41d4-a716-446655440000",
+    "hubId": "550e8400-e29b-41d4-a716-446655440001"
+}
+
+### 재고 검색 API (기본 조건)
+GET {{host}}/api/v1/stock/search
+Content-Type: {{contentType}}
+
+### 재고 검색 API (productId 필터)
+GET {{host}}/api/v1/stock/search?productId=550e8400-e29b-41d4-a716-446655440000
+Content-Type: {{contentType}}
+
+### 재고 검색 API (hubId 필터)
+GET {{host}}/api/v1/stock/search?hubId=550e8400-e29b-41d4-a716-446655440001
+Content-Type: {{contentType}}
+
+### 재고 검색 API (정렬 조건 - 최신순)
+GET {{host}}/api/v1/stock/search?sortBy=updatedAt&isAsc=false
+Content-Type: {{contentType}}
+
+### 재고 검색 API (페이징)
+GET {{host}}/api/v1/stock/search?page=0&size=10
+Content-Type: {{contentType}}
+
+### 재고 검색 API (모든 조건 조합)
+GET {{host}}/api/v1/stock/search?productId=550e8400-e29b-41d4-a716-446655440000&hubId=550e8400-e29b-41d4-a716-446655440001&sortBy=updatedAt&isAsc=true&page=0&size=20
+Content-Type: {{contentType}}
+
+### 재고 삭제 API
+DELETE {{host}}/api/v1/stock
+Content-Type: {{contentType}}
+
+{
+    "productId": "550e8400-e29b-41d4-a716-446655440000",
+    "hubId": "550e8400-e29b-41d4-a716-446655440001"
+}
+
+### 재고 증가 API
+PATCH {{host}}/api/v1/stock/increase
+Content-Type: {{contentType}}
+
+{
+    "stockId": {
+        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "hubId": "550e8400-e29b-41d4-a716-446655440001"
+    },
+    "quantity": 10
+}
+
+### 재고 감소 API
+PATCH {{host}}/api/v1/stock/decrease
+Content-Type: {{contentType}}
+
+{
+    "stockId": {
+        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "hubId": "550e8400-e29b-41d4-a716-446655440001"
+    },
+    "quantity": 5
+}
+

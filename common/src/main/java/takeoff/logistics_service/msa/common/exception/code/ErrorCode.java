@@ -1,4 +1,4 @@
-package takeoff.logistics_service.msa.common.exception.errorcodes;
+package takeoff.logistics_service.msa.common.exception.code;
 
 public interface ErrorCode {
 
