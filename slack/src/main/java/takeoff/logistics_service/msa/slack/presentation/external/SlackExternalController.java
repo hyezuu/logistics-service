@@ -46,7 +46,7 @@ public class SlackExternalController {
 //      Auditing 설정시 추가 개발 예정
     @DeleteMapping("/{slackId}")
     public ResponseEntity<Void> deleteBySlack(@PathVariable("slackId")UUID slackId) {
-        slackService.deleteBySlack(slackId);
+        slackService.deleteSlack(slackId);
         return ResponseEntity.noContent().build();
     }
 

@@ -69,7 +69,7 @@ public class SlackServiceImpl implements SlackService {
     }
 //      Auditing 설정시 추가 개발 예정
     @Override
-    public void deleteBySlack(UUID slackId) {
+    public void deleteSlack(UUID slackId) {
         findSlack(slackId);
     }
 

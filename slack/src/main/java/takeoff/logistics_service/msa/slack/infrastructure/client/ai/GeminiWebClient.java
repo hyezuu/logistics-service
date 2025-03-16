@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -54,18 +55,7 @@ public class GeminiWebClient {
     }
 
     private String generatePrompt(PostSlackMessageRequestDto requestDto) {
-        StringBuilder promptBuilder = new StringBuilder();
-
-        // AiPromptEnum을 사용해 동적으로 프롬프트 생성
-        promptBuilder.append(AiPromptEnum.ORDER_NUMBER.getPromptTemplate()).append(requestDto.orderNumber()).append("\n");
-        promptBuilder.append(AiPromptEnum.COMPANY_NAME.getPromptTemplate()).append(requestDto.companyName()).append("\n");
-        promptBuilder.append(AiPromptEnum.PRODUCT_INFO.getPromptTemplate()).append(requestDto.productInfo()).append("\n");
-        promptBuilder.append(AiPromptEnum.ORDER_REQUEST.getPromptTemplate()).append(requestDto.orderRequest()).append("\n");
-        promptBuilder.append(AiPromptEnum.FROM_HUB_NAME.getPromptTemplate()).append(requestDto.fromHubName()).append("\n");
-        promptBuilder.append(AiPromptEnum.STOP_OVER_HUB_NAMES.getPromptTemplate()).append(String.join(", ", requestDto.stopoverHubNames().hubNames())).append("\n");
-        promptBuilder.append(AiPromptEnum.TO_HUB_NAME.getPromptTemplate()).append(requestDto.toHubName()).append("\n");
-        promptBuilder.append(AiPromptEnum.DELIVERY_USERS.getPromptTemplate()).append(String.join(", ", requestDto.deliveryUsers().deliveryUserNames())).append("\n");
-
+        StringBuilder promptBuilder = getStringBuilder(requestDto);
         // 추가적인 인스트럭션
         promptBuilder.append("\n").append(AiPromptEnum.PROMPT_INSTRUCTION.getPromptTemplate());
 
@@ -73,18 +63,7 @@ public class GeminiWebClient {
     }
 
     private String generateResultMessage(PostSlackMessageRequestDto requestDto, String deadline) {
-        StringBuilder promptBuilder = new StringBuilder();
-
-        // 기본 정보를 추가한 후, 발송 시한을 포함한 메시지 생성
-        promptBuilder.append(AiPromptEnum.ORDER_NUMBER.getPromptTemplate()).append(requestDto.orderNumber()).append("\n");
-        promptBuilder.append(AiPromptEnum.COMPANY_NAME.getPromptTemplate()).append(requestDto.companyName()).append("\n");
-        promptBuilder.append(AiPromptEnum.PRODUCT_INFO.getPromptTemplate()).append(requestDto.productInfo()).append("\n");
-        promptBuilder.append(AiPromptEnum.ORDER_REQUEST.getPromptTemplate()).append(requestDto.orderRequest()).append("\n");
-        promptBuilder.append(AiPromptEnum.FROM_HUB_NAME.getPromptTemplate()).append(requestDto.fromHubName()).append("\n");
-        promptBuilder.append(AiPromptEnum.STOP_OVER_HUB_NAMES.getPromptTemplate()).append(String.join(", ", requestDto.stopoverHubNames().hubNames())).append("\n");
-        promptBuilder.append(AiPromptEnum.TO_HUB_NAME.getPromptTemplate()).append(requestDto.toHubName()).append("\n");
-        promptBuilder.append(AiPromptEnum.DELIVERY_USERS.getPromptTemplate()).append(String.join(", ", requestDto.deliveryUsers().deliveryUserNames())).append("\n");
-
+        StringBuilder promptBuilder = getStringBuilder(requestDto);
         promptBuilder.append(deadline);
 
         return promptBuilder.toString();
@@ -135,7 +114,6 @@ public class GeminiWebClient {
         }
     }
     public String extractDeadline(String aiResponse) {
-        // AI 응답에서 "출발 시간은" 부분을 찾아서 해당 값을 추출
         String pattern = "위 내용을 기반으로 도출된 ";
         log.info(aiResponse);
         int startIdx = aiResponse.indexOf(pattern);
@@ -146,5 +124,20 @@ public class GeminiWebClient {
             }
         }
         return "출발 시간을 계산할 수 없습니다.";  // 응답에서 실패한 경우
+    }
+
+    private static StringBuilder getStringBuilder(PostSlackMessageRequestDto requestDto) {
+        StringBuilder promptBuilder = new StringBuilder();
+
+        // AiPromptEnum을 사용해 동적으로 프롬프트 생성
+        promptBuilder.append(AiPromptEnum.ORDER_NUMBER.getPromptTemplate()).append(requestDto.orderNumber()).append("\n");
+        promptBuilder.append(AiPromptEnum.COMPANY_NAME.getPromptTemplate()).append(requestDto.companyName()).append("\n");
+        promptBuilder.append(AiPromptEnum.PRODUCT_INFO.getPromptTemplate()).append(requestDto.productInfo()).append("\n");
+        promptBuilder.append(AiPromptEnum.ORDER_REQUEST.getPromptTemplate()).append(requestDto.orderRequest()).append("\n");
+        promptBuilder.append(AiPromptEnum.FROM_HUB_NAME.getPromptTemplate()).append(requestDto.fromHubName()).append("\n");
+        promptBuilder.append(AiPromptEnum.STOP_OVER_HUB_NAMES.getPromptTemplate()).append(String.join(", ", requestDto.stopoverHubNames().hubNames())).append("\n");
+        promptBuilder.append(AiPromptEnum.TO_HUB_NAME.getPromptTemplate()).append(requestDto.toHubName()).append("\n");
+        promptBuilder.append(AiPromptEnum.DELIVERY_USERS.getPromptTemplate()).append(String.join(", ", requestDto.deliveryUsers().deliveryUserNames())).append("\n");
+        return promptBuilder;
     }
 }
