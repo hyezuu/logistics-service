@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'takeoff.logistics-service.root' is invalid and this project uses 'takeoff.logistics_service.root' instead.
+* The original package name 'takeoff.logistics_service.root' is invalid and this project uses 'takeoff.logistics_service.root' instead.
 
 # Getting Started
 
