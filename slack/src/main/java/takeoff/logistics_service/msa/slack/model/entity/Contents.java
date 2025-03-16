@@ -2,6 +2,7 @@ package takeoff.logistics_service.msa.slack.model.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Lob;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Contents {
 
-    @Column(nullable = false, length = 1000)
+    @Lob
+    @Column(nullable = false)
     private String message;
 
     @Column(name = "sent_at")

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-import takeoff.logistics_service.msa.slack.infrastructure.client.GeminiWebClient;
+import takeoff.logistics_service.msa.slack.infrastructure.client.ai.GeminiWebClient;
 import takeoff.logistics_service.msa.slack.model.entity.Contents;
 import takeoff.logistics_service.msa.slack.model.entity.Slack;
 import takeoff.logistics_service.msa.slack.model.entity.SlackConstant;
