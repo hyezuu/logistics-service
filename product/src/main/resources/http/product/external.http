@@ -1,5 +1,5 @@
 ### 환경 변수 설정
-@host = http://localhost:19001
+@host = http://localhost:19000
 @contentType = application/json
 
 ### 상품 생성 요청 (재고 수량 지정) - ID 저장
@@ -54,3 +54,7 @@ Content-Type: {{contentType}}
 ### 상품 정보 삭제 - 생성된 ID 사용
 DELETE {{host}}/api/v1/products/{{productId}}
 Content-Type: {{contentType}}
+
+
+### 라우팅확인용
+GET http://localhost:19000/actuator/gateway/routes

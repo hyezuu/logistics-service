@@ -1,3 +1,52 @@
 spring:
   application:
     name: gateway
+  main:
+    web-application-type: reactive  # Spring 애플리케이션이 리액티브 웹 애플리케이션으로 설정됨
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user
+          uri: lb://user
+          predicates:
+            - Path=/api/v1/users/**,/api/v1/app/users/**
+        - id: company
+          uri: lb://company
+          predicates:
+            - Path=/api/v1/companies/**,/api/v1/app/companies/**
+        - id: slack
+          uri: lb://slack
+          predicates:
+            - Path=/api/v1/slacks/**,/api/v1/app/slacks/**
+        - id: product
+          uri: lb://product
+          predicates:
+            - Path=/api/v1/products/**,/api/v1/app/products/**,/api/v1/stock/**,/api/v1/app/stock/**
+        - id: hub
+          uri: lb://hub
+          predicates:
+            - Path=/api/v1/hubs/**,/api/v1/app/hubs/**,/api/v1/hubRoutes/**,/api/v1/app/hubRoutes/**
+        - id: order
+          uri: lb://order
+          predicates:
+            - Path=/api/v1/orders/**,/api/v1/app/orders/**
+
+server:
+  port: 19000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:18999/eureka/  # Eureka 서버의 URL을 지정
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # 모든 액추에이터 엔드포인트 노출
+  endpoint:
+    gateway:
+      enabled: true   # 게이트웨이 액추에이터 활성화
