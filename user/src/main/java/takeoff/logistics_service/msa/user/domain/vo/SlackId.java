@@ -13,16 +13,19 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
-public class HubId {
+public class SlackId {
 
-    @Column(name = "hub_id", nullable = false)
-    private UUID hubIdentifier;
+    @Column(name = "slack_id", nullable = false, unique = true)
+    private UUID value;
 
-    private HubId(UUID hubIdentifier) {
-        this.hubIdentifier = hubIdentifier;
+    public SlackId(UUID value) {
+        validate(value);
+        this.value = value;
     }
 
-    public static HubId from(UUID hubIdentifier) {
-        return new HubId(hubIdentifier);
+    private void validate(UUID value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Slack ID는 NULL일 수 없습니다.");
+        }
     }
 }
