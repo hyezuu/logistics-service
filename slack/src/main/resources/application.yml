@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   application:
-    name: slack-service
+    name: slack
   datasource:
     url: jdbc:postgresql://localhost:5432/slack
     username: sa
