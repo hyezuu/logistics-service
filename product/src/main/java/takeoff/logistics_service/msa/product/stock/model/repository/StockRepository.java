@@ -1,6 +1,8 @@
 package takeoff.logistics_service.msa.product.stock.model.repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import takeoff.logistics_service.msa.product.stock.model.entity.Stock;
@@ -17,4 +19,8 @@ public interface StockRepository {
 	Optional<Stock> findByIdWithLock(StockId id);
 
 	Page<GetStockResponseDto> search(StockSearchCondition condition, Pageable pageable);
+
+	List<Stock> findAllById_ProductIdAndDeletedAtIsNull(UUID productId);
+
+	List<Stock> findAllById_HubIdAndDeletedAtIsNull(UUID hubId);
 }

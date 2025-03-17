@@ -1,17 +1,25 @@
-### 상품 생성 요청 (재고 수량 지정)
-POST http://localhost:19001/api/v1/products
-Content-Type: application/json
+### 환경 변수 설정
+@host = http://localhost:19001
+@contentType = application/json
+
+### 상품 생성 요청 (재고 수량 지정) - ID 저장
+# @name createProduct
+POST {{host}}/api/v1/products
+Content-Type: {{contentType}}
 
 {
   "name": "유기농 바나나",
   "companyId": "550e8400-e29b-41d4-a716-446655440000",
   "hubId": "550e8400-e29b-41d4-a716-446655440001",
-  "quantity": 100
+  "quantity": 0
 }
+> {%
+  client.global.set("productId", response.body.productId)
+%}
 
 ### 상품 생성 요청 (재고 수량 미지정 - 기본값 0 적용)
-POST http://localhost:19001/api/v1/products
-Content-Type: application/json
+POST {{host}}/api/v1/products
+Content-Type: {{contentType}}
 
 {
   "name": "프리미엄 사과",
@@ -21,11 +29,28 @@ Content-Type: application/json
 }
 
 ### 상품 생성 요청 (필수 필드만)
-POST http://localhost:19001/api/v1/products
-Content-Type: application/json
+POST {{host}}/api/v1/products
+Content-Type: {{contentType}}
 
 {
   "name": "신선한 오렌지",
   "companyId": "550e8400-e29b-41d4-a716-446655440003",
   "hubId": "550e8400-e29b-41d4-a716-446655440001"
 }
+
+### 상품 이름 수정 요청 - 생성된 ID 사용
+# 앞서 생성한 상품의 ID(예: 96c0551e-44d9-4c57-b4fa-e4ea3b9d1c2d)를 사용
+PATCH {{host}}/api/v1/products/{{productId}}
+Content-Type: {{contentType}}
+
+{
+  "name": "프리미엄 유기농 바나나"
+}
+
+### 상품 정보 조회 - 생성된 ID 사용
+GET {{host}}/api/v1/products/{{productId}}
+Content-Type: {{contentType}}
+
+### 상품 정보 삭제 - 생성된 ID 사용
+DELETE {{host}}/api/v1/products/{{productId}}
+Content-Type: {{contentType}}

@@ -18,7 +18,7 @@ public class Stock extends BaseEntity {
 	@EmbeddedId
 	private StockId id;
 
-	private Integer quantity;
+	private Integer quantity; //Vo로 래핑
 
 	@Builder
 	private Stock(StockId id, Integer quantity) {
@@ -38,5 +38,17 @@ public class Stock extends BaseEntity {
 			throw new IllegalStateException("재고가 부족합니다.");
 		}
 		this.quantity -= quantity;
+	}
+
+	@Override
+	public void delete(Long deletedBy) {
+		if(quantity > 0) {
+			throw new IllegalStateException("재고가 남아있는 상품은 삭제할 수 없습니다.");
+		}
+		super.delete(deletedBy);
+	}
+
+	public void deleteForce(Long deletedBy) {
+		super.delete(deletedBy);
 	}
 }

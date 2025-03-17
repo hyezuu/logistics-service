@@ -5,7 +5,7 @@ import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 
 public class ProductBusinessException extends BusinessException {
 
-	public ProductBusinessException(
+	private ProductBusinessException(
 		ErrorCode errorCode) {
 		super(errorCode);
 	}
