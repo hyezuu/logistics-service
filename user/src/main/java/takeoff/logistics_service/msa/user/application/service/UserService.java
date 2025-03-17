@@ -13,5 +13,4 @@ public interface UserService {
     PatchUserResponseDto updateUser(Long userId, PatchUserRequestDto requestDto);
     DeleteUserResponseDto deleteUser(Long userId);
     GetUserListResponseDto getAllUsers(Pageable pageable);
-    GetDeliveryTypeResponseDto getDeliveryType(Long userId);
 }

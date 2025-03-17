@@ -24,25 +24,10 @@ public abstract class DeliveryManager extends User {
     @Column(name = "delivery_manager_type", nullable = false)
     private DeliveryManagerType deliveryManagerType;
 
-    protected DeliveryManager(String username, String email, String password, UserRole role, SlackId slackId, DeliverySequence deliverySequence, DeliveryManagerType deliveryManagerType) {
-        super(username, email, password, role, slackId);
+    protected DeliveryManager(String username, String slackEmail, String password, UserRole role, DeliverySequence deliverySequence, DeliveryManagerType deliveryManagerType) {
+        super(username, slackEmail, password, role);
         this.deliverySequence = deliverySequence;
         this.deliveryManagerType = deliveryManagerType;
     }
 
-    public boolean isHubDeliveryManager() {
-        return this.deliveryManagerType == DeliveryManagerType.HUB_DELIVERY_MANAGER;
-    }
-
-    public boolean isCompanyDeliveryManager() {
-        return this.deliveryManagerType == DeliveryManagerType.COMPANY_DELIVERY_MANAGER;
-    }
-
-    public String getHubIdentifier() {
-        return null;
-    }
-
-    public String getCompanyIdentifier() {
-        return null;
-    }
 }

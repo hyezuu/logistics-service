@@ -25,23 +25,17 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public PostSignupResponseDto signup(PostSignupRequestDto requestDto) {
-        validateDuplicateUser(requestDto.email(), requestDto.username(), requestDto.role());
+        validateDuplicateUser(requestDto.slackEmail(), requestDto.username(), requestDto.role());
 
-        User user = User.create(
-                requestDto.username(),
-                requestDto.email(),
-                requestDto.password(),
-                requestDto.role(),
-                new SlackId(UUID.randomUUID())
-        );
+        User user = requestDto.toEntity();
         User savedUser = userRepository.save(user);
-
         return PostSignupResponseDto.from(savedUser);
     }
 
-    private void validateDuplicateUser(String email, String username, UserRole role) {
-        if (userRepository.findByEmail(email).isPresent()) {
+    private void validateDuplicateUser(String slackEmail, String username, UserRole role) {
+        if (userRepository.findByEmail(slackEmail).isPresent()) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
         if (userRepository.findByUsername(username).isPresent()) {
@@ -50,6 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PostLoginResponseDto login(PostLoginRequestDto requestDto) {
         User user = userRepository.findByEmail(requestDto.username())
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 사용자입니다."));
@@ -61,6 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public GetUserResponseDto getUserById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. userId=" + userId));
@@ -69,16 +65,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public PatchUserResponseDto updateUser(Long userId, PatchUserRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. userId=" + userId));
 
-        user.updateUserInfo(requestDto.username(), requestDto.email(), requestDto.slackId());
+        user.updateUserInfo(requestDto.username(), requestDto.slackEmail());
 
         return PatchUserResponseDto.from(user);
     }
 
     @Override
+    @Transactional
     public DeleteUserResponseDto deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -87,26 +85,15 @@ public class UserServiceImpl implements UserService {
             throw new IllegalStateException("이미 삭제된 사용자입니다.");
         }
         user.delete();
-
         return DeleteUserResponseDto.from(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public GetUserListResponseDto getAllUsers(Pageable pageable) {
         Page<User> users = userRepository.findAllUsers(pageable);
         return GetUserListResponseDto.from(users);
     }
 
-    @Override
-    public GetDeliveryTypeResponseDto getDeliveryType(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
-
-        if (!user.isDeliveryManager()) {
-            throw new IllegalArgumentException("해당 사용자는 배송 담당자가 아닙니다.");
-        }
-
-        return GetDeliveryTypeResponseDto.from((DeliveryManager) user);
-    }
 
 }

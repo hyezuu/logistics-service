@@ -20,7 +20,7 @@ public record PostSignupRequestDto(
 
         @NotBlank(message = "이메일은 필수 입력 항목입니다.")
         @Email(message = "유효한 이메일 형식을 입력해주세요.")
-        String email,
+        String slackEmail,
 
         @NotBlank(message = "비밀번호는 필수 입력 항목입니다.")
         @Size(min = 8, max = 20, message = "비밀번호는 8자 이상, 20자 이하로 입력해주세요.")
@@ -29,13 +29,12 @@ public record PostSignupRequestDto(
         String password,
         UserRole role
 ) {
-    public User toEntity(UUID slackId){
+    public User toEntity(){
         return User.builder()
                 .username(username)
-                .email(email)
+                .slackEmail(slackEmail)
                 .password(password)
                 .role(role)
-                .slackId(new SlackId(slackId))
                 .build();
     }
 

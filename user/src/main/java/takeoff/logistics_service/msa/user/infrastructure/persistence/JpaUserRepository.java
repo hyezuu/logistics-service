@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public interface JpaUserRepository extends JpaRepository<User, Long>, UserRepository {
     @Override
-    @Query("SELECT u FROM User u WHERE u.email = :email AND u.deletedAt IS NULL")
+    @Query("SELECT u FROM User u WHERE u.slackEmail = :slackEmail AND u.deletedAt IS NULL")
     Optional<User> findByEmail(String email);
 
     @Override
@@ -24,9 +24,6 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
     @Query("SELECT u FROM User u WHERE u.id = :userId AND u.deletedAt IS NULL")
     Optional<User> findById(Long userId);
 
-    @Override
-    @Query("SELECT u FROM User u WHERE u.slackId = :slackId AND u.deletedAt IS NULL")
-    Optional<User> findBySlackId(SlackId slackId);
     @Override
     @Query("SELECT u FROM User u WHERE u.deletedAt IS NULL")
     Page<User> findAllUsers(Pageable pageable);

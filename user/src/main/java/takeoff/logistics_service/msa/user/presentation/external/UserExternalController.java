@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import takeoff.logistics_service.msa.user.application.service.UserService;
-import takeoff.logistics_service.msa.user.presentation.dto.request.DeleteUserRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
@@ -49,11 +48,6 @@ public class UserExternalController {
     public ResponseEntity<GetUserListResponseDto> getUsers(Pageable pageable) {
         GetUserListResponseDto responseDto = userService.getAllUsers(pageable);
         return ResponseEntity.ok(responseDto);
-    }
-
-    @GetMapping("/{userId}/delivery-type")
-    public ResponseEntity<GetDeliveryTypeResponseDto> getDeliveryType(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getDeliveryType(userId));
     }
 
 }

@@ -21,12 +21,12 @@ public record GetUserListResponseDto(
 }
 
 @Builder
-record UserInfoDto(Long userId, String username, String email, String role) {
+record UserInfoDto(Long userId, String username, String slackEmail, String role) {
     public static UserInfoDto from(User user) {
         return UserInfoDto.builder()
                 .userId(user.getId())
                 .username(user.getUsername())
-                .email(user.getEmail())
+                .slackEmail(user.getSlackEmail())
                 .role(user.getRole().name())
                 .build();
     }
