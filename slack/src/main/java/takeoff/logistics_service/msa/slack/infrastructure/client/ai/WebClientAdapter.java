@@ -11,6 +11,5 @@ import takeoff.logistics_service.msa.slack.application.service.client.WebRequest
  */
 @Component
 public interface WebClientAdapter extends WebRequestClient {
-    Mono<String> sendRequestToGemini(PostSlackMessageRequestDto requestDto);
 
 }
