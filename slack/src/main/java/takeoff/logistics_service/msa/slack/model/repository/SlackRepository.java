@@ -5,8 +5,8 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import takeoff.logistics_service.msa.slack.model.entity.Slack;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponseDto;
+import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequest;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponse;
 
 /**
  * @author : hanjihoon
@@ -19,5 +19,5 @@ public interface SlackRepository {
     Optional<Slack> findById(UUID slackId);
 
 
-    Page<SearchSlackResponseDto> searchSlack(SearchSlackRequestDto searchSlackRequestDto, Pageable pageable);
+    Page<SearchSlackResponse> searchSlack(SearchSlackRequest searchSlackRequest, Pageable pageable);
 }

@@ -34,6 +34,12 @@ public class Slack {
     @Embedded
     private Contents contents;
 
+    public static Slack createSlack(Long userId, String message) {
+        return Slack.builder()
+            .userId(userId)
+            .contents(Contents.create(message))
+            .build();
+    }
     @Builder
     private Slack(Long userId, Contents contents) {
         this.userId = userId;

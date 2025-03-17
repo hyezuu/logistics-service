@@ -7,18 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
+import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
+import takeoff.logistics_service.msa.slack.application.dto.response.PostSlackResponseDto;
 import takeoff.logistics_service.msa.slack.infrastructure.client.ai.GeminiWebClient;
-import takeoff.logistics_service.msa.slack.model.entity.Contents;
 import takeoff.logistics_service.msa.slack.model.entity.Slack;
 import takeoff.logistics_service.msa.slack.model.entity.SlackConstant;
 import takeoff.logistics_service.msa.slack.model.repository.SlackRepository;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.PatchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.PostSlackMessageRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.GetSlackResponseDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.PatchSlackResponseDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.PostSlackResponseDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponseDto;
+import takeoff.logistics_service.msa.slack.presentation.dto.request.PatchSlackRequest;
+import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequest;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.GetSlackResponse;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.PatchSlackResponse;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponse;
 
 /**
  * @author : hanjihoon
@@ -37,35 +36,32 @@ public class SlackServiceImpl implements SlackService {
     public Mono<PostSlackResponseDto> saveSlackMessage(PostSlackMessageRequestDto requestDto, Long userId) {
          return geminiWebClient.sendRequestToGemini(requestDto)
             .map(resultMessage -> {
-                Slack slack = Slack.builder()
-                    .userId(userId)
-                    .contents(Contents.create(resultMessage))
-                    .build();
-                slackRepository.save(slack);
-                slackAlarmService.sendSlackMessage(slack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
-                return PostSlackResponseDto.from(slack);
+                Slack slack = Slack.createSlack(userId, resultMessage);
+                Slack savedSlack = slackRepository.save(slack);
+                slackAlarmService.sendSlackMessage(savedSlack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
+                return PostSlackResponseDto.from(savedSlack);
             });
     }
 
     @Override
     @Transactional(readOnly = true)
-    public GetSlackResponseDto findBySlackId(UUID slackId) {
+    public GetSlackResponse findBySlackId(UUID slackId) {
         Slack slack = findSlack(slackId);
-        return GetSlackResponseDto.from(slack);
+        return GetSlackResponse.from(slack);
     }
 
     @Override
-    public PatchSlackResponseDto updateBySlack(UUID slackId, PatchSlackRequestDto requestDto) {
+    public PatchSlackResponse updateBySlack(UUID slackId, PatchSlackRequest requestDto) {
         Slack slack = findSlack(slackId);
 
-        slack.getContents().modifyMessage(requestDto.patchContentsRequestDto().message());
+        slack.getContents().modifyMessage(requestDto.patchContentsRequest().message());
 
-        return PatchSlackResponseDto.from(slack);
+        return PatchSlackResponse.from(slack);
     }
 
     @Override
-    public Page<SearchSlackResponseDto> searchSlack(SearchSlackRequestDto searchSlackRequestDto, Pageable pageable) {
-        return slackRepository.searchSlack(searchSlackRequestDto, pageable);
+    public Page<SearchSlackResponse> searchSlack(SearchSlackRequest searchSlackRequest, Pageable pageable) {
+        return slackRepository.searchSlack(searchSlackRequest, pageable);
     }
 //      Auditing 설정시 추가 개발 예정
     @Override

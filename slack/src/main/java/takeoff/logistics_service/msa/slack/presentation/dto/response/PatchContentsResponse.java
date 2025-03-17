@@ -9,11 +9,11 @@ import takeoff.logistics_service.msa.slack.model.entity.Contents;
  * @Date : 2025. 03. 13.
  */
 @Builder
-public record PostContentsResponseDto(String message,
-                                      LocalDateTime sent_At) {
+public record PatchContentsResponse(String message,
+                                    LocalDateTime sent_At) {
 
-    public static PostContentsResponseDto from(Contents contents) {
-        return PostContentsResponseDto.builder()
+    public static PatchContentsResponse from(Contents contents) {
+        return PatchContentsResponse.builder()
             .message(contents.getMessage())
             .sent_At(contents.getSentAt())
             .build();

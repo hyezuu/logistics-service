@@ -9,13 +9,13 @@ import takeoff.logistics_service.msa.slack.model.entity.Slack;
  * @Date : 2025. 03. 13.
  */
 
-public record GetSlackRequestDto(@NotNull Long userId,
-                                 @NotNull GetContentsRequestDto getContentsRequestDto) {
+public record PatchSlackRequest(@NotNull Long userId,
+                                @NotNull PatchContentsRequest patchContentsRequest) {
 
     public Slack toEntity() {
         return Slack.builder()
             .userId(userId)
-            .contents(getContentsRequestDto.toVo())
+            .contents(patchContentsRequest.toVo())
             .build();
     }
 

@@ -11,8 +11,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import takeoff.logistics_service.msa.slack.infrastructure.persistence.JpaSlackRepositoryCustom;
 import takeoff.logistics_service.msa.slack.model.entity.Slack;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponseDto;
+import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequest;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponse;
 
 
 /**
@@ -26,12 +26,12 @@ public class JpaSlackRepositoryCustomImpl implements JpaSlackRepositoryCustom {
 
 
     @Override
-    public Page<SearchSlackResponseDto> searchSlack(SearchSlackRequestDto searchSlackRequestDto, Pageable pageable) {
+    public Page<SearchSlackResponse> searchSlack(SearchSlackRequest searchSlackRequest, Pageable pageable) {
 
         List<Slack> fetch = queryFactory.select(slack)
             .from(slack)
             .where(
-                containsMessage(searchSlackRequestDto.searchContentsRequestDto().message())
+                containsMessage(searchSlackRequest.searchContentsRequest().message())
             )
             //Auditor 생성시 변경해야함.
             .orderBy(slack.contents.sentAt.asc())
@@ -42,14 +42,14 @@ public class JpaSlackRepositoryCustomImpl implements JpaSlackRepositoryCustom {
         Long totalCount = queryFactory.select(slack.count())
             .from(slack)
             .where(
-                containsMessage(searchSlackRequestDto.searchContentsRequestDto().message())
+                containsMessage(searchSlackRequest.searchContentsRequest().message())
             )
             .fetchOne();
 
         if (totalCount == null) totalCount = 0L;
 
-        List<SearchSlackResponseDto> responseDtoList = fetch.stream()
-            .map(SearchSlackResponseDto::from)
+        List<SearchSlackResponse> responseDtoList = fetch.stream()
+            .map(SearchSlackResponse::from)
             .toList();
 
 

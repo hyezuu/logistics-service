@@ -1,7 +1,6 @@
 package takeoff.logistics_service.msa.slack.presentation.dto.request;
 
 
-import jakarta.validation.constraints.NotNull;
 import takeoff.logistics_service.msa.slack.model.entity.Slack;
 
 /**
@@ -9,13 +8,13 @@ import takeoff.logistics_service.msa.slack.model.entity.Slack;
  * @Date : 2025. 03. 13.
  */
 
-public record SearchSlackRequestDto(Long userId,
-                                    SearchContentsRequestDto searchContentsRequestDto) {
+public record SearchSlackRequest(Long userId,
+                                 SearchContentsRequest searchContentsRequest) {
 
     public Slack toEntity() {
         return Slack.builder()
             .userId(userId)
-            .contents(searchContentsRequestDto.toVo())
+            .contents(searchContentsRequest.toVo())
             .build();
     }
 

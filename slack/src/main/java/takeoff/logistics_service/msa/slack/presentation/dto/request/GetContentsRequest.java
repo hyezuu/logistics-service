@@ -8,7 +8,7 @@ import takeoff.logistics_service.msa.slack.model.entity.Contents;
  * @Date : 2025. 03. 13.
  */
 
-public record PostContentsRequestDto(@NotNull String message) {
+public record GetContentsRequest(@NotNull String message) {
 
     public Contents toVo() {
         return Contents.create(message);

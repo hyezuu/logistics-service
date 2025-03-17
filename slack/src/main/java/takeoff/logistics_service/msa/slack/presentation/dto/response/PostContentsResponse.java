@@ -1,0 +1,23 @@
+package takeoff.logistics_service.msa.slack.presentation.dto.response;
+
+import java.time.LocalDateTime;
+import lombok.Builder;
+import takeoff.logistics_service.msa.slack.application.dto.response.PostContentsResponseDto;
+import takeoff.logistics_service.msa.slack.model.entity.Contents;
+
+/**
+ * @author : hanjihoon
+ * @Date : 2025. 03. 13.
+ */
+@Builder
+public record PostContentsResponse(String message,
+                                   LocalDateTime sent_At) {
+
+    public static PostContentsResponse from(PostContentsResponseDto postContentsResponseDto) {
+        return PostContentsResponse.builder()
+            .message(postContentsResponseDto.message())
+            .sent_At(postContentsResponseDto.sent_At())
+            .build();
+    }
+
+}

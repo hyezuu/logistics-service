@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.slack.application.service.SlackService;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.PatchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.GetSlackResponseDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.PatchSlackResponseDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponseDto;
+import takeoff.logistics_service.msa.slack.presentation.dto.request.PatchSlackRequest;
+import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequest;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.GetSlackResponse;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.PatchSlackResponse;
+import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponse;
 
 /**
  * @author : hanjihoon
@@ -33,14 +33,14 @@ public class SlackExternalController {
 
     //생성 이외 엔드포인트는 외부에서 호출
     @GetMapping("/{slackId}")
-    public ResponseEntity<GetSlackResponseDto> findBySlackId(@PathVariable("slackId")UUID slackId) {
+    public ResponseEntity<GetSlackResponse> findBySlackId(@PathVariable("slackId")UUID slackId) {
         return ResponseEntity.ok(slackService.findBySlackId(slackId));
     }
 
 
     @PatchMapping("/{slackId}")
-    public ResponseEntity<PatchSlackResponseDto> updateBySlack(@PathVariable("slackId")UUID slackId,
-        @Valid @RequestBody PatchSlackRequestDto requestDto) {
+    public ResponseEntity<PatchSlackResponse> updateBySlack(@PathVariable("slackId")UUID slackId,
+        @Valid @RequestBody PatchSlackRequest requestDto) {
         return ResponseEntity.ok(slackService.updateBySlack(slackId, requestDto));
     }
 //      Auditing 설정시 추가 개발 예정
@@ -51,9 +51,9 @@ public class SlackExternalController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<SearchSlackResponseDto>> searchSlack(
-        SearchSlackRequestDto searchSlackRequestDto, Pageable pageable) {
-        return ResponseEntity.ok(slackService.searchSlack(searchSlackRequestDto, pageable));
+    public ResponseEntity<Page<SearchSlackResponse>> searchSlack(
+        SearchSlackRequest searchSlackRequest, Pageable pageable) {
+        return ResponseEntity.ok(slackService.searchSlack(searchSlackRequest, pageable));
     }
 
 }

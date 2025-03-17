@@ -9,16 +9,16 @@ import takeoff.logistics_service.msa.slack.model.entity.Slack;
  * @Date : 2025. 03. 13.
  */
 @Builder
-public record GetSlackResponseDto(UUID slackId,
+public record SearchSlackResponse(UUID slackId,
                                   UUID userId,
-                                  GetContentsResponseDto getContentsResponseDto) {
+                                  SearchContentsResponse searchContentsResponse) {
 
 
-    public static GetSlackResponseDto from(Slack slack) {
-        return GetSlackResponseDto.builder()
+    public static SearchSlackResponse from(Slack slack) {
+        return SearchSlackResponse.builder()
             .slackId(slack.getId())
             .userId(slack.getId())
-            .getContentsResponseDto(GetContentsResponseDto.from(slack.getContents()))
+            .searchContentsResponseDto(SearchContentsResponse.from(slack.getContents()))
             .build();
     }
 
