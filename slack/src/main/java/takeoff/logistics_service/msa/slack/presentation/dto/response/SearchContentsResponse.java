@@ -10,12 +10,12 @@ import takeoff.logistics_service.msa.slack.model.entity.Contents;
  */
 @Builder
 public record SearchContentsResponse(String message,
-                                     LocalDateTime sent_At) {
+                                     LocalDateTime sentAt) {
 
     public static SearchContentsResponse from(Contents contents) {
         return SearchContentsResponse.builder()
             .message(contents.getMessage())
-            .sent_At(contents.getSentAt())
+            .sentAt(contents.getSentAt())
             .build();
     }
 

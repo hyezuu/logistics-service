@@ -39,7 +39,7 @@ public class SlackServiceImpl implements SlackService {
          return webRequestClient.sendRequestToGemini(requestDto)
              .onErrorMap(error -> {
                  log.error("AI 응답을 받을 수 없습니다.", error);
-                 return new SlackGeminiException(SlackErrorCode.GEMINI_ERROR);
+                 return SlackGeminiException.from(SlackErrorCode.GEMINI_ERROR);
              })
             .map(resultMessage -> {
                 Slack slack = Slack.createSlack(userId, resultMessage);
