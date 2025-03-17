@@ -8,7 +8,7 @@ import takeoff.logistics_service.msa.product.stock.presentation.dto.request.Decr
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.IncreaseStockRequestDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequestDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PrepareStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockSearchCondition;
+import takeoff.logistics_service.msa.product.stock.application.dto.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.DecreaseStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.IncreaseStockResponseDto;

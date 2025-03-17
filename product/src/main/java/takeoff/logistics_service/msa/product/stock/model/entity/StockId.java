@@ -24,7 +24,6 @@ public class StockId implements Serializable {
 
 	private StockId(UUID productId, UUID hubId) {
 		if (productId == null || hubId == null) {
-			//도메인 예외로 ~
 			throw new IllegalArgumentException("Product ID 와 Hub ID 는 null 일 수 없습니다.");
 		}
 		this.productId = productId;

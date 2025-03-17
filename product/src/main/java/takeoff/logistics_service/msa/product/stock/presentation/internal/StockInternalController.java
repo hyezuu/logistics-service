@@ -1,5 +1,6 @@
 package takeoff.logistics_service.msa.product.stock.presentation.internal;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class StockInternalController {
 
 	// 권한검사
 	@PostMapping
-	public PostStockResponseDto saveStock(@RequestBody PostStockRequestDto requestDto) {
+	public PostStockResponseDto saveStock(@RequestBody @Valid PostStockRequestDto requestDto) {
 		return stockService.saveStock(requestDto);
 	}
 
