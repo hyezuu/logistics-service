@@ -6,5 +6,5 @@ import takeoff.logistics_service.msa.product.product.application.dto.response.Po
 
 public interface StockClient {
 	PostStockResponseDto saveStock(PostStockRequestDto postStockRequestDto);
-	void deleteStock(UUID id);
+	void deleteStock(UUID productId);
 }
