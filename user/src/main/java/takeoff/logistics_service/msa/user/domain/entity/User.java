@@ -2,10 +2,9 @@ package takeoff.logistics_service.msa.user.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
-import takeoff.logistics_service.msa.user.domain.vo.HubId;
+import takeoff.logistics_service.msa.user.domain.vo.SlackId;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,7 +16,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(name = "user_id", nullable = false)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -33,21 +33,46 @@ public class User {
     private UserRole role;
 
     @Embedded
-    private CompanyId companyId;
+    private SlackId slackId;
 
-    @Embedded
-    private HubId hubId;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
-    protected User(String username, String email, String password, UserRole role, CompanyId companyId, HubId hubId) {
+    @Builder
+    protected User(String username, String email, String password, UserRole role, SlackId slackId) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.companyId = companyId;
-        this.hubId = hubId;
+        this.slackId = slackId;
     }
 
-    public static User create(String username, String email, String password, UserRole role, CompanyId companyId, HubId hubId) {
-        return new User(username, email, password, role, companyId, hubId);
+    public static User create(String username, String email, String password, UserRole role, SlackId slackId) {
+        return User.builder()
+                .username(username)
+                .email(email)
+                .password(password)
+                .role(role)
+                .slackId(slackId)
+                .build();
     }
+
+    public void updateUserInfo(String username, String email, SlackId slackId) {
+        this.username = username;
+        this.email = email;
+        this.slackId = slackId;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public boolean isDeleted() {
+        return this.deletedAt != null;
+    }
+
+    public boolean isDeliveryManager() {
+        return this.role.isDeliveryManager();
+    }
+
 }
