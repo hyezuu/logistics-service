@@ -1,9 +1,5 @@
 package takeoff.logistics_service.msa.product.product.model.entity;
 
-import lombok.Getter;
-import takeoff.logistics_service.msa.common.domain.BaseEntity;
-import takeoff.logistics_service.msa.product.product.model.command.CreateProduct;
-import takeoff.logistics_service.msa.product.product.model.command.ModifyProduct;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
+import lombok.Getter;
+import takeoff.logistics_service.msa.common.domain.BaseEntity;
+import takeoff.logistics_service.msa.product.product.model.command.CreateProduct;
+import takeoff.logistics_service.msa.product.product.model.command.ModifyProduct;
 
 @Getter
 @Entity

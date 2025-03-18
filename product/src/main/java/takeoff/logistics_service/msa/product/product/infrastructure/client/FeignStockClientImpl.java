@@ -3,7 +3,6 @@ package takeoff.logistics_service.msa.product.product.infrastructure.client;
 import feign.FeignException.FeignClientException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
