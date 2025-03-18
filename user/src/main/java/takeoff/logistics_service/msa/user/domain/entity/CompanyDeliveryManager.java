@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import takeoff.logistics_service.msa.user.domain.vo.*;
-
-import java.util.Optional;
-import java.util.UUID;
+import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
+import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
+import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
 
 @Entity
 @DiscriminatorValue("COMPANY_DELIVERY_MANAGER")
@@ -19,8 +18,8 @@ public class CompanyDeliveryManager extends DeliveryManager {
     @Embedded
     private CompanyId companyId;
     @Builder
-    private CompanyDeliveryManager(String username, String email, String password, UserRole role, SlackId slackId, CompanyId companyId, DeliverySequence deliverySequence) {
-        super(username, email, password, role, slackId, deliverySequence, DeliveryManagerType.COMPANY_DELIVERY_MANAGER);
+    private CompanyDeliveryManager(String username, String slackEmail, String password, UserRole role, CompanyId companyId, DeliverySequence deliverySequence) {
+        super(username, slackEmail, password, role, deliverySequence, DeliveryManagerType.COMPANY_DELIVERY_MANAGER);
         this.companyId = companyId;
     }
 
@@ -28,13 +27,12 @@ public class CompanyDeliveryManager extends DeliveryManager {
         return companyId.getCompanyIdentifier().toString();
     }
 
-    public static CompanyDeliveryManager create(String username, String email, String password, UserRole role, SlackId slackId, CompanyId companyId, DeliverySequence deliverySequence) {
+    public static CompanyDeliveryManager create(String username, String slackEmail, String password, UserRole role, CompanyId companyId, DeliverySequence deliverySequence) {
         return CompanyDeliveryManager.builder()
                 .username(username)
-                .email(email)
+                .slackEmail(slackEmail)
                 .password(password)
                 .role(role)
-                .slackId(slackId)
                 .companyId(companyId)
                 .deliverySequence(deliverySequence)
                 .build();

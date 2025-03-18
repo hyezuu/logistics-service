@@ -7,17 +7,15 @@ import takeoff.logistics_service.msa.user.domain.entity.User;
 public record GetUserResponseDto(
         Long userId,
         String username,
-        String email,
-        String role,
-        String slackId
+        String slackEmail,
+        String role
 ) {
     public static GetUserResponseDto from(User user) {
         return GetUserResponseDto.builder()
                 .userId(user.getId())
                 .username(user.getUsername())
-                .email(user.getEmail())
+                .slackEmail(user.getSlackEmail())
                 .role(user.getRole().name())
-                .slackId(user.getSlackId().getValue().toString())
                 .build();
     }
 }

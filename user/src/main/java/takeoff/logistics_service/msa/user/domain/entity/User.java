@@ -2,7 +2,6 @@ package takeoff.logistics_service.msa.user.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import takeoff.logistics_service.msa.user.domain.vo.SlackId;
 
 import java.time.LocalDateTime;
 
@@ -23,7 +22,7 @@ public class User {
     private String username;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String slackEmail;
 
     @Column(nullable = false)
     private String password;
@@ -32,35 +31,29 @@ public class User {
     @Column(nullable = false)
     private UserRole role;
 
-    @Embedded
-    private SlackId slackId;
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @Builder
-    protected User(String username, String email, String password, UserRole role, SlackId slackId) {
+    protected User(String username, String slackEmail, String password, UserRole role) {
         this.username = username;
-        this.email = email;
+        this.slackEmail = slackEmail;
         this.password = password;
         this.role = role;
-        this.slackId = slackId;
     }
 
-    public static User create(String username, String email, String password, UserRole role, SlackId slackId) {
+    public static User create(String username, String slackEmail, String password, UserRole role) {
         return User.builder()
                 .username(username)
-                .email(email)
+                .slackEmail(slackEmail)
                 .password(password)
                 .role(role)
-                .slackId(slackId)
                 .build();
     }
 
-    public void updateUserInfo(String username, String email, SlackId slackId) {
+    public void updateUserInfo(String username, String slackEmail) {
         this.username = username;
-        this.email = email;
-        this.slackId = slackId;
+        this.slackEmail = slackEmail;
     }
 
     public void delete() {
@@ -69,10 +62,6 @@ public class User {
 
     public boolean isDeleted() {
         return this.deletedAt != null;
-    }
-
-    public boolean isDeliveryManager() {
-        return this.role.isDeliveryManager();
     }
 
 }
