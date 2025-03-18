@@ -26,10 +26,6 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
     Optional<User> findById(Long id);
 
     @Override
-    @Query("SELECT u FROM User u WHERE u.deletedAt IS NULL")
-    Page<User> findAllUsers(Pageable pageable);
-
-    @Override
     @Query("SELECT d FROM DeliveryManager d WHERE d.id = :id AND d.deletedAt IS NULL")
     Optional<DeliveryManager> findDeliveryManagerById(Long id);
 

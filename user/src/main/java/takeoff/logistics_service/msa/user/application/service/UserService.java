@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.user.application.service;
 
 import org.springframework.data.domain.Pageable;
+import takeoff.logistics_service.msa.user.presentation.dto.request.GetUserListRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostLoginRequestDto;
@@ -12,5 +13,5 @@ public interface UserService {
     GetUserResponseDto getUserById(Long id);
     PatchUserResponseDto updateUser(Long id, PatchUserRequestDto requestDto);
     DeleteUserResponseDto deleteUser(Long id);
-    GetUserListResponseDto getAllUsers(Pageable pageable);
+    GetUserListResponseDto getAllUsers(GetUserListRequestDto requestDto);
 }
