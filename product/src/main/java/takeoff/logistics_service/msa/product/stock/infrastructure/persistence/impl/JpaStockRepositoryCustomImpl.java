@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import takeoff.logistics_service.msa.product.stock.application.dto.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.infrastructure.persistence.JpaStockRepositoryCustom;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.StockIdDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponseDto;
 
 @RequiredArgsConstructor

@@ -2,9 +2,7 @@ package takeoff.logistics_service.msa.slack.presentation.dto.response;
 
 import java.util.UUID;
 import lombok.Builder;
-import takeoff.logistics_service.msa.slack.application.dto.response.PostContentsResponseDto;
 import takeoff.logistics_service.msa.slack.application.dto.response.PostSlackResponseDto;
-import takeoff.logistics_service.msa.slack.model.entity.Slack;
 
 /**
  * @author : hanjihoon

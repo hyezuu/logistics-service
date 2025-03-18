@@ -1,7 +1,9 @@
 package takeoff.logistics_service.msa.product.stock.infrastructure.persistence;
 
 import jakarta.persistence.LockModeType;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +20,8 @@ public interface JpaStockRepository
 	Optional<Stock> findByIdWithLock(@Param("id") StockId id);
 
 	Optional<Stock> findByIdAndDeletedAtIsNull(StockId id);
+
+	List<Stock> findAllById_ProductIdAndDeletedAtIsNull(UUID productId);
+
+	List<Stock> findAllById_HubIdAndDeletedAtIsNull(UUID hubId);
 }

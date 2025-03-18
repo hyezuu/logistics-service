@@ -3,7 +3,7 @@ package takeoff.logistics_service.msa.slack.application.dto.request;
 
 import java.util.Set;
 import lombok.Builder;
-import takeoff.logistics_service.msa.slack.model.repository.search.SlackSearchCriteria;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteria;
 
 /**
  * @author : hanjihoon

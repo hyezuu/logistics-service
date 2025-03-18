@@ -18,8 +18,8 @@ import takeoff.logistics_service.msa.slack.application.exception.SlackBusinessEx
 import takeoff.logistics_service.msa.slack.application.exception.SlackErrorCode;
 import takeoff.logistics_service.msa.slack.application.exception.SlackGeminiException;
 import takeoff.logistics_service.msa.slack.application.service.client.WebRequestClient;
-import takeoff.logistics_service.msa.slack.model.entity.Slack;
-import takeoff.logistics_service.msa.slack.model.repository.SlackRepository;
+import takeoff.logistics_service.msa.slack.domain.entity.Slack;
+import takeoff.logistics_service.msa.slack.domain.repository.SlackRepository;
 /**
  * @author : hanjihoon
  * @Date : 2025. 03. 13.
@@ -39,7 +39,7 @@ public class SlackServiceImpl implements SlackService {
          return webRequestClient.sendRequestToGemini(requestDto)
              .onErrorMap(error -> {
                  log.error("AI 응답을 받을 수 없습니다.", error);
-                 return new SlackGeminiException(SlackErrorCode.GEMINI_ERROR);
+                 return SlackGeminiException.from(SlackErrorCode.GEMINI_ERROR);
              })
             .map(resultMessage -> {
                 Slack slack = Slack.createSlack(userId, resultMessage);
@@ -60,7 +60,7 @@ public class SlackServiceImpl implements SlackService {
     public PatchSlackResponseDto updateBySlack(UUID slackId, PatchSlackRequestDto requestDto) {
         Slack slack = findSlack(slackId);
 
-        slack.getContents().modifyMessage(requestDto.patchContentsRequest().message());
+        slack.getContents().modifyMessage(requestDto.patchContentsRequestDto().message());
 
         return PatchSlackResponseDto.from(slack);
     }

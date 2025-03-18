@@ -12,7 +12,7 @@ services:
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  zipkin:dlsdls
+  zipkin:
     container_name: zipkin11
     image: openzipkin/zipkin
     networks:

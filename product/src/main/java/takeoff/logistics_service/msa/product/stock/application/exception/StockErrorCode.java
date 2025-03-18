@@ -7,7 +7,8 @@ import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 @Getter
 public enum StockErrorCode implements ErrorCode {
 
-	STOCK_NOT_FOUND("STO_004", "요청하신 재고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+	INVALID_REQUEST("STK_001", "잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
+	STOCK_NOT_FOUND("STK_004", "요청하신 재고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 
 	private final String code;
 	private final String message;

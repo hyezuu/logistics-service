@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import takeoff.logistics_service.msa.product.stock.application.dto.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.application.service.StockService;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.StockIdDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.DecreaseStockRequestDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.IncreaseStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.DecreaseStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.IncreaseStockResponseDto;
@@ -46,14 +46,14 @@ public class StockExternalController {
 	public ResponseEntity<IncreaseStockResponseDto> increaseStock(
 		@Valid @RequestBody IncreaseStockRequestDto requestDto) {
 
-		return ResponseEntity.ok().body(stockService.increaseStock(requestDto));
+		return ResponseEntity.ok(stockService.increaseStock(requestDto));
 	}
 
 	@PatchMapping("/decrease")
 	public ResponseEntity<DecreaseStockResponseDto> decreaseStock(
 		@Valid @RequestBody DecreaseStockRequestDto requestDto) {
 
-		return ResponseEntity.ok().body(stockService.decreaseStock(requestDto));
+		return ResponseEntity.ok(stockService.decreaseStock(requestDto));
 	}
 
 	@DeleteMapping

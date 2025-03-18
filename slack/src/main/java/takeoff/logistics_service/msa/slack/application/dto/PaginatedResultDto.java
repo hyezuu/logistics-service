@@ -2,8 +2,8 @@ package takeoff.logistics_service.msa.slack.application.dto;
 
 import java.util.List;
 import takeoff.logistics_service.msa.slack.application.dto.response.SearchSlackResponseDto;
-import takeoff.logistics_service.msa.slack.model.repository.search.PaginatedResult;
-import takeoff.logistics_service.msa.slack.model.repository.search.SlackSearchCriteriaResponse;
+import takeoff.logistics_service.msa.slack.domain.repository.search.PaginatedResult;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteriaResponse;
 
 /**
  * @author : hanjihoon

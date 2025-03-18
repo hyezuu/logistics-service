@@ -3,7 +3,6 @@ package takeoff.logistics_service.msa.slack.presentation.dto.response;
 import java.util.UUID;
 import lombok.Builder;
 import takeoff.logistics_service.msa.slack.application.dto.response.SearchSlackResponseDto;
-import takeoff.logistics_service.msa.slack.model.entity.Slack;
 
 /**
  * @author : hanjihoon
@@ -18,7 +17,7 @@ public record SearchSlackResponse(UUID slackId,
         return SearchSlackResponse.builder()
             .slackId(responseDto.slackId())
             .userId(responseDto.userId())
-            .searchContentsResponse(responseDto.searchContentsResponse())
+            .searchContentsResponse(SearchContentsResponse.from(responseDto.searchContentsResponseDto()))
             .build();
     }
 

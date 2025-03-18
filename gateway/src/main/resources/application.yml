@@ -41,3 +41,12 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:18999/eureka/  # Eureka 서버의 URL을 지정
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # 모든 액추에이터 엔드포인트 노출
+  endpoint:
+    gateway:
+      enabled: true   # 게이트웨이 액추에이터 활성화

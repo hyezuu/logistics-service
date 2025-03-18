@@ -7,7 +7,7 @@ import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 @Getter
 public class SlackBusinessException extends BusinessException {
 
-	public SlackBusinessException(ErrorCode errorCode) {
+	private SlackBusinessException(ErrorCode errorCode) {
 		super(errorCode);
 	}
 }

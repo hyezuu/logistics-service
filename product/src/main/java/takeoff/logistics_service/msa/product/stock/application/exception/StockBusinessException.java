@@ -7,7 +7,7 @@ import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 @Getter
 public class StockBusinessException extends BusinessException {
 
-	public StockBusinessException(ErrorCode errorCode) {
+	private StockBusinessException(ErrorCode errorCode) {
 		super(errorCode);
 	}
 }

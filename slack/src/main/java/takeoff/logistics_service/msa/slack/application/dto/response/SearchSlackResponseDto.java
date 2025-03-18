@@ -2,8 +2,7 @@ package takeoff.logistics_service.msa.slack.application.dto.response;
 
 import java.util.UUID;
 import lombok.Builder;
-import takeoff.logistics_service.msa.slack.model.repository.search.SlackSearchCriteriaResponse;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchContentsResponse;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteriaResponse;
 
 /**
  * @author : hanjihoon
@@ -12,14 +11,13 @@ import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchConte
 @Builder
 public record SearchSlackResponseDto(UUID slackId,
                                      Long userId,
-                                     SearchContentsResponse searchContentsResponse) {
+                                     SearchContentsResponseDto searchContentsResponseDto) {
 
     public static SearchSlackResponseDto from(SlackSearchCriteriaResponse slackSearchCriteriaResponse) {
         return SearchSlackResponseDto.builder()
             .slackId(slackSearchCriteriaResponse.slackId())
             .userId(slackSearchCriteriaResponse.userId())
-            .searchContentsResponse(
-                SearchContentsResponse.from(slackSearchCriteriaResponse.contents()))
+            .searchContentsResponseDto(SearchContentsResponseDto.from(slackSearchCriteriaResponse.contents()))
             .build();
     }
 

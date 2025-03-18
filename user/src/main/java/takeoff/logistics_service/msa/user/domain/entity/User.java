@@ -2,10 +2,8 @@ package takeoff.logistics_service.msa.user.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
-import takeoff.logistics_service.msa.user.domain.vo.HubId;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,13 +15,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @Column(name = "user_id", nullable = false)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String slackEmail;
 
     @Column(nullable = false)
     private String password;
@@ -32,22 +31,37 @@ public class User {
     @Column(nullable = false)
     private UserRole role;
 
-    @Embedded
-    private CompanyId companyId;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
-    @Embedded
-    private HubId hubId;
-
-    protected User(String username, String email, String password, UserRole role, CompanyId companyId, HubId hubId) {
+    @Builder
+    protected User(String username, String slackEmail, String password, UserRole role) {
         this.username = username;
-        this.email = email;
+        this.slackEmail = slackEmail;
         this.password = password;
         this.role = role;
-        this.companyId = companyId;
-        this.hubId = hubId;
     }
 
-    public static User create(String username, String email, String password, UserRole role, CompanyId companyId, HubId hubId) {
-        return new User(username, email, password, role, companyId, hubId);
+    public static User create(String username, String slackEmail, String password, UserRole role) {
+        return User.builder()
+                .username(username)
+                .slackEmail(slackEmail)
+                .password(password)
+                .role(role)
+                .build();
     }
+
+    public void updateUserInfo(String username, String slackEmail) {
+        this.username = username;
+        this.slackEmail = slackEmail;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    public boolean isDeleted() {
+        return this.deletedAt != null;
+    }
+
 }

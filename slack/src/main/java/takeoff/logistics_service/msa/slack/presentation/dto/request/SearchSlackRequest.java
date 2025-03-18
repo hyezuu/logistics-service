@@ -3,7 +3,6 @@ package takeoff.logistics_service.msa.slack.presentation.dto.request;
 
 import lombok.Builder;
 import takeoff.logistics_service.msa.slack.application.dto.request.SearchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.model.entity.Slack;
 
 /**
  * @author : hanjihoon

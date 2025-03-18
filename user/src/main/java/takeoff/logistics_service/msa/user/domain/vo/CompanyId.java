@@ -16,13 +16,13 @@ import java.util.UUID;
 public class CompanyId {
 
     @Column(name = "company_id", nullable = false)
-    private UUID value;
+    private UUID companyIdentifier;
 
-    private CompanyId(UUID value) {
-        this.value = value;
+    private CompanyId(UUID companyIdentifier) {
+        this.companyIdentifier = companyIdentifier;
     }
 
-    public static CompanyId from(UUID value) {
-        return new CompanyId(value);
+    public static CompanyId from(UUID companyIdentifier) {
+        return new CompanyId(companyIdentifier);
     }
 }

@@ -2,11 +2,13 @@ package takeoff.logistics_service.msa.product.stock.application.service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.product.stock.application.dto.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.application.exception.StockBusinessException;
 import takeoff.logistics_service.msa.product.stock.application.exception.StockErrorCode;
 import takeoff.logistics_service.msa.product.stock.model.entity.Stock;
@@ -19,7 +21,6 @@ import takeoff.logistics_service.msa.product.stock.presentation.dto.request.Incr
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequestDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PrepareStockRequestDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockItemRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.DecreaseStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.IncreaseStockResponseDto;
@@ -53,6 +54,7 @@ public class StockServiceImpl implements StockService {
 		getStock(stockIdDto.toVo()).delete(0L);
 	}
 
+	//리스트 수 많을수록 락 시간 길어지는 문제
 	@Override
 	@Transactional
 	public void prepareStock(PrepareStockRequestDto requestDto) {
@@ -104,5 +106,19 @@ public class StockServiceImpl implements StockService {
 	public Page<GetStockResponseDto> searchStock(
 		StockSearchCondition condition, Pageable pageable) {
 		return stockRepository.search(condition, pageable);
+	}
+
+	@Override
+	@Transactional
+	public void deleteAllByProductId(UUID productId) {
+		stockRepository.findAllById_ProductIdAndDeletedAtIsNull(productId)
+			.forEach(stock -> stock.delete(0L));
+	}
+
+	@Override
+	@Transactional
+	public void deleteAllByHubId(UUID hubId) {
+		stockRepository.findAllById_HubIdAndDeletedAtIsNull(hubId)
+			.forEach(stock -> stock.delete(0L));
 	}
 }

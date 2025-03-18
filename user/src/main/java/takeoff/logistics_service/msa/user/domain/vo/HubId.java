@@ -16,13 +16,13 @@ import java.util.UUID;
 public class HubId {
 
     @Column(name = "hub_id", nullable = false)
-    private UUID value;
+    private UUID hubIdentifier;
 
-    private HubId(UUID value) {
-        this.value = value;
+    private HubId(UUID hubIdentifier) {
+        this.hubIdentifier = hubIdentifier;
     }
 
-    public static HubId from(UUID value) {
-        return new HubId(value);
+    public static HubId from(UUID hubIdentifier) {
+        return new HubId(hubIdentifier);
     }
 }

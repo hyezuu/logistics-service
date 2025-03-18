@@ -11,6 +11,6 @@ import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 @Getter
 public class SlackGeminiException extends BusinessException {
 
-    public SlackGeminiException(ErrorCode errorCode) {super(errorCode);
+    private SlackGeminiException(ErrorCode errorCode) {super(errorCode);
     }
 }

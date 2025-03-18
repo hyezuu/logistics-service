@@ -3,8 +3,8 @@ package takeoff.logistics_service.msa.slack.infrastructure.persistence;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import takeoff.logistics_service.msa.slack.model.entity.Slack;
-import takeoff.logistics_service.msa.slack.model.repository.SlackRepository;
+import takeoff.logistics_service.msa.slack.domain.entity.Slack;
+import takeoff.logistics_service.msa.slack.domain.repository.SlackRepository;
 
 /**
  * @author : hanjihoon

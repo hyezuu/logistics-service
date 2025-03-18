@@ -1,6 +1,6 @@
 package takeoff.logistics_service.msa.slack.infrastructure.persistence.impl;
 
-import static takeoff.logistics_service.msa.slack.model.entity.QSlack.slack;
+import static takeoff.logistics_service.msa.slack.domain.entity.QSlack.slack;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -8,11 +8,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import takeoff.logistics_service.msa.slack.domain.entity.Slack;
+import takeoff.logistics_service.msa.slack.domain.repository.search.PaginatedResult;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteria;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteriaResponse;
 import takeoff.logistics_service.msa.slack.infrastructure.persistence.JpaSlackRepositoryCustom;
-import takeoff.logistics_service.msa.slack.model.entity.Slack;
-import takeoff.logistics_service.msa.slack.model.repository.search.PaginatedResult;
-import takeoff.logistics_service.msa.slack.model.repository.search.SlackSearchCriteria;
-import takeoff.logistics_service.msa.slack.model.repository.search.SlackSearchCriteriaResponse;
 
 
 /**

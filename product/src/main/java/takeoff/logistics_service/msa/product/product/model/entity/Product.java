@@ -7,13 +7,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import takeoff.logistics_service.msa.common.domain.BaseEntity;
+import takeoff.logistics_service.msa.product.product.model.command.CreateProduct;
+import takeoff.logistics_service.msa.product.product.model.command.ModifyProduct;
 
+@Getter
 @Entity
 @Table(name = "p_product")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Product {
+public class Product extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -23,4 +25,20 @@ public class Product {
 	private String name;
 
 	private UUID companyId;
+
+	public static Product create(CreateProduct command){
+		return new Product(command.name(), command.companyId());
+	}
+
+	public void modify(ModifyProduct command){
+		this.name = command.name();
+	}
+
+	private Product(String name, UUID companyId) {
+		this.name = name;
+		this.companyId = companyId;
+	}
+
+	protected Product() {
+	}
 }

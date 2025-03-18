@@ -1,8 +1,8 @@
 package takeoff.logistics_service.msa.slack.infrastructure.persistence;
 
-import takeoff.logistics_service.msa.slack.model.repository.search.PaginatedResult;
-import takeoff.logistics_service.msa.slack.model.repository.search.SlackSearchCriteria;
-import takeoff.logistics_service.msa.slack.model.repository.search.SlackSearchCriteriaResponse;
+import takeoff.logistics_service.msa.slack.domain.repository.search.PaginatedResult;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteria;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteriaResponse;
 
 /**
  * @author : hanjihoon
