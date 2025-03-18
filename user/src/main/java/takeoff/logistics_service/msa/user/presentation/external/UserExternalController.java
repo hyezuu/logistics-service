@@ -24,12 +24,13 @@ public class UserExternalController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<GetUserResponseDto> getUser(@PathVariable Long userId) {
+    public ResponseEntity<GetUserResponseDto> getUser(
+            @PathVariable Long userId) {
         GetUserResponseDto responseDto = userService.getUserById(userId);
         return ResponseEntity.ok(responseDto);
     }
 
-    @PostMapping("/{userId}")
+    @PatchMapping("/{userId}")
     public ResponseEntity<PatchUserResponseDto> updateUser(
             @PathVariable Long userId,
             @RequestBody @Valid PatchUserRequestDto requestDto

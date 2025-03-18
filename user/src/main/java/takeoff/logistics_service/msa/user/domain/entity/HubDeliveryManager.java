@@ -8,33 +8,30 @@ import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
 import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
 import takeoff.logistics_service.msa.user.domain.vo.HubId;
 
+import java.util.UUID;
+
 @Entity
 @DiscriminatorValue("HUB_DELIVERY_MANAGER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_hub_delivery_manager")
-@AttributeOverride(name = "hubIdentifier", column = @Column(name = "hub_id"))
+@AttributeOverride(name = "hubId.hubIdentifier", column = @Column(name = "hub_id"))
 public class HubDeliveryManager extends DeliveryManager {
     @Embedded
     private HubId hubId;
 
-    @Builder
-    private HubDeliveryManager(String username, String slackEmail, String password, UserRole role, HubId hubId, DeliverySequence deliverySequence) {
+    protected HubDeliveryManager(String username, String slackEmail, String password, UserRole role, HubId hubId, DeliverySequence deliverySequence) {
         super(username, slackEmail, password, role, deliverySequence, DeliveryManagerType.HUB_DELIVERY_MANAGER);
         this.hubId = hubId;
     }
-
-    public String getHubIdentifier() {
-        return hubId.getHubIdentifier().toString();
+    @Override
+    public String getIdentifier() {
+        return this.hubId.getHubIdentifier().toString();
+    }
+    public void updateIdentifier(String identifier) {
+        this.hubId = HubId.from(UUID.fromString(identifier));
     }
 
     public static HubDeliveryManager create(String username, String slackEmail, String password, UserRole role, HubId hubId, DeliverySequence deliverySequence) {
-        return HubDeliveryManager.builder()
-                .username(username)
-                .slackEmail(slackEmail)
-                .password(password)
-                .role(role)
-                .hubId(hubId)
-                .deliverySequence(deliverySequence)
-                .build();
+        return new HubDeliveryManager(username, slackEmail, password, role, hubId, deliverySequence);
     }
 }

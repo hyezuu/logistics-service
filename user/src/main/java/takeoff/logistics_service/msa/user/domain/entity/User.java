@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long id;
 
@@ -53,6 +53,10 @@ public class User {
 
     public void updateUserInfo(String username, String slackEmail) {
         this.username = username;
+        this.slackEmail = slackEmail;
+    }
+
+    public void updateSlackEmail(String slackEmail){
         this.slackEmail = slackEmail;
     }
 

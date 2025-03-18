@@ -9,8 +9,8 @@ import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 public interface UserService {
     PostSignupResponseDto signup(PostSignupRequestDto requestDto);
     PostLoginResponseDto login(PostLoginRequestDto requestDto);
-    GetUserResponseDto getUserById(Long userId);
-    PatchUserResponseDto updateUser(Long userId, PatchUserRequestDto requestDto);
-    DeleteUserResponseDto deleteUser(Long userId);
+    GetUserResponseDto getUserById(Long id);
+    PatchUserResponseDto updateUser(Long id, PatchUserRequestDto requestDto);
+    DeleteUserResponseDto deleteUser(Long id);
     GetUserListResponseDto getAllUsers(Pageable pageable);
 }

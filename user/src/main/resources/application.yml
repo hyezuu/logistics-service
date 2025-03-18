@@ -19,5 +19,9 @@ spring:
 
 eureka:
   client:
+    register-with-eureka: true  # Eureka Server에 등록
+    fetch-registry: true  # Eureka Server에서 서비스 목록 가져오기
     service-url:
-      defaultZone: http://localhost:18999/eureka/  # Eureka Server 주소
+      defaultZone: http://localhost:18999/eureka/
+  instance:
+    prefer-ip-address: true  # 서비스 등록 시 IP 주소 사용
