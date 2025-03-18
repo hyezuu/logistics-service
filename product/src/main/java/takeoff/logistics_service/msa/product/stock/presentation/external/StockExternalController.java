@@ -2,8 +2,6 @@ package takeoff.logistics_service.msa.product.stock.presentation.external;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +10,15 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import takeoff.logistics_service.msa.product.stock.application.dto.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.application.service.StockService;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.StockIdDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.DecreaseStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.IncreaseStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.DecreaseStockResponseDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponseDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.IncreaseStockResponseDto;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.PaginatedResultApi;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.DecreaseStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.IncreaseStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.SearchStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockIdRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.response.DecreaseStockResponse;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponse;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.response.IncreaseStockResponse;
 
 @RestController
 @RequestMapping("/api/v1/stock")
@@ -29,37 +28,41 @@ public class StockExternalController {
 	private final StockService stockService;
 
 	@GetMapping
-	public ResponseEntity<GetStockResponseDto> findStock(
-		@Valid @RequestBody StockIdDto stockIdDto) {
+	public ResponseEntity<GetStockResponse> findStock(
+		@Valid @RequestBody StockIdRequest requestDto) {
 
-		return ResponseEntity.ok(stockService.findStock(stockIdDto));
+		return ResponseEntity.ok(GetStockResponse
+			.from(stockService.findStock(requestDto.toApplicationDto())));
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<Page<GetStockResponseDto>> searchStock(
-		@ModelAttribute StockSearchCondition condition, Pageable pageable) {
+	public ResponseEntity<PaginatedResultApi<GetStockResponse>> searchStock(
+		@ModelAttribute SearchStockRequest requestDto) {
 
-		return ResponseEntity.ok(stockService.searchStock(condition, pageable));
+		return ResponseEntity.ok(PaginatedResultApi
+			.from(stockService.searchStock(requestDto.toApplicationDto())));
 	}
 
 	@PatchMapping("/increase")
-	public ResponseEntity<IncreaseStockResponseDto> increaseStock(
-		@Valid @RequestBody IncreaseStockRequestDto requestDto) {
+	public ResponseEntity<IncreaseStockResponse> increaseStock(
+		@Valid @RequestBody IncreaseStockRequest requestDto) {
 
-		return ResponseEntity.ok(stockService.increaseStock(requestDto));
+		return ResponseEntity.ok(IncreaseStockResponse
+			.from(stockService.increaseStock(requestDto.toApplicationDto())));
 	}
 
 	@PatchMapping("/decrease")
-	public ResponseEntity<DecreaseStockResponseDto> decreaseStock(
-		@Valid @RequestBody DecreaseStockRequestDto requestDto) {
+	public ResponseEntity<DecreaseStockResponse> decreaseStock(
+		@Valid @RequestBody DecreaseStockRequest requestDto) {
 
-		return ResponseEntity.ok(stockService.decreaseStock(requestDto));
+		return ResponseEntity.ok(DecreaseStockResponse
+			.from(stockService.decreaseStock(requestDto.toApplicationDto())));
 	}
 
 	@DeleteMapping
-	public ResponseEntity<Void> deleteStock(@Valid @RequestBody StockIdDto stockIdDto) {
+	public ResponseEntity<Void> deleteStock(@Valid @RequestBody StockIdRequest requestDto) {
 
-		stockService.delete(stockIdDto);
+		stockService.delete(requestDto.toApplicationDto());
 		return ResponseEntity.noContent().build();
 	}
 }

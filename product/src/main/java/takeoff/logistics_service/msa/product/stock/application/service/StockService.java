@@ -1,19 +1,18 @@
 package takeoff.logistics_service.msa.product.stock.application.service;
 
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import takeoff.logistics_service.msa.product.stock.application.dto.StockSearchCondition;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.StockIdDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.AbortStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.DecreaseStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.IncreaseStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PrepareStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.DecreaseStockResponseDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponseDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.IncreaseStockResponseDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.PostStockResponseDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.PaginatedResultDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.request.AbortStockRequestDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.request.DecreaseStockRequestDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.request.IncreaseStockRequestDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.request.PostStockRequestDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.request.PrepareStockRequestDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.request.SearchStockRequestDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.request.StockIdRequestDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.response.DecreaseStockResponseDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.response.GetStockResponseDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.response.IncreaseStockResponseDto;
+import takeoff.logistics_service.msa.product.stock.application.dto.response.PostStockResponseDto;
 
 public interface StockService {
 
@@ -23,15 +22,15 @@ public interface StockService {
 
 	DecreaseStockResponseDto decreaseStock(DecreaseStockRequestDto requestDto);
 
-	void delete(StockIdDto stockIdDto);
+	void delete(StockIdRequestDto requestDto);
 
-	GetStockResponseDto findStock(StockIdDto stockIdDto);
+	GetStockResponseDto findStock(StockIdRequestDto requestDto);
 
 	void prepareStock(PrepareStockRequestDto requestDto);
 
 	void abortStock(AbortStockRequestDto requestDto);
 
-	Page<GetStockResponseDto> searchStock(StockSearchCondition condition, Pageable pageable);
+	PaginatedResultDto<GetStockResponseDto> searchStock(SearchStockRequestDto requestDto);
 
 	void deleteAllByProductId(UUID productId);
 

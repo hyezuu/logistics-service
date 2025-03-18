@@ -4,10 +4,10 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import takeoff.logistics_service.msa.common.domain.BaseEntity;
+import takeoff.logistics_service.msa.product.stock.domain.command.CreateStock;
 
 @Getter
 @Entity
@@ -20,7 +20,12 @@ public class Stock extends BaseEntity {
 
 	private Integer quantity; //Vo로 래핑
 
-	@Builder
+	public static Stock create(CreateStock command){
+		return new Stock(
+			command.stockId(),
+			command.quantity());
+	}
+
 	private Stock(StockId id, Integer quantity) {
 		this.id = id;
 		this.quantity = quantity;

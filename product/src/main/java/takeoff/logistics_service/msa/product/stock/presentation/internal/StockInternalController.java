@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.product.stock.application.service.StockService;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.AbortStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PrepareStockRequestDto;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.PostStockResponseDto;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.AbortStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PrepareStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.response.PostStockResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,18 +25,18 @@ public class StockInternalController {
 
 	// 권한검사
 	@PostMapping
-	public PostStockResponseDto saveStock(@RequestBody @Valid PostStockRequestDto requestDto) {
-		return stockService.saveStock(requestDto);
+	public PostStockResponse saveStock(@RequestBody @Valid PostStockRequest requestDto) {
+		return PostStockResponse.from(stockService.saveStock(requestDto.toApplicationDto()));
 	}
 
 	@PostMapping("/prepare")
-	public void prepareStock(@RequestBody PrepareStockRequestDto requestDto) {
-		stockService.prepareStock(requestDto);
+	public void prepareStock(@RequestBody PrepareStockRequest requestDto) {
+		stockService.prepareStock(requestDto.toApplicationDto());
 	}
 
 	@PostMapping("/abort")
-	public void abortStock(@RequestBody AbortStockRequestDto requestDto) {
-		stockService.abortStock(requestDto);
+	public void abortStock(@RequestBody AbortStockRequest requestDto) {
+		stockService.abortStock(requestDto.toApplicationDto());
 	}
 
 	@DeleteMapping("/all-by-product")

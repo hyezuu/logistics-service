@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import takeoff.logistics_service.msa.product.stock.domain.command.CreateStockId;
 
 @Getter
 @Embeddable
@@ -18,8 +19,8 @@ public class StockId implements Serializable {
 
 	private UUID hubId;
 
-	public static StockId create(UUID productId, UUID hubId) {
-		return new StockId(productId, hubId);
+	public static StockId create(CreateStockId command) {
+		return new StockId(command.productId(), command.hubId());
 	}
 
 	private StockId(UUID productId, UUID hubId) {

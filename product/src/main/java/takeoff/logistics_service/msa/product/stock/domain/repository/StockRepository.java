@@ -3,12 +3,11 @@ package takeoff.logistics_service.msa.product.stock.domain.repository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import takeoff.logistics_service.msa.product.stock.application.dto.StockSearchCondition;
 import takeoff.logistics_service.msa.product.stock.domain.entity.Stock;
 import takeoff.logistics_service.msa.product.stock.domain.entity.StockId;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponseDto;
+import takeoff.logistics_service.msa.product.stock.domain.repository.search.PaginatedResult;
+import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteria;
+import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteriaResponse;
 
 public interface StockRepository {
 
@@ -18,7 +17,7 @@ public interface StockRepository {
 
 	Optional<Stock> findByIdWithLock(StockId id);
 
-	Page<GetStockResponseDto> search(StockSearchCondition condition, Pageable pageable);
+	PaginatedResult<StockSearchCriteriaResponse> search(StockSearchCriteria criteria);
 
 	List<Stock> findAllById_ProductIdAndDeletedAtIsNull(UUID productId);
 
