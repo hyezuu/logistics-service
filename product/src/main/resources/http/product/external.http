@@ -55,6 +55,9 @@ Content-Type: {{contentType}}
 DELETE {{host}}/api/v1/products/{{productId}}
 Content-Type: {{contentType}}
 
+### 상품 검색
+GET {{host}}/api/v1/products/search
+Content-Type: {{contentType}}
 
 ### 라우팅확인용
 GET http://localhost:19000/actuator/gateway/routes

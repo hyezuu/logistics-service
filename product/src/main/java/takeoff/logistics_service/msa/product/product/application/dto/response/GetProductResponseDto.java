@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
 import takeoff.logistics_service.msa.product.product.model.entity.Product;
+import takeoff.logistics_service.msa.product.product.model.repository.search.ProductSearchCriteriaResponse;
 
 @Builder
 public record GetProductResponseDto(UUID productId, String name, UUID companyId,
@@ -16,6 +17,16 @@ public record GetProductResponseDto(UUID productId, String name, UUID companyId,
 			.companyId(product.getCompanyId())
 			.createdAt(product.getCreatedAt())
 			.updatedAt(product.getUpdatedAt())
+			.build();
+	}
+
+	public static GetProductResponseDto from(ProductSearchCriteriaResponse response) {
+		return GetProductResponseDto.builder()
+			.productId(response.productId())
+			.name(response.name())
+			.companyId(response.companyId())
+			.createdAt(response.createdAt())
+			.updatedAt(response.updatedAt())
 			.build();
 	}
 }

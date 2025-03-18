@@ -4,9 +4,11 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.product.product.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PatchProductRequestDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PostProductRequestDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PostStockRequestDto;
+import takeoff.logistics_service.msa.product.product.application.dto.request.SearchProductRequestDto;
 import takeoff.logistics_service.msa.product.product.application.dto.response.GetProductResponseDto;
 import takeoff.logistics_service.msa.product.product.application.dto.response.PatchProductResponseDto;
 import takeoff.logistics_service.msa.product.product.application.dto.response.PostProductResponseDto;
@@ -62,5 +64,12 @@ public class ProductServiceImpl implements ProductService {
 	public void deleteProduct(UUID productId) {
 		getProduct(productId).delete(0L);
 		stockClient.deleteStock(productId);
+	}
+
+	@Override
+	public PaginatedResultDto<GetProductResponseDto> searchProduct(
+		SearchProductRequestDto requestDto) {
+		return PaginatedResultDto
+			.from(productRepository.search(requestDto.toSearchCriteria()));
 	}
 }
