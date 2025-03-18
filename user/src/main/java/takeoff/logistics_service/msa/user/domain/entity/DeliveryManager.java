@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
 import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
 import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
 import takeoff.logistics_service.msa.user.domain.vo.HubId;
@@ -33,9 +32,9 @@ public abstract class DeliveryManager extends User {
     public static DeliveryManager create(String username, String slackEmail, String password, UserRole role,
                                          String identifier, DeliverySequence deliverySequence, DeliveryManagerType type) {
         if (type == DeliveryManagerType.HUB_DELIVERY_MANAGER) {
-            return new HubDeliveryManager(username, slackEmail, password, role, HubId.from(UUID.fromString(identifier)), deliverySequence);
+            return new HubDeliveryManager(username, slackEmail, password, role, deliverySequence);
         } else if (type == DeliveryManagerType.COMPANY_DELIVERY_MANAGER) {
-            return new CompanyDeliveryManager(username, slackEmail, password, role, CompanyId.from(UUID.fromString(identifier)), deliverySequence);
+            return new CompanyDeliveryManager(username, slackEmail, password, role, HubId.from(UUID.fromString(identifier)), deliverySequence);
         }
         throw new IllegalArgumentException("Invalid Delivery Manager Type");
     }
