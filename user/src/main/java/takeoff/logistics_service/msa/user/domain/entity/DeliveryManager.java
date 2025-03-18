@@ -4,15 +4,15 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
 import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
 import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
-import takeoff.logistics_service.msa.user.domain.vo.SlackId;
+import takeoff.logistics_service.msa.user.domain.vo.HubId;
 
-import java.util.Optional;
+import java.util.UUID;
 
 @Entity
 @Getter
-@DiscriminatorColumn(name = "delivery_manager_type")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "p_delivery_manager")
 public abstract class DeliveryManager extends User {
@@ -28,6 +28,29 @@ public abstract class DeliveryManager extends User {
         super(username, slackEmail, password, role);
         this.deliverySequence = deliverySequence;
         this.deliveryManagerType = deliveryManagerType;
+    }
+
+    public static DeliveryManager create(String username, String slackEmail, String password, UserRole role,
+                                         String identifier, DeliverySequence deliverySequence, DeliveryManagerType type) {
+        if (type == DeliveryManagerType.HUB_DELIVERY_MANAGER) {
+            return new HubDeliveryManager(username, slackEmail, password, role, HubId.from(UUID.fromString(identifier)), deliverySequence);
+        } else if (type == DeliveryManagerType.COMPANY_DELIVERY_MANAGER) {
+            return new CompanyDeliveryManager(username, slackEmail, password, role, CompanyId.from(UUID.fromString(identifier)), deliverySequence);
+        }
+        throw new IllegalArgumentException("Invalid Delivery Manager Type");
+    }
+
+    public abstract String getIdentifier();  // 서브 클래스에서 구현하도록 강제
+
+    public abstract void updateIdentifier(String identifier);
+
+    public void updateDeliveryManager(String slackEmail, DeliverySequence deliverySequence){
+        updateSlackEmail(slackEmail);
+        this.deliverySequence = deliverySequence;
+    }
+
+    public void deleteDeliveryManager() {
+        super.delete();
     }
 
 }

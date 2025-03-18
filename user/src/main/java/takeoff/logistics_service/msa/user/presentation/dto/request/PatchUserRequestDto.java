@@ -3,6 +3,7 @@ package takeoff.logistics_service.msa.user.presentation.dto.request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
+import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.domain.vo.SlackId;
 
 @Builder

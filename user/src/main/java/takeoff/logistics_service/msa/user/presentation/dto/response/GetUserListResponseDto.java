@@ -11,7 +11,6 @@ public record GetUserListResponseDto(
         List<UserInfoDto> users,
         PaginationDto pagination
 ) {
-
     public static GetUserListResponseDto from(Page<User> userPage) {
         return GetUserListResponseDto.builder()
                 .users(userPage.getContent().stream().map(UserInfoDto::from).toList())

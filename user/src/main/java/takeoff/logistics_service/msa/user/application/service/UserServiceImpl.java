@@ -5,17 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import takeoff.logistics_service.msa.user.domain.entity.DeliveryManager;
 import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.domain.entity.UserRole;
 import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostLoginRequestDto;
+import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
-import takeoff.logistics_service.msa.user.domain.vo.SlackId;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,28 +53,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public GetUserResponseDto getUserById(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. userId=" + userId));
+    public GetUserResponseDto getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. userId=" + id));
 
         return GetUserResponseDto.from(user);
     }
 
     @Override
     @Transactional
-    public PatchUserResponseDto updateUser(Long userId, PatchUserRequestDto requestDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. userId=" + userId));
+    public PatchUserResponseDto updateUser(Long id, PatchUserRequestDto requestDto) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다. userId=" + id));
 
-        user.updateUserInfo(requestDto.username(), requestDto.slackEmail());
+        user.updateUserInfo(
+                requestDto.username() != null ? requestDto.username() : user.getUsername(),
+                requestDto.slackEmail() != null ? requestDto.slackEmail() : user.getSlackEmail()
+        );
 
         return PatchUserResponseDto.from(user);
     }
 
     @Override
     @Transactional
-    public DeleteUserResponseDto deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
+    public DeleteUserResponseDto deleteUser(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         if (user.isDeleted()) {
