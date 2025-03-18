@@ -1,8 +1,8 @@
 package takeoff.logistics_service.msa.slack.application.dto.request;
 
 import lombok.Builder;
-import takeoff.logistics_service.msa.slack.presentation.dto.DeliveryUsers;
-import takeoff.logistics_service.msa.slack.presentation.dto.StopoverHubNames;
+import takeoff.logistics_service.msa.slack.application.dto.DeliveryUsersDto;
+import takeoff.logistics_service.msa.slack.application.dto.StopoverHubNamesDto;
 
 /**
  * @author : hanjihoon
@@ -14,9 +14,9 @@ public record PostSlackMessageRequestDto(Integer orderNumber,
                                          String productInfo,
                                          String orderRequest,
                                          String fromHubName,
-                                         StopoverHubNames stopoverHubNames,
+                                         StopoverHubNamesDto stopoverHubNames,
                                          String toHubName,
-                                         DeliveryUsers deliveryUsers,
+                                         DeliveryUsersDto deliveryUsers,
                                          String companyDeliveryUserName) {
 
 }

@@ -26,9 +26,9 @@ public record PostSlackRequest(@NotNull Integer orderNumber,
             .productInfo(request.productInfo())
             .orderRequest(request.orderRequest())
             .fromHubName(request.fromHubName())
-            .stopoverHubNames(request.stopoverHubNames())
+            .stopoverHubNames(StopoverHubNames.from(request.stopoverHubNames()))
             .toHubName(request.fromHubName())
-            .deliveryUsers(request.deliveryUsers())
+            .deliveryUsers(DeliveryUsers.from(request.deliveryUsers()))
             .companyDeliveryUserName(request.companyDeliveryUserName())
             .build();
     }

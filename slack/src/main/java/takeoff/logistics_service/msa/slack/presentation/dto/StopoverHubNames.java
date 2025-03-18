@@ -1,7 +1,6 @@
 package takeoff.logistics_service.msa.slack.presentation.dto;
 
 import java.util.List;
-import lombok.Builder;
 import takeoff.logistics_service.msa.slack.application.dto.StopoverHubNamesDto;
 
 /**
