@@ -1,15 +1,14 @@
-package takeoff.logistics_service.msa.hub.hub.presentation.dto.request;
+package takeoff.logistics_service.msa.hub.hub.application.dto.request;
 
 import lombok.Builder;
-import takeoff.logistics_service.msa.hub.hub.model.entity.Hub;
-import takeoff.logistics_service.msa.hub.hub.model.entity.Location;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.LocationDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.LocationDto;
+import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
 
 /**
  * @author : hanjihoon
  * @Date : 2025. 03. 15.
  */
-
+@Builder
 public record PostHubRequestDto(String hubName,
                                 LocationDto locationDto) {
 

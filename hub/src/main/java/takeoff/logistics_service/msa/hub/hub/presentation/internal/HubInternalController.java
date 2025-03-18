@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.hub.hub.application.service.HubService;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetHubResponse;
 
 /**
  * @author : hanjihoon
@@ -21,8 +21,8 @@ public class HubInternalController {
     private final HubService hubService;
 
     @GetMapping("/{hubId}")
-    public GetHubResponseDto findByHubId(@PathVariable("hubId")UUID hubId) {
-        return hubService.findByHubId(hubId);
+    public GetHubResponse findByHubId(@PathVariable("hubId")UUID hubId) {
+        return GetHubResponse.from(hubService.findByHubId(hubId));
     }
 
 }

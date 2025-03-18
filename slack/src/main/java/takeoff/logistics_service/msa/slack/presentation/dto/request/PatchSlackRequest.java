@@ -15,7 +15,7 @@ public record PatchSlackRequest(@NotNull Long userId,
     public static PatchSlackRequestDto toApplicationDto(PatchSlackRequest request, Long userId) {
         return PatchSlackRequestDto.builder()
             .userId(userId)
-            .patchContentsRequestDto(PatchContentsRequest.from(request.patchContentsRequest()))
+            .patchContentsRequestDto(request.patchContentsRequest.toApplicationDto())
             .build();
     }
 

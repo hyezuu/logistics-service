@@ -1,8 +1,7 @@
-package takeoff.logistics_service.msa.hub.hub.model.entity;
+package takeoff.logistics_service.msa.hub.hub.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Embedded;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

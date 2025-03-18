@@ -1,7 +1,6 @@
 package takeoff.logistics_service.msa.slack.presentation.dto.request;
 
 import jakarta.validation.constraints.NotNull;
-import takeoff.logistics_service.msa.slack.domain.entity.Contents;
 
 /**
  * @author : hanjihoon
@@ -10,8 +9,5 @@ import takeoff.logistics_service.msa.slack.domain.entity.Contents;
 
 public record SearchContentsRequest(@NotNull String message) {
 
-    public Contents toVo() {
-        return Contents.create(message);
-    }
 
 }

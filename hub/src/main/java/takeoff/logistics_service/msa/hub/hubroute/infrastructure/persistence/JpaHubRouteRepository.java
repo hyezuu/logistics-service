@@ -2,8 +2,8 @@ package takeoff.logistics_service.msa.hub.hubroute.infrastructure.persistence;
 
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
-import takeoff.logistics_service.msa.hub.hubroute.model.entity.HubRoute;
-import takeoff.logistics_service.msa.hub.hubroute.model.repository.HubRouteRepository;
+import takeoff.logistics_service.msa.hub.hubroute.domain.entity.HubRoute;
+import takeoff.logistics_service.msa.hub.hubroute.domain.repository.HubRouteRepository;
 
 /**
  * @author : hanjihoon

@@ -1,8 +1,8 @@
-package takeoff.logistics_service.msa.hub.hub.presentation.dto.response;
+package takeoff.logistics_service.msa.hub.hub.application.dto.response;
 
 import java.util.UUID;
 import lombok.Builder;
-import takeoff.logistics_service.msa.hub.hub.model.entity.Hub;
+import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
 
 /**
  * @author : hanjihoon

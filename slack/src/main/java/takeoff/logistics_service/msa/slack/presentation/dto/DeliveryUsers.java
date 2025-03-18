@@ -9,9 +9,9 @@ import takeoff.logistics_service.msa.slack.application.dto.DeliveryUsersDto;
  */
 public record DeliveryUsers(List<String> deliveryUserNames) {
 
-    public static DeliveryUsersDto from(DeliveryUsers deliveryUsers) {
+    public DeliveryUsersDto toApplicationDto() {
         return DeliveryUsersDto.builder()
-            .deliveryUserNames(deliveryUsers.deliveryUserNames())
+            .deliveryUserNames(deliveryUserNames())
             .build();
     }
 

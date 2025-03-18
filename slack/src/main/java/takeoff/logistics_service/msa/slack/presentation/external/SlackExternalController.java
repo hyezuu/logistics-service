@@ -60,7 +60,7 @@ public class SlackExternalController {
     public ResponseEntity<PaginatedResultApi<SearchSlackResponse>> searchSlack(
         SearchSlackRequest searchSlackRequest) {
         return ResponseEntity.ok(PaginatedResultApi.from(
-            slackService.searchSlack(SearchSlackRequest.from(searchSlackRequest))
+            slackService.searchSlack(searchSlackRequest.toApplicationDto())
         ));
     }
 

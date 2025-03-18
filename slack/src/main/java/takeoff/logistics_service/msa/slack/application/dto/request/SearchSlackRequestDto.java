@@ -17,13 +17,13 @@ public record SearchSlackRequestDto(String message,
                                     int size
                                  ) {
 
-    public static SlackSearchCriteria toSearchCriteria(SearchSlackRequestDto requestDto) {
+    public SlackSearchCriteria toSearchCriteria( ) {
         return new SlackSearchCriteria(
-            requestDto.message,
-            requestDto.isAsc,
-            requestDto.sortBy,
-            requestDto.page,
-            validSize(requestDto.size)
+            message,
+            isAsc,
+            sortBy,
+            page,
+            validSize(size)
         );
     }
 

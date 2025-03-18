@@ -68,7 +68,7 @@ public class SlackServiceImpl implements SlackService {
     @Override
     public PaginatedResultDto<SearchSlackResponseDto> searchSlack(SearchSlackRequestDto searchSlackRequest) {
         return PaginatedResultDto.from(
-            slackRepository.searchSlack(SearchSlackRequestDto.toSearchCriteria(searchSlackRequest))
+            slackRepository.searchSlack(searchSlackRequest.toSearchCriteria())
         );
     }
     @Override

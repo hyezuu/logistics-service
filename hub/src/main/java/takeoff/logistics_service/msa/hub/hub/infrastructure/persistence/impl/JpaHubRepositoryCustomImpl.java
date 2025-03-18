@@ -1,19 +1,17 @@
 package takeoff.logistics_service.msa.hub.hub.infrastructure.persistence.impl;
 
-import static takeoff.logistics_service.msa.hub.hub.model.entity.QHub.hub;
+import static takeoff.logistics_service.msa.hub.hub.domain.entity.QHub.hub;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
+import takeoff.logistics_service.msa.hub.hub.domain.repository.search.HubSearchCriteria;
+import takeoff.logistics_service.msa.hub.hub.domain.repository.search.HubSearchCriteriaResponse;
+import takeoff.logistics_service.msa.hub.hub.domain.repository.search.PaginatedResult;
 import takeoff.logistics_service.msa.hub.hub.infrastructure.persistence.JpaHubRepositoryCustom;
-import takeoff.logistics_service.msa.hub.hub.model.entity.Hub;
-import takeoff.logistics_service.msa.hub.hub.model.entity.QHub;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.request.SearchHubRequestDto;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.SearchHubResponseDto;
 
 /**
  * @author : hanjihoon
@@ -25,63 +23,52 @@ public class JpaHubRepositoryCustomImpl implements JpaHubRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<SearchHubResponseDto> searchHub(SearchHubRequestDto requestDto, Pageable pageable) {
+    public PaginatedResult<HubSearchCriteriaResponse> searchHub(HubSearchCriteria hubSearchCriteria) {
 
         List<Hub> fetch = queryFactory.select(hub)
             .from(hub)
             .where(
-                containsHubName(requestDto.hubName())
+                containsHubName(hubSearchCriteria.hubName()),
+                containsHubAddess(hubSearchCriteria.address())
             )
-            //Auditor 생성시 정렬생성
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
+            .orderBy(getOrderSpecifier(hubSearchCriteria))
+            .offset(hubSearchCriteria.page())
+            .limit(hubSearchCriteria.size())
             .fetch();
 
         Long totalCount = queryFactory.select(hub.count())
             .from(hub)
             .where(
-                containsHubName(requestDto.hubName())
+                containsHubName(hubSearchCriteria.hubName())
             )
             .fetchOne();
 
         if (totalCount == null) totalCount = 0L;
 
-        List<SearchHubResponseDto> responseDtoList = fetch.stream()
-            .map(SearchHubResponseDto::from)
+        List<HubSearchCriteriaResponse> resultList = fetch.stream()
+            .map(HubSearchCriteriaResponse::from)
             .toList();
 
+        int totalPages = (int) Math.ceil((double) totalCount / hubSearchCriteria.size());
 
-        return new PageImpl<>(responseDtoList, pageable, totalCount);
+        return new PaginatedResult<>(
+            resultList,
+            hubSearchCriteria.page(),
+            hubSearchCriteria.size(),
+            totalCount,
+            totalPages);
     }
 
     private BooleanExpression containsHubName(String hubName) {
         return hubName == null ? null : hub.hubName.containsIgnoreCase(hubName);
     }
+    private BooleanExpression containsHubAddess(String address) {
+        return address == null ? null : hub.location.address.containsIgnoreCase(address);
+    }
 
-    //Auditor 구성시 정렬 추가
-//    private List<OrderSpecifier<?>> dynamicOrder(Pageable pageable) {
-//        List<OrderSpecifier<?>> orderSpecifierList = new ArrayList<>();
-//
-//        if (pageable.getSort() != null) {
-//            for (Sort.Order sortOrder : pageable.getSort()) {
-//                Order direction = sortOrder.isAscending() ? Order.ASC : Order.DESC;
-//
-//                switch (sortOrder.getProperty()) {
-//                    case "createdAt":
-//                        orderSpecifierList.add(new OrderSpecifier<>(direction, hub.createdAt));
-//                        break;
-//                    case "updatedAt":
-//                        orderSpecifierList.add(new OrderSpecifier<>(direction, hub.updatedAt));
-//                        break;
-//                    default:
-//                        throw new IllegalArgumentException(
-//                            "잘못된 정렬 필드입니다. : " + sortOrder.getProperty());
-//                }
-//            }
-//        } else {
-//            orderSpecifierList.add(new OrderSpecifier<>(Order.ASC, hub.createdAt));
-//        }
-//        return orderSpecifierList;
-//
-//    }
+    private OrderSpecifier<?> getOrderSpecifier(HubSearchCriteria hubSearchCriteria) {
+        return "updatedAt".equals(hubSearchCriteria.sortBy()) ? (
+            hubSearchCriteria.isAsc() ? hub.updatedAt.asc() : hub.updatedAt.desc())
+            : (hubSearchCriteria.isAsc() ? hub.createdAt.asc() : hub.createdAt.desc());
+    }
 }

@@ -19,17 +19,17 @@ public record PostSlackRequest(@NotNull Integer orderNumber,
                                @NotNull DeliveryUsers deliveryUsers,
                                @NotNull String companyDeliveryUserName) {
 
-    public static PostSlackMessageRequestDto toApplicationDto(PostSlackRequest request) {
+    public PostSlackMessageRequestDto toApplicationDto() {
         return PostSlackMessageRequestDto.builder()
-            .orderNumber(request.orderNumber())
-            .companyName(request.companyName())
-            .productInfo(request.productInfo())
-            .orderRequest(request.orderRequest())
-            .fromHubName(request.fromHubName())
-            .stopoverHubNames(StopoverHubNames.from(request.stopoverHubNames()))
-            .toHubName(request.fromHubName())
-            .deliveryUsers(DeliveryUsers.from(request.deliveryUsers()))
-            .companyDeliveryUserName(request.companyDeliveryUserName())
+            .orderNumber(orderNumber())
+            .companyName(companyName())
+            .productInfo(productInfo())
+            .orderRequest(orderRequest())
+            .fromHubName(fromHubName())
+            .stopoverHubNames(stopoverHubNames.toApplicationDto())
+            .toHubName(fromHubName())
+            .deliveryUsers(deliveryUsers.toApplicationDto())
+            .companyDeliveryUserName(companyDeliveryUserName())
             .build();
     }
 

@@ -1,4 +1,4 @@
-package takeoff.logistics_service.msa.hub.hub.model.entity;
+package takeoff.logistics_service.msa.hub.hub.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import takeoff.logistics_service.msa.common.domain.BaseEntity;
 
 /**
  * @author : hanjihoon
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "p_hub")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Hub {
+public class Hub extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

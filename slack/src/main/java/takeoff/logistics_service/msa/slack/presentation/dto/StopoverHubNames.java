@@ -9,9 +9,9 @@ import takeoff.logistics_service.msa.slack.application.dto.StopoverHubNamesDto;
  */
 public record StopoverHubNames(List<String> hubNames) {
 
-    public static StopoverHubNamesDto from(StopoverHubNames stopoverHubNames) {
+    public StopoverHubNamesDto toApplicationDto() {
         return StopoverHubNamesDto.builder()
-            .hubNames(stopoverHubNames.hubNames())
+            .hubNames(hubNames())
             .build();
     }
 }

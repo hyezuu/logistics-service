@@ -1,8 +1,8 @@
 package takeoff.logistics_service.msa.hub.hubroute.presentation.dto.response;
 
 import java.util.UUID;
-import takeoff.logistics_service.msa.hub.hubroute.model.entity.Distance;
-import takeoff.logistics_service.msa.hub.hubroute.model.entity.Duration;
+import takeoff.logistics_service.msa.hub.hubroute.domain.entity.Distance;
+import takeoff.logistics_service.msa.hub.hubroute.domain.entity.Duration;
 
 /**
  * @author : hanjihoon

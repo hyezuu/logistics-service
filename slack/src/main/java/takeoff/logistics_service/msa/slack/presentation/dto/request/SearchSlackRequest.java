@@ -15,13 +15,13 @@ public record SearchSlackRequest(String message,
                                  int page,
                                  int size
                                  ) {
-    public static SearchSlackRequestDto from(SearchSlackRequest requestDto) {
+    public SearchSlackRequestDto toApplicationDto() {
         return SearchSlackRequestDto.builder()
-            .message(requestDto.message())
-            .isAsc(requestDto.isAsc())
-            .sortBy(requestDto.sortBy())
-            .page(requestDto.page())
-            .size(requestDto.size())
+            .message(message())
+            .isAsc(isAsc())
+            .sortBy(sortBy())
+            .page(page())
+            .size(size())
             .build();
     }
 }

@@ -26,8 +26,8 @@ public class SlackInternalController {
     @PostMapping("/message/{userId}")
     public Mono<PostSlackResponse> saveSlackMessage(@Valid @RequestBody PostSlackRequest requestDto,
         @PathVariable Long userId) {
-        return slackService.saveSlackMessage(PostSlackRequest
-            .toApplicationDto(requestDto), userId)
+        return slackService.saveSlackMessage(requestDto
+            .toApplicationDto(), userId)
             .map(PostSlackResponse::from);
     }
 

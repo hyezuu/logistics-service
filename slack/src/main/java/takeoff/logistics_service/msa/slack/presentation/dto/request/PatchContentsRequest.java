@@ -9,9 +9,9 @@ import takeoff.logistics_service.msa.slack.application.dto.request.PatchContents
  */
 public record PatchContentsRequest(@NotNull String message) {
 
-    public static PatchContentsRequestDto from(PatchContentsRequest patchContentsRequest) {
+    public PatchContentsRequestDto toApplicationDto() {
         return PatchContentsRequestDto.builder()
-            .message(patchContentsRequest.message())
+            .message(message())
             .build();
     }
 

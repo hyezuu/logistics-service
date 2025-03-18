@@ -2,19 +2,20 @@ package takeoff.logistics_service.msa.hub.hub.application.service;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import takeoff.logistics_service.msa.hub.hub.model.entity.Hub;
-import takeoff.logistics_service.msa.hub.hub.model.repository.HubRepository;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.request.PostHubRequestDto;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.request.PatchHubRequestDto;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.request.SearchHubRequestDto;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetHubResponseDto;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.PostHubResponseDto;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.PatchHubResponseDto;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.SearchHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.PaginatedResultDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.request.PatchHubRequestDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.request.PostHubRequestDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.request.SearchHubRequestDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.PatchHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.PostHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.SearchHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.exception.HubBusinessException;
+import takeoff.logistics_service.msa.hub.hub.application.exception.HubErrorCode;
+import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
+import takeoff.logistics_service.msa.hub.hub.domain.repository.HubRepository;
 
 /**
  * @author : hanjihoon
@@ -34,8 +35,7 @@ public class HubServiceImpl implements HubService{
 
     @Override
     public PatchHubResponseDto updateHub(UUID hubId, PatchHubRequestDto requestDto) {
-        Hub hub = hubRepository.findById(hubId)
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));
+        Hub hub = getHub(hubId);
         hub.modifyHubName(requestDto.hubName());
         return PatchHubResponseDto.from(hub);
     }
@@ -43,20 +43,24 @@ public class HubServiceImpl implements HubService{
     @Override
     @Transactional(readOnly = true)
     public GetHubResponseDto findByHubId(UUID hubId) {
-        Hub hub = hubRepository.findById(hubId)
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));
+        Hub hub = getHub(hubId);
         return GetHubResponseDto.from(hub);
     }
 
+
     @Override
-    public Page<SearchHubResponseDto> searchHub(SearchHubRequestDto requestDto, Pageable pageable) {
-        return hubRepository.searchHub(requestDto, pageable);
+    public PaginatedResultDto<SearchHubResponseDto> searchHub(SearchHubRequestDto requestDto) {
+        return PaginatedResultDto.from(hubRepository.searchHub(requestDto.toSearchCriteria()));
     }
 
-    //      Auditing 설정시 추가 개발 예정
-//    @Override
-//    public void deleteHub(UUID hubId) {
-//        Hub hub = hubRepository.findByHubId(hubId)
-//            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 허브입니다."));v
-//    }
+    @Override
+    public void deleteHub(UUID hubId) {
+        Hub hub = getHub(hubId);
+        //Auth 개발시 수정 예정
+        hub.delete(1L);
+    }
+    private Hub getHub(UUID hubId) {
+        return hubRepository.findById(hubId)
+            .orElseThrow(() -> HubBusinessException.from(HubErrorCode.HUB_NOT_FOUND));
+    }
 }
