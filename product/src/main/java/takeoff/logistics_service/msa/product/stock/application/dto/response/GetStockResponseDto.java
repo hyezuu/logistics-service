@@ -3,7 +3,6 @@ package takeoff.logistics_service.msa.product.stock.application.dto.response;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import takeoff.logistics_service.msa.product.stock.domain.entity.Stock;
-import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteria;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteriaResponse;
 
 @Builder

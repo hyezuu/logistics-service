@@ -9,7 +9,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import takeoff.logistics_service.msa.product.stock.domain.entity.StockId;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.PaginatedResult;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockIdSearchCriteriaResponse;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteria;

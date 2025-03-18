@@ -4,8 +4,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.product.stock.application.dto.PaginatedResultDto;
@@ -26,14 +24,6 @@ import takeoff.logistics_service.msa.product.stock.application.exception.StockEr
 import takeoff.logistics_service.msa.product.stock.domain.entity.Stock;
 import takeoff.logistics_service.msa.product.stock.domain.entity.StockId;
 import takeoff.logistics_service.msa.product.stock.domain.repository.StockRepository;
-import takeoff.logistics_service.msa.product.stock.domain.repository.search.PaginatedResult;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.AbortStockRequest;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.DecreaseStockRequest;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockIdRequest;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockItemRequest;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.DecreaseStockResponse;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponse;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.response.IncreaseStockResponse;
 
 @Service
 @RequiredArgsConstructor

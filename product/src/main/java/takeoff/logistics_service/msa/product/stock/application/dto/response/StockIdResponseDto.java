@@ -3,7 +3,6 @@ package takeoff.logistics_service.msa.product.stock.application.dto.response;
 import java.util.UUID;
 import takeoff.logistics_service.msa.product.stock.domain.entity.StockId;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockIdSearchCriteriaResponse;
-import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteriaResponse;
 
 public record StockIdResponseDto(UUID productId, UUID hubId) {
 
