@@ -6,16 +6,15 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
 import takeoff.logistics_service.msa.slack.infrastructure.client.ai.GeminiWebClient.RequestBody.Content;
 import takeoff.logistics_service.msa.slack.infrastructure.client.ai.GeminiWebClient.RequestBody.Part;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.PostSlackMessageRequestDto;
 
 /**
  * @author : hanjihoon
@@ -24,7 +23,7 @@ import takeoff.logistics_service.msa.slack.presentation.dto.request.PostSlackMes
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class GeminiWebClient {
+public class GeminiWebClient implements WebClientAdapter{
 
     private final WebClient webClient;
     @Value("${ai.api.key}")

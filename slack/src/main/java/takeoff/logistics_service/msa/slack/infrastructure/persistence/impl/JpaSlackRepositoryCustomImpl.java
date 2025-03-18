@@ -1,18 +1,18 @@
 package takeoff.logistics_service.msa.slack.infrastructure.persistence.impl;
 
-import static takeoff.logistics_service.msa.slack.model.entity.QSlack.slack;
+import static takeoff.logistics_service.msa.slack.domain.entity.QSlack.slack;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
+import takeoff.logistics_service.msa.slack.domain.entity.Slack;
+import takeoff.logistics_service.msa.slack.domain.repository.search.PaginatedResult;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteria;
+import takeoff.logistics_service.msa.slack.domain.repository.search.SlackSearchCriteriaResponse;
 import takeoff.logistics_service.msa.slack.infrastructure.persistence.JpaSlackRepositoryCustom;
-import takeoff.logistics_service.msa.slack.model.entity.Slack;
-import takeoff.logistics_service.msa.slack.presentation.dto.request.SearchSlackRequestDto;
-import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlackResponseDto;
 
 
 /**
@@ -20,70 +20,55 @@ import takeoff.logistics_service.msa.slack.presentation.dto.response.SearchSlack
  * @Date : 2025. 03. 14.
  */
 @RequiredArgsConstructor
+@Slf4j
 public class JpaSlackRepositoryCustomImpl implements JpaSlackRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-
     @Override
-    public Page<SearchSlackResponseDto> searchSlack(SearchSlackRequestDto searchSlackRequestDto, Pageable pageable) {
+    public PaginatedResult<SlackSearchCriteriaResponse> searchSlack(SlackSearchCriteria slackSearchCriteria) {
 
         List<Slack> fetch = queryFactory.select(slack)
             .from(slack)
             .where(
-                containsMessage(searchSlackRequestDto.searchContentsRequestDto().message())
+                containsMessage(slackSearchCriteria.message())
             )
-            //Auditor 생성시 변경해야함.
-            .orderBy(slack.contents.sentAt.asc())
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
+            .orderBy(getOrderSpecifier(slackSearchCriteria))
+            .offset(slackSearchCriteria.page())
+            .limit(slackSearchCriteria.size())
             .fetch();
 
         Long totalCount = queryFactory.select(slack.count())
             .from(slack)
             .where(
-                containsMessage(searchSlackRequestDto.searchContentsRequestDto().message())
+                containsMessage(slackSearchCriteria.message())
             )
             .fetchOne();
 
         if (totalCount == null) totalCount = 0L;
 
-        List<SearchSlackResponseDto> responseDtoList = fetch.stream()
-            .map(SearchSlackResponseDto::from)
+        List<SlackSearchCriteriaResponse> resultList = fetch.stream()
+            .map(SlackSearchCriteriaResponse::from)
             .toList();
 
+        int totalPages = (int) Math.ceil((double) totalCount / slackSearchCriteria.size());
 
-        return new PageImpl<>(responseDtoList, pageable, totalCount);
+        return new PaginatedResult<>(
+            resultList,
+            slackSearchCriteria.page(),
+            slackSearchCriteria.size(),
+            totalCount,
+            totalPages);
     }
 
     private BooleanExpression containsMessage(String message) {
         return message == null ? null : slack.contents.message.containsIgnoreCase(message);
     }
 
-    //Auditor 구성시 정렬 추가
-//    private List<OrderSpecifier<?>> dynamicOrder(Pageable pageable) {
-//        List<OrderSpecifier<?>> orderSpecifierList = new ArrayList<>();
-//
-//        if (pageable.getSort() != null) {
-//            for (Sort.Order sortOrder : pageable.getSort()) {
-//                Order direction = sortOrder.isAscending() ? Order.ASC : Order.DESC;
-//
-//                switch (sortOrder.getProperty()) {
-//                    case "createdAt":
-//                        orderSpecifierList.add(new OrderSpecifier<>(direction, slack.createdAt));
-//                        break;
-//                    case "updatedAt":
-//                        orderSpecifierList.add(new OrderSpecifier<>(direction, slack.updatedAt));
-//                        break;
-//                    default:
-//                        throw new IllegalArgumentException(
-//                            "잘못된 정렬 필드입니다. : " + sortOrder.getProperty());
-//                }
-//            }
-//        } else {
-//            orderSpecifierList.add(new OrderSpecifier<>(Order.ASC, slack.createdAt));
-//        }
-//        return orderSpecifierList;
-//
-//    }
+    private OrderSpecifier<?> getOrderSpecifier(SlackSearchCriteria searchCriteria) {
+        return "updatedAt".equals(searchCriteria.sortBy()) ? (
+            searchCriteria.isAsc() ? slack.updatedAt.asc() : slack.updatedAt.desc())
+            : (searchCriteria.isAsc() ? slack.createdAt.asc() : slack.createdAt.desc());
+    }
+
 }

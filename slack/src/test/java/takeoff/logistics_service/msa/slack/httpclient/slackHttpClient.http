@@ -17,6 +17,29 @@ Content-Type: application/json
   },
   "companyDeliveryUserName": "고길동 / kdk@sparta.world"
 }
+###
+GET http://localhost:19041/api/v1/slacks/47e3ed7e-af0b-4e0a-a4a8-b09137fe4045
+
+###
+PATCH http://localhost:19041/api/v1/slacks/d2bbbf71-8cc7-4fe4-b7f9-565992e08d78
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "patchContentsRequest": {
+    "message": "수정된 메시지 내용"
+  }
+}
+
+###
+DELETE http://localhost:19041/api/v1/slacks/{{slackId}}
+
+###
+GET http://localhost:19041/api/v1/slacks/search?message=주문&isAsc=true&sortBy=createdAt&page=0&size=10
+
+
+
+
 
 
 ###
