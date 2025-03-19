@@ -1,0 +1,14 @@
+### 네이버 map direction
+GET https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?goal=126.835836,37.649621&start=127.112628,37.514219
+X-NCP-APIGW-API-KEY-ID:
+X-NCP-APIGW-API-KEY:
+
+###37.514219,127.112628,0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7,서울특별시 송파구 송파대로 55,서울특별시 센터
+###37.649621,126.835836,fc5bcff8-dd48-44fa-b36a-80df0262b178,경기도 고양시 덕양구 권율대로 570,경기 북부 센터
+POST http://localhost:19042/api/v1/app/hubRoutes
+Content-Type: application/json
+
+{
+  "fromHubId": "0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7",
+  "toHubId": "fc5bcff8-dd48-44fa-b36a-80df0262b178"
+}

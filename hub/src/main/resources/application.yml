@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
     name: hub-service
   datasource:
@@ -9,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -38,3 +40,8 @@ management:
 
 server:
   port: 19042
+
+NAVER:
+  ID: ${NAVER_Client_ID}
+  KEY: ${NAVER_Secret_KEY}
+  URL: ${NAVER_URL}

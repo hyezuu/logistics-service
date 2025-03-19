@@ -1,9 +1,13 @@
 package takeoff.logistics_service.msa.hub.hubroute.presentation.internal;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.hub.hubroute.application.service.HubRouteService;
+import takeoff.logistics_service.msa.hub.hubroute.presentation.dto.request.PostHubRouteRequest;
+import takeoff.logistics_service.msa.hub.hubroute.presentation.dto.response.PostHubRouteResponse;
 
 /**
  * @author : hanjihoon
@@ -16,9 +20,9 @@ public class HubRouteInternalController {
 
     private final HubRouteService hubRouteService;
 
-//    @PostMapping
-//    public List<PostHubRouteResponseDto> createHubRoute(@RequestBody PostHubRouteRequestDto requestDto) {
-//        return hubRouteService.createHubRoute(requestDto);
-//    }
+    @PostMapping
+    public PostHubRouteResponse createHubRoute(@RequestBody PostHubRouteRequest request) {
+        return PostHubRouteResponse.from(hubRouteService.createHubRoute(request.toApplication()));
+    }
 
 }

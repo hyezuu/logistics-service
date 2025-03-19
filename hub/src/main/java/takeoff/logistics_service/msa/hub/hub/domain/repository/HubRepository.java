@@ -1,5 +1,6 @@
 package takeoff.logistics_service.msa.hub.hub.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
@@ -18,4 +19,6 @@ public interface HubRepository {
     Optional<Hub> findById(UUID hubId);
 
     PaginatedResult<HubSearchCriteriaResponse> searchHub(HubSearchCriteria hubSearchCriteria);
+
+    List<Hub> findByIdIn(List<UUID> ids);
 }
