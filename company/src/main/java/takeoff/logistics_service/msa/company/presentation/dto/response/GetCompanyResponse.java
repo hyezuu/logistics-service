@@ -8,8 +8,7 @@ import takeoff.logistics_service.msa.company.application.dto.response.GetCompany
 @Builder
 public record GetCompanyResponse(
 	UUID companyId, String companyName, String companyType,
-	UUID hubId, String address, LocalDateTime createdAt, LocalDateTime updatedAt
-) {
+	UUID hubId, String address, LocalDateTime createdAt, LocalDateTime updatedAt) {
 
 	public static GetCompanyResponse from(GetCompanyResponseDto responseDto) {
 		return GetCompanyResponse.builder()

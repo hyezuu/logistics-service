@@ -62,6 +62,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public PaginatedResultDto<GetCompanyResponseDto> searchCompany(
 		SearchCompanyRequestDto requestDto) {
 		return PaginatedResultDto

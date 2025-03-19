@@ -20,6 +20,5 @@ public record PutCompanyResponseDto(
 			.createdAt(company.getCreatedAt())
 			.updatedAt(company.getUpdatedAt())
 			.build();
-
 	}
 }

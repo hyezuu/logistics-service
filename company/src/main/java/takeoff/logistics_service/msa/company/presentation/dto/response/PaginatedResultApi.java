@@ -24,5 +24,4 @@ public record PaginatedResultApi<T>(List<T> content,
 			result.totalPages()
 		);
 	}
-
 }

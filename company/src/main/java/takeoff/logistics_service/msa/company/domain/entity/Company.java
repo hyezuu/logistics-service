@@ -58,6 +58,5 @@ public class Company extends BaseEntity {
 		this.address = address;
 	}
 
-	protected Company() {
-	}
+	protected Company() {}
 }
