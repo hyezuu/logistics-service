@@ -21,8 +21,8 @@ POST http://localhost:19042/api/v1/app/hubRoutes/delivery
 Content-Type: application/json
 
 {
-  "fromHubId": "fc5bcff8-dd48-44fa-b36a-80df0262b178",
-  "toHubId": "39b993a8-d226-4eaa-abe1-1d53463f334c"
+  "fromHubId": "ccc994d9-82b8-4556-9533-94cd824646ec",
+  "toHubId": "7094ddcf-cc2c-4255-8e8d-43d2f2b74a18"
 }
 
 ###200km 이상 HUB To HUB RELAY
@@ -30,6 +30,7 @@ POST http://localhost:19042/api/v1/app/hubRoutes/delivery
 Content-Type: application/json
 
 {
-  "fromHubId": "0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7",
-  "toHubId": "ccc994d9-82b8-4556-9533-94cd824646ec"
+  "fromHubId": "8eb343e4-ddd8-478a-8dae-c561a4d72062",
+  "toHubId": "bd022638-f752-4bde-abd6-096441f68907"
 }
+1->3 1-2, 2-3

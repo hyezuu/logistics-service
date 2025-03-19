@@ -117,7 +117,7 @@ public class HubRouteServiceImpl implements HubRouteService {
         } else {
             // 200km이 넘을 경우
             log.info("200km 이상입니다.");
-            HubAllListResponseDto stopoverHub = findClosestHub(toHub, allHubs);
+            HubAllListResponseDto stopoverHub = findClosestHubWithinDistance(fromHub, toHub, allHubs);
 
             // 시작점 -> 중간 지점까지 저장된 경로가 있는지 확인
             Optional<HubRoute> byFromHubIdAndStopoverHubId = hubRouteRepository.findByFromHubIdAndToHubId(
@@ -182,11 +182,17 @@ public class HubRouteServiceImpl implements HubRouteService {
     }
 
     //목적지에서 가장 가까운 허브 찾기
-    private HubAllListResponseDto findClosestHub(HubAllListResponseDto targetHub, List<HubAllListResponseDto> hubs) {
+    //출발지에서 중간 허브가 200km가 넘으면 예외발생
+    private HubAllListResponseDto findClosestHubWithinDistance(
+        HubAllListResponseDto fromHub,
+        HubAllListResponseDto toHub,
+        List<HubAllListResponseDto> hubs) {
+
         return hubs.stream()
-            .filter(hub -> !hub.hubId().equals(targetHub.hubId()))
+            .filter(hub -> !hub.hubId().equals(fromHub.hubId()) && !hub.hubId().equals(toHub.hubId()))
+            .filter(hub -> calculateDistance(fromHub.latitude(), fromHub.longitude(), hub.latitude(), hub.longitude()) <= 200)
             .min(Comparator.comparingDouble(hub ->
-                calculateDistance(targetHub.latitude(), targetHub.longitude(), hub.latitude(), hub.longitude())
+                calculateDistance(toHub.latitude(), toHub.longitude(), hub.latitude(), hub.longitude())
             ))
             .orElseThrow(() -> HubRouteBusinessException.from(HubRouteErrorCode.HUB_ROUTE_NOT_FOUND));
     }
@@ -227,7 +233,7 @@ public class HubRouteServiceImpl implements HubRouteService {
 
 
     //각 허브의 위도와 경도를 통해 Haversine 공식을 사용하여 두 지점 간의 구면 거리를 구하는 방식
-    public double calculateDistance(double fromLatitude, double fromLongitude, double toLatitude,
+    private double calculateDistance(double fromLatitude, double fromLongitude, double toLatitude,
         double toLongitude) {
 
         double deltaLatitude = Math.toRadians(toLatitude - fromLatitude);

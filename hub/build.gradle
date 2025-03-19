@@ -42,6 +42,9 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'com.h2database:h2'
 
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64'
 
 	// Jackson Databind 의존성 (JSON 직렬화 및 역직렬화)
