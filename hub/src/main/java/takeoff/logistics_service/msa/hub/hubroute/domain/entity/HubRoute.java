@@ -8,8 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import takeoff.logistics_service.msa.common.domain.BaseEntity;
 
 /**
  * @author : hanjihoon
@@ -19,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "p_hubRoute")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class HubRoute {
+public class HubRoute extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -43,5 +45,11 @@ public class HubRoute {
         Duration.create(minutes);
     }
 
-
+    @Builder
+    private HubRoute(UUID fromHubId, UUID toHubId, Distance distance, Duration duration) {
+        this.fromHubId = fromHubId;
+        this.toHubId = toHubId;
+        this.distance = distance;
+        this.duration = duration;
+    }
 }

@@ -1,5 +1,6 @@
 package takeoff.logistics_service.msa.hub.hub.infrastructure.persistence;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
@@ -11,4 +12,5 @@ import takeoff.logistics_service.msa.hub.hub.domain.repository.HubRepository;
  */
 public interface JpaHubRepository extends JpaRepository<Hub, UUID>, HubRepository,JpaHubRepositoryCustom {
 
+    List<Hub> findByIdIn(List<UUID> ids);
 }

@@ -5,7 +5,6 @@ import lombok.Builder;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.PutHubRouteResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.domain.entity.Distance;
 import takeoff.logistics_service.msa.hub.hubroute.domain.entity.Duration;
-import takeoff.logistics_service.msa.hub.hubroute.domain.entity.HubRoute;
 
 /**
  * @author : hanjihoon

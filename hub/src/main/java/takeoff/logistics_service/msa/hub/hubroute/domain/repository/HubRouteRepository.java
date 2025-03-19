@@ -11,4 +11,6 @@ import takeoff.logistics_service.msa.hub.hubroute.domain.entity.HubRoute;
 public interface HubRouteRepository {
 
     Optional<HubRoute> findById(UUID hubRouteId);
+
+    HubRoute save(HubRoute hubRoute);
 }

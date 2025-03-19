@@ -21,6 +21,7 @@ import takeoff.logistics_service.msa.common.domain.BaseEntity;
 @Entity
 @Table(name = "p_hub")
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hub extends BaseEntity {
 
@@ -38,8 +39,15 @@ public class Hub extends BaseEntity {
         this.hubName = hubName;
     }
 
-    @Builder
+
     private Hub(String hubName, Location location) {
+        this.hubName = hubName;
+        this.location = location;
+    }
+
+    //테스트용 생성자
+    private Hub(UUID id, String hubName, Location location) {
+        this.id = id;
         this.hubName = hubName;
         this.location = location;
     }
