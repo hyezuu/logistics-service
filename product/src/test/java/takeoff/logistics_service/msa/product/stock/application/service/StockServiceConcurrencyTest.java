@@ -24,7 +24,7 @@ import takeoff.logistics_service.msa.product.stock.presentation.dto.request.Stoc
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockItemRequest;
 
 @SpringBootTest
-@ActiveProfiles("Test")
+@ActiveProfiles("local")
 class StockServiceConcurrencyTest {
 
 	@Autowired

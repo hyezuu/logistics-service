@@ -2,7 +2,7 @@ spring:
   profiles:
     group:
       "local": "localDB, common"
-      "text": "testDB, common"
+      "test": "testDB, common"
     active: local
 
 ---
