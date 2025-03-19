@@ -4,10 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableFeignClients
-@EnableJpaAuditing
 @ComponentScan({"takeoff.logistics_service.msa.common", "takeoff.logistics_service.msa.product"})
 @SpringBootApplication
 public class ProductApplication {

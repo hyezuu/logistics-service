@@ -2,7 +2,7 @@ spring:
   profiles:
     group:
       "local": "localDB, common"
-      "text": "testDB, common"
+      "test": "testDB, common"
     active: local
 
 ---
@@ -46,10 +46,6 @@ spring:
         show_sql: true
         format_sql: true
         default_batch_fetch_size: 30
-      jakarta:
-        persistence:
-          lock:
-            timeout: 3000
 
 ---
 spring:
@@ -78,3 +74,7 @@ logging:
       springframework:
         security: DEBUG
     sql: DEBUG
+eureka:
+  client:
+    register-with-eureka: false  # Eureka 서버에 등록
+    fetch-registry: false  # Eureka 서버로부터 레지스트리 정보 가져오기

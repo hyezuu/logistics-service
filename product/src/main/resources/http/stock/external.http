@@ -1,5 +1,5 @@
 ### 환경 변수 설정
-@host = http://localhost:19001
+@host = http://localhost:19000
 @contentType = application/json
 
 ### 재고 조회 API
@@ -50,11 +50,13 @@ Content-Type: {{contentType}}
 
 {
     "stockId": {
-        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "productId": "550e8400-e29b-41d4-a716-446655440002",
         "hubId": "550e8400-e29b-41d4-a716-446655440001"
     },
-    "quantity": 10
+    "quantity": 100
 }
+
+
 
 ### 재고 감소 API
 PATCH {{host}}/api/v1/stock/decrease

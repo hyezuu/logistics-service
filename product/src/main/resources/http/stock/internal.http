@@ -7,8 +7,62 @@ Content-Type: {{contentType}}
 
 {
     "stockId": {
-        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "productId": "550e8400-e29b-41d4-a716-446655440002",
         "hubId": "550e8400-e29b-41d4-a716-446655440001"
     },
     "quantity": 100
 }
+
+### 재고 준비 (여러 상품 일괄)
+POST {{host}}/api/v1/app/stock/prepare
+Content-Type: {{contentType}}
+
+{
+  "stocks": [
+    {
+      "stockId": {
+        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "hubId": "550e8400-e29b-41d4-a716-446655440001"
+      },
+      "quantity": 10
+    },
+    {
+      "stockId": {
+        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "hubId": "550e8400-e29b-41d4-a716-446655440001"
+      },
+      "quantity": 15
+    }
+  ]
+}
+
+
+### 재고 준비 취소
+POST {{host}}/api/v1/app/stock/abort
+Content-Type: {{contentType}}
+
+{
+  "stocks": [
+    {
+      "stockId": {
+        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "hubId": "550e8400-e29b-41d4-a716-446655440001"
+      },
+      "quantity": 10
+    },
+    {
+      "stockId": {
+        "productId": "550e8400-e29b-41d4-a716-446655440000",
+        "hubId": "550e8400-e29b-41d4-a716-446655440001"
+      },
+      "quantity": 5
+    }
+  ]
+}
+
+
+### 상품별 재고 삭제
+DELETE {{host}}/api/v1/app/stock/all-by-product?productId=550e8400-e29b-41d4-a716-446655440000
+
+### 창고별 재고 삭제
+DELETE {{host}}/api/v1/app/stock/all-by-hub?hubId=550e8400-e29b-41d4-a716-446655440001
