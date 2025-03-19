@@ -1,8 +1,5 @@
 package takeoff.logistics_service.msa.product.stock.application.service;
 
-import static java.lang.Thread.sleep;
-
-import jakarta.persistence.PessimisticLockException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
