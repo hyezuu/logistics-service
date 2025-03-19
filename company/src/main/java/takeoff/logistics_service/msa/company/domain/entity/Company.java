@@ -51,7 +51,7 @@ public class Company extends BaseEntity {
 		return this;
 	}
 
-	public Company(String companyName, CompanyType companyType, UUID hubId, String address) {
+	private Company(String companyName, CompanyType companyType, UUID hubId, String address) {
 		this.companyName = companyName;
 		this.companyType = companyType;
 		this.hubId = hubId;
