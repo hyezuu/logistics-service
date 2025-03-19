@@ -41,7 +41,7 @@ public class HubInternalController {
 
     @GetMapping("/allHub")
     public List<GetAllHubs> findByAllHub() {
-        return hubService.findByAllHub()
+        return hubService.findAllHub()
             .stream()
             .map(GetAllHubs::from)
             .toList();

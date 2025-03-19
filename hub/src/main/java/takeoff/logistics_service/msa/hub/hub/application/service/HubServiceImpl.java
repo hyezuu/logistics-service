@@ -68,7 +68,7 @@ public class HubServiceImpl implements HubService {
     }
 
     @Override
-    public List<GetAllHubsDto> findByAllHub() {
+    public List<GetAllHubsDto> findAllHub() {
         return hubRepository.findAll()
             .stream()
             .map(GetAllHubsDto::from)

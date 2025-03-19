@@ -32,5 +32,5 @@ public interface HubService {
 
     List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto applicationDto);
 
-    List<GetAllHubsDto> findByAllHub();
+    List<GetAllHubsDto> findAllHub();
 }
