@@ -62,7 +62,7 @@ public class HubRouteServiceImpl implements HubRouteService {
             .block();
 
 
-        HubRoute hubRoute = result.toEntity(requestDto);
+        HubRoute hubRoute = result.toEntity(result, requestDto);
         HubRoute savedHubRoute = hubRouteRepository.save(hubRoute);
 
         return PostHubRouteResponseDto.from(savedHubRoute);

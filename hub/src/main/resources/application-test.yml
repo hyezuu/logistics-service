@@ -15,3 +15,8 @@ spring:
         spring.jpa.open-in-view: false
         format_sql: true
         default_batch_fetch_size: 10
+
+NAVER:
+  ID: ${NAVER_Client_ID}
+  KEY: ${NAVER_Secret_KEY}
+  URL: ${NAVER_URL}

@@ -15,4 +15,6 @@ public record DistanceDto(int distance) {
             .distance(distance.getDistanceKm())
             .build();
     }
+
+
 }

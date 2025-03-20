@@ -14,13 +14,13 @@ import takeoff.logistics_service.msa.hub.hubroute.domain.entity.HubRoute;
 public record GetHubRouteNaverResponseDto(Integer distance,
                                           Integer duration) {
 
-    public HubRoute toEntity(
+    public static HubRoute toEntity(GetHubRouteNaverResponseDto getHubRouteNaverResponseDto,
         PostHubRouteRequestDto postHubRouteRequestDto) {
         return HubRoute.builder()
             .toHubId(postHubRouteRequestDto.toHubId())
             .fromHubId(postHubRouteRequestDto.fromHubId())
-            .distance(Distance.create(distance()))
-            .duration(Duration.create(duration()))
+            .distance(Distance.create(getHubRouteNaverResponseDto.distance()))
+            .duration(Duration.create(getHubRouteNaverResponseDto.duration()))
             .build();
     }
 }
