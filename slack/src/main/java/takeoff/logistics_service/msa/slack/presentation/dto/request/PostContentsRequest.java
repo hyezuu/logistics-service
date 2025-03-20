@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.slack.presentation.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import takeoff.logistics_service.msa.slack.application.dto.request.PostContentsRequestDto;
 
 /**
  * @author : hanjihoon
@@ -9,4 +10,9 @@ import jakarta.validation.constraints.NotNull;
 
 public record PostContentsRequest(@NotNull String message) {
 
+    public PostContentsRequestDto toApplicationDto() {
+        return PostContentsRequestDto.builder()
+            .message(message)
+            .build();
+    }
 }

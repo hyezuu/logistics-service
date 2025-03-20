@@ -22,12 +22,29 @@ public class SlackAlarmService {
     @Value(value = "${slack.key}")
     String slackToken;
 
-    public void sendSlackMessage(String message, String channel){
+    public void sendSlackMessageToDeliveryChannel(String message, String channel){
         try{
             MethodsClient methods = Slack.getInstance().methods(slackToken);
 
             ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                 .channel(SlackConstant.PROJECT_CHANNEL)
+                .text(message)
+                .build();
+
+            methods.chatPostMessage(request);
+
+            log.info("Slack " + channel + " 에 메시지 보냄");
+        } catch (SlackApiException | IOException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    public void sendSlackMessageToUserChannel(String message, String channel){
+        try{
+            MethodsClient methods = Slack.getInstance().methods(slackToken);
+
+            ChatPostMessageRequest request = ChatPostMessageRequest.builder()
+                .channel(SlackConstant.USER_CHANNEL)
                 .text(message)
                 .build();
 
