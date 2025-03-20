@@ -10,8 +10,9 @@ import takeoff.logistics_service.msa.hub.hubroute.application.dto.DurationDto;
 @Builder
 public record DurationApi(int duration) {
 
-    public static DurationApi from(DurationDto durationDto) {
-        return DurationApi.builder()
+    public static DurationApi from(
+        DurationDto durationDto) {
+        return takeoff.logistics_service.msa.hub.hubroute.presentation.dto.DurationApi.builder()
             .duration(durationDto.duration())
             .build();
     }

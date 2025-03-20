@@ -13,4 +13,5 @@ public interface HubRouteRepository {
     Optional<HubRoute> findById(UUID hubRouteId);
 
     HubRoute save(HubRoute hubRoute);
+    Optional<HubRoute> findByFromHubIdAndToHubId(UUID fromHubId, UUID toHubId);
 }

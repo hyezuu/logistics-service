@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.hub.hubroute.application.dto.client;
 
 import java.util.List;
+import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubAllListResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.HubIdsDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.GetRouteResponseDto;
 
@@ -10,5 +11,6 @@ import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.GetRo
  */
 public interface HubClient {
     List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto hubIdsDto);
+    List<HubAllListResponseDto> findAllHubs();
 
 }

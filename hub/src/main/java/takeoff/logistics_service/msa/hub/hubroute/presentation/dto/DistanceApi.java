@@ -10,8 +10,9 @@ import takeoff.logistics_service.msa.hub.hubroute.application.dto.DistanceDto;
 @Builder
 public record DistanceApi(int distance) {
 
-    public static DistanceApi from(DistanceDto distanceDto) {
-        return DistanceApi.builder()
+    public static DistanceApi from(
+        DistanceDto distanceDto) {
+        return takeoff.logistics_service.msa.hub.hubroute.presentation.dto.DistanceApi.builder()
             .distance(distanceDto.distance())
             .build();
     }

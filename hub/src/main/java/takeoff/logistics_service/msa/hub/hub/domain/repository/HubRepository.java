@@ -21,4 +21,6 @@ public interface HubRepository {
     PaginatedResult<HubSearchCriteriaResponse> searchHub(HubSearchCriteria hubSearchCriteria);
 
     List<Hub> findByIdIn(List<UUID> ids);
+
+    List<Hub> findAll();
 }

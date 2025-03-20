@@ -12,3 +12,24 @@ Content-Type: application/json
   "fromHubId": "0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7",
   "toHubId": "fc5bcff8-dd48-44fa-b36a-80df0262b178"
 }
+
+###배송 경로를 알고리즘 계산해 200km 이하일 때 P2P로 from, to hub 제공
+
+### 200km 이상일 때 중간 경유지가 담긴 List 경로 반환 ex)1-2, 2-3
+###200km 이하 P2P
+POST http://localhost:19042/api/v1/app/hubRoutes/delivery
+Content-Type: application/json
+
+{
+  "fromHubId": "fc5bcff8-dd48-44fa-b36a-80df0262b178",
+  "toHubId": "39b993a8-d226-4eaa-abe1-1d53463f334c"
+}
+
+###200km 이상 HUB To HUB RELAY
+POST http://localhost:19042/api/v1/app/hubRoutes/delivery
+Content-Type: application/json
+
+{
+  "fromHubId": "0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7",
+  "toHubId": "ccc994d9-82b8-4556-9533-94cd824646ec"
+}

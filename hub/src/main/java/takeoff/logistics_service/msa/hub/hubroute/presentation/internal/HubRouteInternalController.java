@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.hub.hubroute.application.service.HubRouteService;
+import takeoff.logistics_service.msa.hub.hubroute.presentation.dto.HubRoutes;
+import takeoff.logistics_service.msa.hub.hubroute.presentation.dto.request.PostDeliveryHubRouteRequest;
 import takeoff.logistics_service.msa.hub.hubroute.presentation.dto.request.PostHubRouteRequest;
 import takeoff.logistics_service.msa.hub.hubroute.presentation.dto.response.PostHubRouteResponse;
 
@@ -24,5 +26,11 @@ public class HubRouteInternalController {
     public PostHubRouteResponse createHubRoute(@RequestBody PostHubRouteRequest request) {
         return PostHubRouteResponse.from(hubRouteService.createHubRoute(request.toApplication()));
     }
+
+    @PostMapping("/delivery")
+    public HubRoutes getDeliveryHubRouteList(@RequestBody PostDeliveryHubRouteRequest request) {
+        return HubRoutes.from(hubRouteService.getDeliveryHubRouteList(request.toApplication()));
+    }
+
 
 }

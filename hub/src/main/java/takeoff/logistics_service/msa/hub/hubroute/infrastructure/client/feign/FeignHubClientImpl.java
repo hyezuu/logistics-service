@@ -7,12 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
 import takeoff.logistics_service.msa.common.exception.code.CommonErrorCode;
+import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubAllListResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.client.HubClient;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.HubIdsDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.GetRouteResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.exception.HubRouteBusinessException;
 import takeoff.logistics_service.msa.hub.hubroute.application.exception.HubRouteErrorCode;
 import takeoff.logistics_service.msa.hub.hubroute.infrastructure.dto.request.HubIds;
+import takeoff.logistics_service.msa.hub.hubroute.infrastructure.dto.response.GetAllHubs;
 import takeoff.logistics_service.msa.hub.hubroute.infrastructure.dto.response.GetRouteResponse;
 
 /**
@@ -27,11 +29,22 @@ public class FeignHubClientImpl implements HubClient {
 
     @Override
     public List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto hubIdsDto) {
-
         try {
             return feignHubClient.findByToHubIdAndFromHubId(HubIds.from(hubIdsDto))
                 .stream()
                 .map(GetRouteResponse::from)
+                .toList();
+        } catch (FeignClientException e) {
+            throw handleFeignException(e);
+        }
+    }
+
+    @Override
+    public List<HubAllListResponseDto> findAllHubs() {
+        try {
+            return feignHubClient.findAllHubs()
+                .stream()
+                .map(GetAllHubs::from)
                 .toList();
         } catch (FeignClientException e) {
             throw handleFeignException(e);

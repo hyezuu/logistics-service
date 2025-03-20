@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.hub.hub.application.dto.HubIdsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.PaginatedResultDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.feign.GetAllHubsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PatchHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PostHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.SearchHubRequestDto;
@@ -63,6 +64,14 @@ public class HubServiceImpl implements HubService {
                 List.of(hubIdsDto.toHubId(), hubIdsDto.fromHubId()))
             .stream()
             .map(GetRouteResponseDto::from)
+            .toList();
+    }
+
+    @Override
+    public List<GetAllHubsDto> findByAllHub() {
+        return hubRepository.findAll()
+            .stream()
+            .map(GetAllHubsDto::from)
             .toList();
     }
 

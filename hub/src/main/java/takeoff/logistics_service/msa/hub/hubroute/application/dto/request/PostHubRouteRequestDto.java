@@ -11,4 +11,8 @@ import lombok.Builder;
 public record PostHubRouteRequestDto(UUID fromHubId,
                                      UUID toHubId) {
 
+    public static PostHubRouteRequestDto createDto(UUID fromHubId, UUID toHubId) {
+        return new PostHubRouteRequestDto(fromHubId, toHubId);
+    }
+
 }

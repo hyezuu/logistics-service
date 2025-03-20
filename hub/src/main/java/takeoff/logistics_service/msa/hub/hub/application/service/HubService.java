@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import takeoff.logistics_service.msa.hub.hub.application.dto.HubIdsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.PaginatedResultDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.feign.GetAllHubsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PatchHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PostHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.SearchHubRequestDto;
@@ -30,4 +31,6 @@ public interface HubService {
     PaginatedResultDto<SearchHubResponseDto> searchHub(SearchHubRequestDto requestDto);
 
     List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto applicationDto);
+
+    List<GetAllHubsDto> findByAllHub();
 }

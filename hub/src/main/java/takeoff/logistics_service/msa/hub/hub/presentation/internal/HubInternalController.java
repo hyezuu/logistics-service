@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.hub.hub.application.service.HubService;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.HubIds;
+import takeoff.logistics_service.msa.hub.hub.presentation.dto.feign.GetAllHubs;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetHubResponse;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetRouteResponse;
 
@@ -38,4 +39,11 @@ public class HubInternalController {
             .toList();
     }
 
+    @GetMapping("/allHub")
+    public List<GetAllHubs> findByAllHub() {
+        return hubService.findByAllHub()
+            .stream()
+            .map(GetAllHubs::from)
+            .toList();
+    }
 }

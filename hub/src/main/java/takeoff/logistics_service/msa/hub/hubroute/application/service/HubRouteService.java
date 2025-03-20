@@ -1,6 +1,8 @@
 package takeoff.logistics_service.msa.hub.hubroute.application.service;
 
 import java.util.UUID;
+import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubRoutesDto;
+import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.PostDeliveryHubRouteRequestDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.PostHubRouteRequestDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.PutHubRouteRequestDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.GetHubRouteResponseDto;
@@ -20,4 +22,6 @@ public interface HubRouteService {
     void deleteHubRoute(UUID hubRouteId, Long userId);
 
     PostHubRouteResponseDto createHubRoute(PostHubRouteRequestDto requestDto);
+
+    HubRoutesDto getDeliveryHubRouteList(PostDeliveryHubRouteRequestDto request);
 }
