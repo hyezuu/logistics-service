@@ -92,11 +92,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserValidationResponseDto validateUser(UserValidationRequestDto requestDto) {
         User user = userRepository.findByUsername(requestDto.username())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        // 🔥 비밀번호 검증 수행
         if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }

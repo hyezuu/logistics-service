@@ -18,11 +18,6 @@ public class AuthController {
     private final AuthService authService;
     private final TokenService tokenService;
 
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto requestDto) {
-        return ResponseEntity.ok(authService.login(requestDto));
-    }
-
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestParam String userId) {
         authService.logout(userId);
