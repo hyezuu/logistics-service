@@ -15,6 +15,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -240,9 +241,7 @@ class SlackExternalControllerTest {
         // SlackResponseDto 객체 준비
         PostSlackResponseDto mockResponse = new PostSlackResponseDto(slackId, userId, new PostContentsResponseDto("updated-message", LocalDateTime.now()));
 
-
-
-        when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId))).thenReturn((mockResponse));
+        when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId))).thenReturn(mockResponse);
         when(slackServiceImpl.searchSlack(any()))
             .thenReturn(new PaginatedResultDto<>(
                 List.of(new SearchSlackResponseDto(slackId, userId,
@@ -254,7 +253,6 @@ class SlackExternalControllerTest {
                 1
             ));
 
-
         // When & Then
         mockMvc.perform(get("/api/v1/slacks/search")
                 .param("message", message)
@@ -265,22 +263,18 @@ class SlackExternalControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andDo(document("slack/search",
-
-                    (
-                    parameterWithName("message").optional().description("검색할 메시지"),
-                    parameterWithName("isAsc").optional()
-                        .description("정렬 순서 (true: 오름차순, false: 내림차순)"),
-                    parameterWithName("sortBy").optional().description("정렬 기준 필드 (예: sentAt)"),
+                queryParameters(
+                    parameterWithName("message").description("검색할 메시지"),
+                    parameterWithName("isAsc").description("정렬 순서 (true: 오름차순, false: 내림차순)"),
+                    parameterWithName("sortBy").description("정렬 기준 필드 (예: sentAt)"),
                     parameterWithName("page").description("조회할 페이지 번호"),
                     parameterWithName("size").description("페이지 크기")
                 ),
                 responseFields(
                     fieldWithPath("content[].slackId").description("Slack 메시지의 UUID"),
                     fieldWithPath("content[].userId").description("Slack 메시지를 보낸 사용자 ID"),
-                    fieldWithPath("content[].searchContentsResponse.message").description(
-                        "Slack 메시지 내용"),
-                    fieldWithPath("content[].searchContentsResponse.sentAt").description(
-                        "Slack 메시지 전송 시간"),
+                    fieldWithPath("content[].searchContentsResponse.message").description("Slack 메시지 내용"),
+                    fieldWithPath("content[].searchContentsResponse.sentAt").description("Slack 메시지 전송 시간"),
                     fieldWithPath("page").description("현재 페이지 번호"),
                     fieldWithPath("size").description("페이지 크기"),
                     fieldWithPath("totalElements").description("총 검색된 요소 수"),
@@ -288,4 +282,5 @@ class SlackExternalControllerTest {
                 )
             ));
     }
+
 }

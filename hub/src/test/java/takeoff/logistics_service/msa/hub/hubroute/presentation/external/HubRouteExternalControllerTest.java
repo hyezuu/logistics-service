@@ -86,7 +86,7 @@ class HubRouteExternalControllerTest {
             .thenReturn(getHubRouteResponseDto);
 
         // When & Then
-        mockMvc.perform(get("/api/v1/hubRoutes/" + hubRouteId))
+        mockMvc.perform(get("/api/v1/hubRoutes/{hubRouteId}", hubRouteId))
             .andExpect(status().isOk()) // HTTP 200 OK 응답 확인
             .andExpect(jsonPath("$.hubRouteId").value(hubRouteId.toString()))
             .andDo(document("hubRoute/find-by-hubRouteId",
@@ -97,8 +97,8 @@ class HubRouteExternalControllerTest {
                     fieldWithPath("hubRouteId").description("허브 경로 ID"),
                     fieldWithPath("fromHubId").description("출발 허브 ID"),
                     fieldWithPath("toHubId").description("도착 허브 ID"),
-                    fieldWithPath("distance.value").description("거리 (단위: 예시)"),
-                    fieldWithPath("duration.value").description("소요 시간 (단위: 예시)")
+                    fieldWithPath("distance.distanceKm").description("거리 (단위: 예시)"),
+                    fieldWithPath("duration.durationMinutes").description("소요 시간 (단위: 예시)")
                 )
             ));
 
