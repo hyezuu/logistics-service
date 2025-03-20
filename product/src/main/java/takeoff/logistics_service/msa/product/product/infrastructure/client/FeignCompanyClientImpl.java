@@ -20,7 +20,7 @@ public class FeignCompanyClientImpl implements CompanyClient {
 	@Override
 	public void findByCompanyId(UUID companyId) {
 		try {
-			feignCompanyClient.findCompanyId(companyId);
+			feignCompanyClient.findByCompanyId(companyId);
 		} catch (FeignClientException e) {
 			throw handleFeignException(e);
 		}

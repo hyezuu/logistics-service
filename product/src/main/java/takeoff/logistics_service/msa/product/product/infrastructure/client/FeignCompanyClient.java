@@ -10,5 +10,5 @@ import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.r
 public interface FeignCompanyClient {
 
 	@GetMapping("/api/v1/app/companies/{companyId}")
-	GetCompanyResponse findCompanyId(@PathVariable UUID companyId);
+	GetCompanyResponse findByCompanyId(@PathVariable UUID companyId);
 }
