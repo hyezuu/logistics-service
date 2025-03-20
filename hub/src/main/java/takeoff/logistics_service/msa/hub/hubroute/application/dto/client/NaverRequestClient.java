@@ -1,7 +1,6 @@
 package takeoff.logistics_service.msa.hub.hubroute.application.dto.client;
 
 import java.util.List;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.GetHubRouteNaverResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.GetRouteResponseDto;
@@ -10,7 +9,7 @@ import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.GetRo
  * @author : hanjihoon
  * @Date : 2025. 03. 19.
  */
-@Component
+
 public interface NaverRequestClient {
 
     Mono<GetHubRouteNaverResponseDto> sendRequestToNaver(List<GetRouteResponseDto> responseToHub);

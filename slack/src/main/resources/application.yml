@@ -48,3 +48,14 @@ ai:
   api:
     key: ${AI_API_KEY}
     url: ${AI_API_URL}
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs
+    url: /springdoc/openapi3-slack-service.json
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    enabled: true
+    path: /api-docs-slack-service

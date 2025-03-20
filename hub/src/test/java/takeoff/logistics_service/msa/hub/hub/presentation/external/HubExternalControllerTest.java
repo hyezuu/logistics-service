@@ -1,10 +1,10 @@
 package takeoff.logistics_service.msa.hub.hub.presentation.external;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
@@ -13,10 +13,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
@@ -97,8 +96,12 @@ class HubExternalControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(postHubRequest)))
             .andExpect(status().isOk())
-            .andDo(document("hub/save-hub",
-                requestFields(
+            .andDo(document("hub/save-hub", (
+                        ResourceSnippetParameters
+                            .builder()
+                            .description("허브를 생성합니다")
+                            .tag("Hub-External"))
+                    .requestFields(
                     fieldWithPath("hubName").description("허브 이름"),
                     fieldWithPath("locationApi.address").description("허브 주소"),
                     fieldWithPath("locationApi.latitude").description("허브 위도"),
@@ -139,8 +142,12 @@ class HubExternalControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(patchHubRequest)))
             .andExpect(status().isOk())
-            .andDo(document("hub/update-hub",
-                pathParameters(
+            .andDo(document("hub/update-hub",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브를 수정합니다")
+                        .tag("Hub-External"))
+                    .pathParameters(
                     parameterWithName("hubId").description("허브 ID")
                 ),
                 requestFields(
@@ -168,8 +175,12 @@ class HubExternalControllerTest {
         // When & Then
         mockMvc.perform(delete("/api/v1/hubs/{hubId}", hubId))
             .andExpect(status().isNoContent()) // HTTP 204 No Content 응답 확인
-            .andDo(document("hub/delete-hub",
-                pathParameters(
+            .andDo(document("hub/delete-hub",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브를 삭제합니다")
+                        .tag("Hub-External"))
+                .pathParameters(
                     parameterWithName("hubId").description("삭제할 허브 ID")
                 )
             ));
@@ -211,8 +222,12 @@ class HubExternalControllerTest {
                 .param("page", String.valueOf(request.page()))
                 .param("size", String.valueOf(request.size())))
             .andExpect(status().isOk()) // HTTP 200 OK 응답 확인
-            .andDo(document("hub/search-hub",
-                queryParameters(
+            .andDo(document("hub/search-hub",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브를 검색합니다")
+                        .tag("Hub-External"))
+                    .queryParameters(
                     parameterWithName("hubName").description("검색할 허브 이름"),
                     parameterWithName("address").description("검색할 주소"),
                     parameterWithName("isAsc").description("정렬 여부"),

@@ -1,17 +1,15 @@
 package takeoff.logistics_service.msa.slack.presentation.internal;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import java.time.LocalDateTime;
@@ -93,33 +91,35 @@ class SlackInternalControllerTest {
         when(slackServiceImpl.saveSlackMessage(any(), eq(userId)))
             .thenReturn(postSlackResponseDto);
 
-
         // When & Then
         mockMvc.perform(post("/api/v1/app/slacks/message/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(postSlackRequest)))
             .andExpect(status().isOk())
             .andDo(document("slack/save-message",
-                pathParameters(
-                    parameterWithName("userId").description("Slack 메시지를 저장할 사용자 ID")
-                ),
-                requestFields(
-                    fieldWithPath("orderNumber").description("주문 번호"),
-                    fieldWithPath("companyName").description("회사명"),
-                    fieldWithPath("productInfo").description("상품 정보"),
-                    fieldWithPath("orderRequest").description("주문 요청사항"),
-                    fieldWithPath("fromHubName").description("출발 허브명"),
-                    fieldWithPath("stopoverHubNames.hubNames").description("경유 허브 목록"),
-                    fieldWithPath("toHubName").description("도착 허브명"),
-                    fieldWithPath("deliveryUsers.deliveryUserNames").description("배송 기사 목록"),
-                    fieldWithPath("companyDeliveryUserName").description("회사 배송 담당자 이름")
-                ),
-                responseFields(
-                    fieldWithPath("slackId").description("저장된 Slack ID"),
-                    fieldWithPath("userId").description("Slack을 등록한 사용자 ID"),
-                    fieldWithPath("postContentsResponse.message").description("저장된 메시지 내용"),
-                    fieldWithPath("postContentsResponse.sent_At").description("메시지 전송 시간")
-                )
+                ResourceSnippetParameters.builder()
+                    .description("Slack 메시지를 저장합니다")
+                    .tag("Slack")
+                    .pathParameters(
+                        parameterWithName("userId").description("Slack 메시지를 저장할 사용자 ID")
+                    )
+                    .requestFields(
+                        fieldWithPath("orderNumber").description("주문 번호"),
+                        fieldWithPath("companyName").description("회사명"),
+                        fieldWithPath("productInfo").description("상품 정보"),
+                        fieldWithPath("orderRequest").description("주문 요청사항"),
+                        fieldWithPath("fromHubName").description("출발 허브명"),
+                        fieldWithPath("stopoverHubNames.hubNames").description("경유 허브 목록"),
+                        fieldWithPath("toHubName").description("도착 허브명"),
+                        fieldWithPath("deliveryUsers.deliveryUserNames").description("배송 기사 목록"),
+                        fieldWithPath("companyDeliveryUserName").description("회사 배송 담당자 이름")
+                    )
+                    .responseFields(
+                        fieldWithPath("slackId").description("저장된 Slack ID"),
+                        fieldWithPath("userId").description("Slack을 등록한 사용자 ID"),
+                        fieldWithPath("postContentsResponse.message").description("저장된 메시지 내용"),
+                        fieldWithPath("postContentsResponse.sentAt").description("메시지 전송 시간")
+                    )
             ));
     }
 
@@ -133,7 +133,6 @@ class SlackInternalControllerTest {
         PostContentsRequest postContentsRequest = new PostContentsRequest(message);
         PostUserSlackRequest postUserSlackRequest = new PostUserSlackRequest(postContentsRequest);
 
-        // SlackService mock
         when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId)))
             .thenReturn(new PostSlackResponseDto(slackId, userId,
                 new PostContentsResponseDto(message, LocalDateTime.now())));
@@ -144,19 +143,21 @@ class SlackInternalControllerTest {
                 .content(objectMapper.writeValueAsBytes(postUserSlackRequest)))
             .andExpect(status().isOk())
             .andDo(document("slack/save-message-to-user",
-                pathParameters(
-                    parameterWithName("userId").description("Slack 메시지를 저장할 사용자 ID")
-                ),
-                requestFields(
-                    fieldWithPath("postContentsRequest.message").description("슬랙 메시지 내용")
-                ),
-                responseFields(
-                    fieldWithPath("slackId").description("저장된 Slack ID"),
-                    fieldWithPath("userId").description("Slack을 등록한 사용자 ID"),
-                    fieldWithPath("postContentsResponse.message").description("저장된 메시지 내용"),
-                    fieldWithPath("postContentsResponse.sent_At").description("메시지 전송 시간")
-                )
+                ResourceSnippetParameters.builder()
+                    .description("사용자의 Slack 메시지를 저장합니다")
+                    .tag("Slack")
+                    .pathParameters(
+                        parameterWithName("userId").description("Slack 메시지를 저장할 사용자 ID")
+                    )
+                    .requestFields(
+                        fieldWithPath("postContentsRequest.message").description("슬랙 메시지 내용")
+                    )
+                    .responseFields(
+                        fieldWithPath("slackId").description("저장된 Slack ID"),
+                        fieldWithPath("userId").description("Slack을 등록한 사용자 ID"),
+                        fieldWithPath("postContentsResponse.message").description("저장된 메시지 내용"),
+                        fieldWithPath("postContentsResponse.sentAt").description("메시지 전송 시간")
+                    )
             ));
     }
-
 }

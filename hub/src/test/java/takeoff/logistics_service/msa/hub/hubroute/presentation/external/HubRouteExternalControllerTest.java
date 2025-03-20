@@ -1,8 +1,8 @@
 package takeoff.logistics_service.msa.hub.hubroute.presentation.external;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
@@ -10,10 +10,10 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import java.util.UUID;
@@ -89,8 +89,12 @@ class HubRouteExternalControllerTest {
         mockMvc.perform(get("/api/v1/hubRoutes/{hubRouteId}", hubRouteId))
             .andExpect(status().isOk()) // HTTP 200 OK 응답 확인
             .andExpect(jsonPath("$.hubRouteId").value(hubRouteId.toString()))
-            .andDo(document("hubRoute/find-by-hubRouteId",
-                pathParameters(
+            .andDo(document("hubRoute/find-by-hubRouteId",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브 경로를 조회합니다")
+                        .tag("HubRoute-External"))
+                    .pathParameters(
                     parameterWithName("hubRouteId").description("허브 경로 ID")
                 ),
                 responseFields(
@@ -134,8 +138,12 @@ class HubRouteExternalControllerTest {
                 .content(objectMapper.writeValueAsString(requestDto)))
             .andExpect(status().isOk()) // HTTP 200 OK 응답 확인
 
-            .andDo(document("hubRoute/update-hubRoute",
-                pathParameters(
+            .andDo(document("hubRoute/update-hubRoute",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브 경로를 수정합니다")
+                        .tag("HubRoute-External"))
+                    .pathParameters(
                     parameterWithName("hubRouteId").description("허브 경로 ID")
                 ),
                 requestFields(
@@ -168,8 +176,12 @@ class HubRouteExternalControllerTest {
         mockMvc.perform(delete("/api/v1/hubRoutes/{hubRouteId}/{userId}", hubRouteId, userId)
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent()) // HTTP 204 No Content 응답 확인
-            .andDo(document("hubRoute/delete-hubRoute",
-                pathParameters(
+            .andDo(document("hubRoute/delete-hubRoute",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브 경로를 삭제합니다")
+                        .tag("HubRoute-External"))
+                .pathParameters(
                     parameterWithName("hubRouteId").description("허브 경로 ID"),  // 경로 파라미터 문서화
                     parameterWithName("userId").description("사용자 ID")  // 쿼리 파라미터 문서화
                 )
