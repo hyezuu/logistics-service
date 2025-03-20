@@ -8,6 +8,7 @@ import takeoff.logistics_service.msa.user.application.service.UserService;
 import takeoff.logistics_service.msa.user.presentation.dto.request.GetUserListRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
+import takeoff.logistics_service.msa.user.presentation.dto.request.UserValidationRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 
 @RestController

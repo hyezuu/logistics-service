@@ -35,4 +35,6 @@ public interface StockService {
 	void deleteAllByProductId(UUID productId);
 
 	void deleteAllByHubId(UUID hubId);
+
+	GetStockResponseDto findStockWithProductId(UUID productId);
 }

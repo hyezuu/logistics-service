@@ -1,4 +1,4 @@
-@host = http://localhost:19001
+@host = http://localhost:19000
 @contentType = application/json
 
 ### 재고 생성 API (PostStockRequestDto 사용)
@@ -12,6 +12,22 @@ Content-Type: {{contentType}}
     },
     "quantity": 100
 }
+
+### 재고 생성 API2 (PostStockRequestDto 사용)
+POST {{host}}/api/v1/app/stock
+Content-Type: {{contentType}}
+
+{
+    "stockId": {
+        "productId": "550e8400-e29b-41d4-a716-446655440002",
+        "hubId": "550e8400-e29b-41d4-a716-446655440003"
+    },
+    "quantity": 500
+}
+
+### 상품 ID 로 가장 재고 많은 결과 얻어오기 (하나만)
+GET {{host}}/api/v1/app/stock?productId=550e8400-e29b-41d4-a716-446655440002
+
 
 ### 재고 준비 (여러 상품 일괄)
 POST {{host}}/api/v1/app/stock/prepare

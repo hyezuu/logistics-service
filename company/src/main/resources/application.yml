@@ -1,13 +1,13 @@
 server:
-  port: 8082
+  port: 19030
 
 spring:
   application:
     name: company
   datasource:
     url: jdbc:postgresql://localhost:5432/company
-    username: postgres
-    password: abcde12345
+    username: sa
+    password: sa
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -16,3 +16,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:18999/eureka/

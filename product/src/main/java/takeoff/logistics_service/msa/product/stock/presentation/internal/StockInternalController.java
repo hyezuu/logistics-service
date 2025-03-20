@@ -5,6 +5,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import takeoff.logistics_service.msa.product.stock.application.service.StockServ
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.AbortStockRequest;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequest;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PrepareStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.response.GetStockResponse;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.response.PostStockResponse;
 
 @RestController
@@ -29,6 +31,12 @@ public class StockInternalController {
 		return PostStockResponse.from(stockService.saveStock(requestDto.toApplicationDto()));
 	}
 
+	@GetMapping
+	public GetStockResponse findStockWithProductId(@RequestParam UUID productId) {
+
+		return GetStockResponse.from(stockService.findStockWithProductId(productId));
+	}
+
 	@PostMapping("/prepare")
 	public void prepareStock(@RequestBody PrepareStockRequest requestDto) {
 		stockService.prepareStock(requestDto.toApplicationDto());
@@ -40,16 +48,14 @@ public class StockInternalController {
 	}
 
 	@DeleteMapping("/all-by-product")
-	public ResponseEntity<Void> deleteAllByProductId(@RequestParam UUID productId) {
+	public void deleteAllByProductId(@RequestParam UUID productId) {
 
 		stockService.deleteAllByProductId(productId);
-		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/all-by-hub")
-	public ResponseEntity<Void> deleteAllByHubId(@RequestParam UUID hubId) {
+	public void deleteAllByHubId(@RequestParam UUID hubId) {
 
 		stockService.deleteAllByHubId(hubId);
-		return ResponseEntity.noContent().build();
 	}
 }

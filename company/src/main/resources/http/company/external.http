@@ -1,0 +1,76 @@
+### 환경 변수 설정
+@host = http://localhost:19030
+@contentType = application/json
+
+### 회사 생성 요청 - ID 저장
+# @name createCompany
+POST {{host}}/api/v1/companies
+Content-Type: {{contentType}}
+
+{
+  "companyName": "푸른 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "550e8400-e29b-41d4-a716-446655440001",
+  "address": "서울특별시 강남구 테헤란로 123"
+}
+> {%
+  client.global.set("companyId", response.body.companyId)
+%}
+
+### 또 다른 회사 생성 요청
+POST {{host}}/api/v1/companies
+Content-Type: {{contentType}}
+
+{
+  "companyName": "신선 마트",
+  "companyType": "CUSTOMER",
+  "hubId": "550e8400-e29b-41d4-a716-446655440002",
+  "address": "서울특별시 서초구 서초대로 456"
+}
+
+### 회사 정보 수정 요청 - 생성된 ID 사용
+PUT {{host}}/api/v1/companies/{{companyId}}
+Content-Type: {{contentType}}
+
+{
+  "companyName": "그린 오가닉 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "550e8400-e29b-41d4-a716-446655440001",
+  "address": "서울특별시 강남구 테헤란로 123-45"
+}
+
+### 회사 정보 조회 - 생성된 ID 사용
+GET {{host}}/api/v1/companies/{{companyId}}
+Content-Type: {{contentType}}
+
+### 회사 정보 삭제 - 생성된 ID 사용
+DELETE {{host}}/api/v1/companies/{{companyId}}
+Content-Type: {{contentType}}
+
+### 회사 검색 (모든 회사)
+GET {{host}}/api/v1/companies/search
+Content-Type: {{contentType}}
+
+### 회사 검색 (필터링 - 이름으로)
+GET {{host}}/api/v1/companies/search?companyName=농장
+Content-Type: {{contentType}}
+
+### 회사 검색 (필터링 - 타입으로)
+GET {{host}}/api/v1/companies/search?companyType=SUPPLIER
+Content-Type: {{contentType}}
+
+### 회사 검색 (필터링 - 허브 ID로)
+GET {{host}}/api/v1/companies/search?hubId=550e8400-e29b-41d4-a716-446655440001
+Content-Type: {{contentType}}
+
+### 회사 검색 (필터링 - 주소로)
+GET {{host}}/api/v1/companies/search?address=강남
+Content-Type: {{contentType}}
+
+### 회사 검색 (정렬 및 페이징)
+GET {{host}}/api/v1/companies/search?sortBy=companyName&isAsc=true&page=0&size=30
+Content-Type: {{contentType}}
+
+### 회사 검색 (복합 필터링)
+GET {{host}}/api/v1/companies/search?companyType=SUPPLIER&address=서울&sortBy=companyName&isAsc=true
+Content-Type: {{contentType}}

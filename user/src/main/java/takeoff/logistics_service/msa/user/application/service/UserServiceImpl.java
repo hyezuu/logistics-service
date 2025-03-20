@@ -3,6 +3,7 @@ package takeoff.logistics_service.msa.user.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.user.domain.entity.User;
@@ -11,10 +12,7 @@ import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
 import takeoff.logistics_service.msa.user.domain.service.SearchQueryService;
 import takeoff.logistics_service.msa.user.domain.service.UserSearchCondition;
 import takeoff.logistics_service.msa.user.presentation.common.dto.PaginationDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.GetUserListRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PostLoginRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
+import takeoff.logistics_service.msa.user.presentation.dto.request.*;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 
 import java.util.List;
@@ -26,12 +24,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final SearchQueryService searchQueryService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public PostSignupResponseDto signup(PostSignupRequestDto requestDto) {
         validateDuplicateUser(requestDto.slackEmail(), requestDto.username(), requestDto.role());
-        User user = requestDto.toEntity();
+        String encodedPassword = passwordEncoder.encode(requestDto.password());
+
+        User user = requestDto.toEntity(encodedPassword);
         User savedUser = userRepository.save(user);
         return PostSignupResponseDto.from(savedUser);
     }
@@ -43,17 +44,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("이미 사용 중인 사용자 이름입니다.");
         }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public PostLoginResponseDto login(PostLoginRequestDto requestDto) {
-        User user = userRepository.findByEmail(requestDto.username())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 사용자입니다."));
-        if (!user.getPassword().equals(requestDto.password())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-        return null;
     }
 
     @Override
@@ -99,6 +89,19 @@ public class UserServiceImpl implements UserService {
                 .toList();
 
         return new GetUserListResponseDto(userList, PaginationDto.from(users));
+    }
+
+    @Override
+    public UserValidationResponseDto validateUser(UserValidationRequestDto requestDto) {
+        User user = userRepository.findByUsername(requestDto.username())
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // 🔥 비밀번호 검증 수행
+        if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return UserValidationResponseDto.from(user);
     }
 
 

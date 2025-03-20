@@ -72,8 +72,9 @@ public class NaverDirectionWebClient implements NaverApiAdapter{
         return getResult(response);
     }
     private static GetHubRouteNaverResponse getResult(NaverApiResponse response) {
-        int totalDistance = response.route().traoptimal().get(0).summary().distance();
-        int totalDuration = response.route().traoptimal().get(0).summary().duration();
+        int totalDistance = response.route().traoptimal().get(0).summary().distance() / 1000;
+        int totalDuration = response.route().traoptimal().get(0).summary().duration() / 60;
+
 
         return new GetHubRouteNaverResponse(totalDistance, totalDuration);
     }

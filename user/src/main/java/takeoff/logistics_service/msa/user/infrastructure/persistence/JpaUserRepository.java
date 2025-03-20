@@ -34,4 +34,8 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
         return findAllDeliveryManagers(spec, pageable);
     }
 
+    @Override
+    @Query("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.deletedAt IS NULL")
+    Optional<User> findByUsernameAndPassword(String username, String password);
+
 }

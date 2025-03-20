@@ -24,17 +24,25 @@ public class ProductServiceImpl implements ProductService {
 
 	private final ProductRepository productRepository;
 	private final StockClient stockClient;
+	private final HubClient hubClient;
+	private final CompanyClient companyClient;
 
 	@Override
 	@Transactional
 	public PostProductResponseDto saveProduct(PostProductRequestDto requestDto) {
 
-		Product product = productRepository
-			.save(Product.create(requestDto.toCommand()));
+		validateRequest(requestDto.hubId(), requestDto.companyId());
+
+		Product product = productRepository.save(Product.create(requestDto.toCommand()));
 		PostStockResponseDto responseDto = stockClient
 			.saveStock(PostStockRequestDto.from(product.getId(), requestDto));
 
 		return PostProductResponseDto.from(product, responseDto);
+	}
+
+	private void validateRequest(UUID hubId, UUID companyId) {
+		hubClient.findByHubId(hubId);
+		companyClient.findByCompanyId(companyId);
 	}
 
 	@Override

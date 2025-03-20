@@ -18,7 +18,7 @@ public class Stock extends BaseEntity {
 	@EmbeddedId
 	private StockId id;
 
-	private Integer quantity; //Vo로 래핑
+	private Integer quantity;
 
 	public static Stock create(CreateStock command){
 		return new Stock(

@@ -137,4 +137,13 @@ public class StockServiceImpl implements StockService {
 		stockRepository.findAllById_HubIdAndDeletedAtIsNull(hubId)
 			.forEach(stock -> stock.delete(0L));
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public GetStockResponseDto findStockWithProductId(UUID productId) {
+		return stockRepository
+			.findAllById_ProductIdAndDeletedAtIsNullOrderByQuantityDesc(productId)
+			.stream().findFirst().map(GetStockResponseDto::from)
+			.orElseThrow(() -> StockBusinessException.from(StockErrorCode.STOCK_NOT_FOUND));
+	}
 }

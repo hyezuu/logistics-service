@@ -29,11 +29,11 @@ public record PostSignupRequestDto(
         String password,
         UserRole role
 ) {
-    public User toEntity(){
+    public User toEntity(String encodedPassword){
         return User.builder()
                 .username(username)
                 .slackEmail(slackEmail)
-                .password(password)
+                .password(encodedPassword)
                 .role(role)
                 .build();
     }

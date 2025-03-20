@@ -26,4 +26,6 @@ public interface JpaStockRepository
 	List<Stock> findAllById_ProductIdAndDeletedAtIsNull(UUID productId);
 
 	List<Stock> findAllById_HubIdAndDeletedAtIsNull(UUID hubId);
+
+	List<Stock> findAllById_ProductIdAndDeletedAtIsNullOrderByQuantityDesc(UUID productId);
 }
