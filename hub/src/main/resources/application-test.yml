@@ -1,9 +1,7 @@
 spring:
-  config:
-    import: optional:file:.env.test[.properties]
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:~/takeoff
+    url: jdbc:h2:mem:test
     username: admin
     password:
   jpa:
@@ -16,7 +14,7 @@ spring:
         format_sql: true
         default_batch_fetch_size: 10
 
-NAVER:
-  ID: ${NAVER_Client_ID}
-  KEY: ${NAVER_Secret_KEY}
-  URL: ${NAVER_URL}
+eureka:
+  client:
+    register-with-eureka: false  # Eureka 서버에 등록
+    fetch-registry: false  # Eureka 서버로부터 레지스트리 정보 가져오기
