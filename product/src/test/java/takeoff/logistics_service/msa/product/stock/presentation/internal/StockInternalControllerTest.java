@@ -1,6 +1,6 @@
 package takeoff.logistics_service.msa.product.stock.presentation.internal;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -12,6 +12,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.queryPar
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.UUID;
@@ -31,7 +32,9 @@ import takeoff.logistics_service.msa.product.stock.presentation.dto.request.Stoc
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockItemRequest;
 
 @SpringBootTest
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(
+	uriPort = 19001
+)
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
@@ -64,13 +67,17 @@ class StockInternalControllerTest {
 			.andExpect(jsonPath("$.stockId.productId").value(productId.toString()))
 			.andExpect(jsonPath("$.stockId.hubId").value(hubId.toString()))
 			.andExpect(jsonPath("$.quantity").value(100))
-			.andDo(document("stock/save",
-				requestFields(
+			.andDo(document("stock/save", (
+				ResourceSnippetParameters
+					.builder()
+					.description("재고를 생성합니다")
+					.tag("Stock-Internal"))
+				.requestFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
 					fieldWithPath("quantity").description("재고 수량")
-				),
+				).
 				responseFields(
 					fieldWithPath("stockId").description("생성된 재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
@@ -100,11 +107,15 @@ class StockInternalControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.stockId.productId").value(productId.toString()))
 			.andExpect(jsonPath("$.stockId.hubId").value(hubId.toString()))
-			.andDo(document("stock/find-by-product-id",
-				queryParameters(
+			.andDo(document("stock/find-by-product-id", (
+				ResourceSnippetParameters
+					.builder()
+					.description("상품 ID로 재고를 조회합니다")
+					.tag("Stock-Internal"))
+				.queryParameters(
 					parameterWithName("productId").description("상품 ID")
-				),
-				responseFields(
+				)
+				.responseFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
@@ -149,8 +160,12 @@ class StockInternalControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(prepareStockRequest)))
 			.andExpect(status().isOk())
-			.andDo(document("stock/prepare",
-				requestFields(
+			.andDo(document("stock/prepare", (
+				ResourceSnippetParameters
+					.builder()
+					.description("주문 준비를 위해 여러 재고의 수량을 차감합니다")
+					.tag("Stock-Internal"))
+				.requestFields(
 					fieldWithPath("stocks").description("준비할 재고 목록"),
 					fieldWithPath("stocks[].stockId").description("재고 ID 정보"),
 					fieldWithPath("stocks[].stockId.productId").description("상품 ID"),
@@ -205,8 +220,12 @@ class StockInternalControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(abortStockRequest)))
 			.andExpect(status().isOk())
-			.andDo(document("stock/abort",
-				requestFields(
+			.andDo(document("stock/abort", (
+				ResourceSnippetParameters
+					.builder()
+					.description("주문 취소를 위해 여러 재고의 수량을 복구합니다")
+					.tag("Stock-Internal"))
+				.requestFields(
 					fieldWithPath("stocks").description("취소할 재고 목록"),
 					fieldWithPath("stocks[].stockId").description("재고 ID 정보"),
 					fieldWithPath("stocks[].stockId.productId").description("상품 ID"),
@@ -233,10 +252,14 @@ class StockInternalControllerTest {
 		mockMvc.perform(delete("/api/v1/app/stock/all-by-product")
 				.queryParam("productId", productId.toString()))
 			.andExpect(status().isOk())
-			.andDo(document("stock/delete-all-by-product",
-				queryParameters(
+			.andDo(document("stock/delete-all-by-product", (
+				ResourceSnippetParameters
+					.builder()
+					.description("상품 ID에 해당하는 모든 재고를 삭제합니다(재고가 남아있지 않은 경우)")
+					.tag("Stock-Internal"))
+				.queryParameters(
 					parameterWithName("productId").description("삭제할 상품 ID")
-				)))
+				)));
 		;
 	}
 
@@ -258,8 +281,12 @@ class StockInternalControllerTest {
 		mockMvc.perform(delete("/api/v1/app/stock/all-by-hub")
 				.queryParam("hubId", hubId.toString()))
 			.andExpect(status().isOk())
-			.andDo(document("stock/delete-all-by-hub",
-				queryParameters(
+			.andDo(document("stock/delete-all-by-hub", (
+				ResourceSnippetParameters
+					.builder()
+					.description("허브 ID에 해당하는 모든 재고를 삭제합니다(재고가 남아있지 않은 경우)")
+					.tag("Stock-Internal"))
+				.queryParameters(
 					parameterWithName("hubId").description("삭제할 허브 ID")
 				)));
 	}

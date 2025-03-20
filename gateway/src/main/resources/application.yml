@@ -20,19 +20,43 @@ spring:
         - id: slack
           uri: lb://slack
           predicates:
-            - Path=/api/v1/slacks/**,/api/v1/app/slacks/**
+            - Path=/api/v1/slacks/**,/api/v1/app/slacks/**,/springdoc/openapi3-slack-service.json
         - id: product
           uri: lb://product
           predicates:
-            - Path=/api/v1/products/**,/api/v1/app/products/**,/api/v1/stock/**,/api/v1/app/stock/**
+            - Path=/api/v1/products/**,/api/v1/app/products/**,/api/v1/stock/**,/api/v1/app/stock/**,/springdoc/openapi3-product-service.json
         - id: hub
           uri: lb://hub
           predicates:
-            - Path=/api/v1/hubs/**,/api/v1/app/hubs/**,/api/v1/hubRoutes/**,/api/v1/app/hubRoutes/**
+            - Path=/api/v1/hubs/**,/api/v1/app/hubs/**,/api/v1/hubRoutes/**,/api/v1/app/hubRoutes/**,/springdoc/openapi3-hub-service.json
         - id: order
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**,/api/v1/app/orders/**
+
+springdoc:
+  swagger-ui:
+    urls[0]:
+      name: user
+      url: /springdoc/openapi3-user-service.json
+    urls[1]:
+      name: company
+      url: /springdoc/openapi3-company-service.json
+    urls[2]:
+      name: slack
+      url: /springdoc/openapi3-slack-service.json
+    urls[3]:
+      name: product
+      url: /springdoc/openapi3-product-service.json
+    urls[4]:
+      name: hub
+      url: /springdoc/openapi3-hub-service.json
+    urls[5]:
+      name: order
+      url: /springdoc/openapi3-order-service.json
+    path: /docs
+  api-docs:
+    enabled: true
 
 server:
   port: 19000
