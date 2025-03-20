@@ -3,7 +3,7 @@ package takeoff.logistics_service.msa.order.presentation.dto.response;
 
 import java.util.List;
 import java.util.UUID;
-import takeoff.logistics_service.msa.order.model.entity.Order;
+import takeoff.logistics_service.msa.order.domain.entity.Order;
 
 public record PostOrderResponseDto(
     UUID orderId,
