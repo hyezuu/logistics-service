@@ -32,7 +32,7 @@ springdoc:
     enabled: true
     path: /docs
     url: /springdoc/openapi3-product-service.json
-    operations-sorter: alpha
+    operations-sorter: method
     tags-sorter: alpha
   api-docs:
     enabled: true
