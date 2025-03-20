@@ -214,7 +214,7 @@ public class HubRouteServiceImpl implements HubRouteService {
     }
 
     @Override
-    @CacheEvict(value = "hubRoutes", key = "#hubRoute.fromHubId + '-' + #hubRoute.toHubId")
+    @CacheEvict(value = "hubRoutes", allEntries = true)
     public PutHubRouteResponseDto updateHubRoute(UUID hubRouteId,
         PutHubRouteRequestDto requestDto) {
         HubRoute hubRoute = getHubRoute(
@@ -229,7 +229,7 @@ public class HubRouteServiceImpl implements HubRouteService {
 
 
     @Override
-    @CacheEvict(value = "hubRoutes", key = "#hubRoute.fromHubId + '-' + #hubRoute.toHubId")
+    @CacheEvict(value = "hubRoutes", allEntries = true)
     public void deleteHubRoute(UUID hubRouteId, Long userId) {
         HubRoute hubRoute = getHubRoute(hubRouteId);
         hubRoute.delete(userId);

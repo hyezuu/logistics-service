@@ -3,8 +3,8 @@ GET https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?goal=126.8358
 X-NCP-APIGW-API-KEY-ID:
 X-NCP-APIGW-API-KEY:
 
-###37.514219,127.112628,0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7,서울특별시 송파구 송파대로 55,서울특별시 센터
-###37.649621,126.835836,fc5bcff8-dd48-44fa-b36a-80df0262b178,경기도 고양시 덕양구 권율대로 570,경기 북부 센터
+
+###
 POST http://localhost:19042/api/v1/app/hubRoutes
 Content-Type: application/json
 
@@ -33,4 +33,3 @@ Content-Type: application/json
   "fromHubId": "8eb343e4-ddd8-478a-8dae-c561a4d72062",
   "toHubId": "bd022638-f752-4bde-abd6-096441f68907"
 }
-1->3 1-2, 2-3

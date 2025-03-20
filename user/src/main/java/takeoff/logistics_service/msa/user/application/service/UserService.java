@@ -1,16 +1,13 @@
 package takeoff.logistics_service.msa.user.application.service;
 
-import takeoff.logistics_service.msa.user.presentation.dto.request.GetUserListRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PostLoginRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
+import takeoff.logistics_service.msa.user.presentation.dto.request.*;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 
 public interface UserService {
     PostSignupResponseDto signup(PostSignupRequestDto requestDto);
-    PostLoginResponseDto login(PostLoginRequestDto requestDto);
     GetUserResponseDto getUserById(Long id);
     PatchUserResponseDto updateUser(Long id, PatchUserRequestDto requestDto);
     DeleteUserResponseDto deleteUser(Long id);
     GetUserListResponseDto getAllUsers(GetUserListRequestDto requestDto);
+    UserValidationResponseDto validateUser(UserValidationRequestDto requestDto);
 }

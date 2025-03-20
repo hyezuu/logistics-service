@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.hub.hub.application.dto;
 
 import java.util.List;
+import java.util.UUID;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.SearchHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.domain.repository.search.HubSearchCriteriaResponse;
 import takeoff.logistics_service.msa.hub.hub.domain.repository.search.PaginatedResult;
@@ -26,5 +27,12 @@ public record PaginatedResultDto<T>(List<T> content,
             searchResult.totalElements(),
             searchResult.totalPages()
         );
+    }
+
+    //ID들만 추출
+    public List<UUID> getHubIds() {
+        return content.stream()
+            .map(item -> ((SearchHubResponseDto) item).hubId())
+            .toList();
     }
 }

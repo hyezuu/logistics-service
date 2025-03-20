@@ -16,5 +16,6 @@ public interface UserRepository {
     Page<User> findAll(Specification<User> spec, Pageable pageable);
     Page<DeliveryManager> findAllDeliveryManagers(Specification<DeliveryManager> spec, Pageable pageable);
     Optional<DeliveryManager> findDeliveryManagerById(Long id);
+    Optional<User> findByUsernameAndPassword(String username, String password);
 
 }

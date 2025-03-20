@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface DeliveryClient {
 
   @PostMapping("/api/v1/app/delivery")
-  public UUID saveDelivery();
+  public UUID saveDelivery(UUID orderId);
 }

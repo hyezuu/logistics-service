@@ -1,0 +1,16 @@
+###
+GET {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
+
+###
+PUT {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
+Content-Type: application/json
+
+{
+  "fromHubId": "",
+  "toHubId": "",
+  "distance": {},
+  "duration": {}
+}
+
+###
+DELETE {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}

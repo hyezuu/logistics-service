@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 import takeoff.logistics_service.msa.slack.application.service.SlackService;
 import takeoff.logistics_service.msa.slack.presentation.dto.request.PostSlackRequest;
+import takeoff.logistics_service.msa.slack.presentation.dto.request.PostUserSlackRequest;
 import takeoff.logistics_service.msa.slack.presentation.dto.response.PostSlackResponse;
 /**
  * @author : hanjihoon
@@ -29,6 +30,13 @@ public class SlackInternalController {
         return slackService.saveSlackMessage(requestDto
             .toApplicationDto(), userId)
             .map(PostSlackResponse::from);
+    }
+
+    @PostMapping("/message/users/{userId}")
+    public PostSlackResponse saveSlackMessageToUser(@Valid @RequestBody PostUserSlackRequest request,
+        @PathVariable Long userId) {
+        return PostSlackResponse.from(slackService.saveSlackMessageToUser(request.toApplicationDto()
+            , userId));
     }
 
 

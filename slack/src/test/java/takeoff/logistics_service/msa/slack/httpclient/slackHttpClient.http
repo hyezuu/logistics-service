@@ -1,5 +1,5 @@
-###
-POST http://localhost:19000/api/v1/app/slacks/message/1
+### 내부에서 사용하는 엔드포인트
+POST {{baseUrl}}/api/v1/app/slacks/message/1
 Content-Type: application/json
 
 {
@@ -17,11 +17,27 @@ Content-Type: application/json
   },
   "companyDeliveryUserName": "고길동 / kdk@sparta.world"
 }
-###
-GET http://localhost:19041/api/v1/slacks/47e3ed7e-af0b-4e0a-a4a8-b09137fe4045
+> {%
+  client.global.set("slackId", response.body.slackId)
+%}
 
 ###
-PATCH http://localhost:19041/api/v1/slacks/d2bbbf71-8cc7-4fe4-b7f9-565992e08d78
+POST {{baseUrl}}/api/v1/app/slacks/message/users/1
+Content-Type: application/json
+
+{
+  "postContentsRequest": {
+    "message": "유저 채널에 발송되는 슬랙 메시지 입니다."
+  }
+}
+> {%
+  client.global.set("slackId", response.body.slackId)
+%}
+###
+GET {{baseUrl}}/api/v1/slacks/{{slackId}}
+
+###
+PATCH {{baseUrl}}/api/v1/slacks/{{slackId}}
 Content-Type: application/json
 
 {
@@ -32,10 +48,10 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:19041/api/v1/slacks/{{slackId}}
+DELETE {{baseUrl}}/api/v1/slacks/{{slackId}}
 
 ###
-GET http://localhost:19041/api/v1/slacks/search?message=주문&isAsc=true&sortBy=createdAt&page=0&size=10
+GET {{baseUrl}}/api/v1/slacks/search?message=주문&isAsc=true&sortBy=createdAt&page=0&size=10
 
 
 

@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
 import takeoff.logistics_service.msa.slack.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PatchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
+import takeoff.logistics_service.msa.slack.application.dto.request.PostUserSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.SearchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.response.GetSlackResponseDto;
 import takeoff.logistics_service.msa.slack.application.dto.response.PatchSlackResponseDto;
@@ -44,9 +45,17 @@ public class SlackServiceImpl implements SlackService {
             .map(resultMessage -> {
                 Slack slack = Slack.createSlack(userId, resultMessage);
                 Slack savedSlack = slackRepository.save(slack);
-                slackAlarmService.sendSlackMessage(savedSlack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
+                slackAlarmService.sendSlackMessageToDeliveryChannel(savedSlack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
                 return PostSlackResponseDto.from(savedSlack);
             });
+    }
+
+    @Override
+    public PostSlackResponseDto saveSlackMessageToUser(PostUserSlackRequestDto requestDto,
+        Long userId) {
+        slackAlarmService.sendSlackMessageToUserChannel(requestDto.postContentsRequestDto().message(),
+            SlackConstant.USER_CHANNEL);
+        return PostSlackResponseDto.from(slackRepository.save(requestDto.toEntity(userId)));
     }
 
     @Override
@@ -71,6 +80,7 @@ public class SlackServiceImpl implements SlackService {
             slackRepository.searchSlack(searchSlackRequest.toSearchCriteria())
         );
     }
+
     @Override
     public void deleteSlack(UUID slackId, Long userId) {
         Slack slack = findSlack(slackId);
