@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class SlackConstant {
 
     public static final String PROJECT_CHANNEL = "#프로젝트";
+    public static final String USER_CHANNEL = "#사용자메세지";
 }

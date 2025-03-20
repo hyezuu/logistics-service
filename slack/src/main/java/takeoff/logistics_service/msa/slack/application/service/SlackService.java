@@ -5,6 +5,7 @@ import reactor.core.publisher.Mono;
 import takeoff.logistics_service.msa.slack.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PatchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
+import takeoff.logistics_service.msa.slack.application.dto.request.PostUserSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.SearchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.response.GetSlackResponseDto;
 import takeoff.logistics_service.msa.slack.application.dto.response.PatchSlackResponseDto;
@@ -26,5 +27,7 @@ public interface SlackService {
     void deleteSlack(UUID slackId, Long userId);
 
     PaginatedResultDto<SearchSlackResponseDto> searchSlack(SearchSlackRequestDto searchSlackRequestDto);
+
+    PostSlackResponseDto saveSlackMessageToUser(PostUserSlackRequestDto requestDto, Long userId);
 
 }
