@@ -1,11 +1,19 @@
 package takeoff.logistics_service.msa.product.stock.presentation.external;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -17,11 +25,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import takeoff.logistics_service.msa.product.stock.presentation.dto.request.*;
-import takeoff.logistics_service.msa.product.stock.presentation.internal.StockInternalController;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.DecreaseStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.IncreaseStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequest;
+import takeoff.logistics_service.msa.product.stock.presentation.dto.request.StockIdRequest;
 
 @SpringBootTest
-@AutoConfigureRestDocs
+@AutoConfigureRestDocs(
+	uriPort = 19001
+)
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
@@ -32,9 +44,6 @@ class StockExternalControllerTest {
 
 	@Autowired
 	private ObjectMapper objectMapper;
-
-	@Autowired
-	private StockInternalController stockInternalController; // 테스트 데이터 준비를 위해 사용
 
 	private UUID createRandomUUID(String seed) {
 		return UUID.nameUUIDFromBytes(seed.getBytes());
@@ -69,12 +78,16 @@ class StockExternalControllerTest {
 			.andExpect(jsonPath("$.stockId.productId").value(productId.toString()))
 			.andExpect(jsonPath("$.stockId.hubId").value(hubId.toString()))
 			.andExpect(jsonPath("$.quantity").exists())
-			.andDo(document("stock-external/find",
-				requestFields(
+			.andDo(document("stock-external/find", (
+				ResourceSnippetParameters
+					.builder()
+					.description("재고 ID로 재고를 조회합니다")
+					.tag("Stock-External"))
+				.requestFields(
 					fieldWithPath("productId").description("조회할 상품 ID"),
 					fieldWithPath("hubId").description("조회할 허브 ID")
-				),
-				responseFields(
+				)
+				.responseFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
@@ -97,8 +110,12 @@ class StockExternalControllerTest {
 		mockMvc.perform(get("/api/v1/stock/search")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-default",
-				responseFields(
+			.andDo(document("stock-external/search-default", (
+				ResourceSnippetParameters
+					.builder()
+					.description("조건 없이 재고를 검색합니다")
+					.tag("Stock-External"))
+				.responseFields(
 					fieldWithPath("content").description("재고 목록"),
 					fieldWithPath("content[].stockId").description("재고 ID 정보"),
 					fieldWithPath("content[].stockId.productId").description("상품 ID"),
@@ -116,8 +133,12 @@ class StockExternalControllerTest {
 				.param("productId", productId.toString())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-by-product-id",
-				queryParameters(
+			.andDo(document("stock-external/search-by-product-id", (
+				ResourceSnippetParameters
+					.builder()
+					.description("상품 ID로 재고를 검색합니다")
+					.tag("Stock-External"))
+				.queryParameters(
 					parameterWithName("productId").description("검색할 상품 ID")
 				)));
 
@@ -126,8 +147,12 @@ class StockExternalControllerTest {
 				.param("hubId", hubId.toString())
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-by-hub-id",
-				queryParameters(
+			.andDo(document("stock-external/search-by-hub-id", (
+				ResourceSnippetParameters
+					.builder()
+					.description("허브 ID로 재고를 검색합니다")
+					.tag("Stock-External"))
+				.queryParameters(
 					parameterWithName("hubId").description("검색할 허브 ID")
 				)));
 
@@ -136,8 +161,12 @@ class StockExternalControllerTest {
 				.param("isAsc", "true")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-with-asc-sort",
-				queryParameters(
+			.andDo(document("stock-external/search-with-asc-sort", (
+				ResourceSnippetParameters
+					.builder()
+					.description("오름차순으로 재고를 검색합니다")
+					.tag("Stock-External"))
+				.queryParameters(
 					parameterWithName("isAsc").description("오름차순 여부 (true: 오름차순, false: 내림차순, 기본값: false)")
 				)));
 
@@ -146,8 +175,12 @@ class StockExternalControllerTest {
 				.param("sortBy", "updatedAt")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-with-sort-by",
-				queryParameters(
+			.andDo(document("stock-external/search-with-sort-by", (
+				ResourceSnippetParameters
+					.builder()
+					.description("정렬 기준 필드를 지정하여 재고를 검색합니다")
+					.tag("Stock-External"))
+				.queryParameters(
 					parameterWithName("sortBy").description("정렬 기준 필드 (기본값: createdAt)")
 				)));
 
@@ -156,8 +189,12 @@ class StockExternalControllerTest {
 				.param("page", "1")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-with-page",
-				queryParameters(
+			.andDo(document("stock-external/search-with-page", (
+				ResourceSnippetParameters
+					.builder()
+					.description("페이지 번호를 지정하여 재고를 검색합니다")
+					.tag("Stock-External"))
+				.queryParameters(
 					parameterWithName("page").description("페이지 번호 (0부터 시작, 기본값: 0)")
 				)));
 
@@ -166,8 +203,12 @@ class StockExternalControllerTest {
 				.param("size", "30")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-with-size",
-				queryParameters(
+			.andDo(document("stock-external/search-with-size", (
+				ResourceSnippetParameters
+					.builder()
+					.description("페이지 크기를 지정하여 재고를 검색합니다")
+					.tag("Stock-External"))
+				.queryParameters(
 					parameterWithName("size").description("페이지 크기 (유효한 값: 10, 30, 50, 기본값: 10)")
 				)));
 
@@ -188,8 +229,12 @@ class StockExternalControllerTest {
 				.param("size", "30")
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
-			.andDo(document("stock-external/search-with-all-params",
-				queryParameters(
+			.andDo(document("stock-external/search-with-all-params", (
+				ResourceSnippetParameters
+					.builder()
+					.description("모든 검색 조건을 적용하여 재고를 검색합니다")
+					.tag("Stock-External"))
+				.queryParameters(
 					parameterWithName("productId").description("검색할 상품 ID"),
 					parameterWithName("hubId").description("검색할 허브 ID"),
 					parameterWithName("sortBy").description("정렬 기준 필드 (기본값: createdAt)"),
@@ -219,14 +264,18 @@ class StockExternalControllerTest {
 			.andExpect(jsonPath("$.stockId.productId").value(productId.toString()))
 			.andExpect(jsonPath("$.stockId.hubId").value(hubId.toString()))
 			.andExpect(jsonPath("$.quantity").exists())
-			.andDo(document("stock-external/increase",
-				requestFields(
+			.andDo(document("stock-external/increase", (
+				ResourceSnippetParameters
+					.builder()
+					.description("재고 수량을 증가시킵니다")
+					.tag("Stock-External"))
+				.requestFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
 					fieldWithPath("quantity").description("증가시킬 수량")
-				),
-				responseFields(
+				)
+				.responseFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
@@ -254,14 +303,18 @@ class StockExternalControllerTest {
 			.andExpect(jsonPath("$.stockId.productId").value(productId.toString()))
 			.andExpect(jsonPath("$.stockId.hubId").value(hubId.toString()))
 			.andExpect(jsonPath("$.quantity").exists())
-			.andDo(document("stock-external/increase",
-				requestFields(
+			.andDo(document("stock-external/increase-specific", (
+				ResourceSnippetParameters
+					.builder()
+					.description("특정 재고의 수량을 증가시킵니다")
+					.tag("Stock-External"))
+				.requestFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
 					fieldWithPath("quantity").description("증가시킬 수량")
-				),
-				responseFields(
+				)
+				.responseFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
@@ -289,14 +342,18 @@ class StockExternalControllerTest {
 			.andExpect(jsonPath("$.stockId.productId").value(productId.toString()))
 			.andExpect(jsonPath("$.stockId.hubId").value(hubId.toString()))
 			.andExpect(jsonPath("$.quantity").exists())
-			.andDo(document("stock-external/decrease",
-				requestFields(
+			.andDo(document("stock-external/decrease", (
+				ResourceSnippetParameters
+					.builder()
+					.description("재고 수량을 감소시킵니다")
+					.tag("Stock-External"))
+				.requestFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
 					fieldWithPath("quantity").description("감소시킬 수량")
-				),
-				responseFields(
+				)
+				.responseFields(
 					fieldWithPath("stockId").description("재고 ID 정보"),
 					fieldWithPath("stockId.productId").description("상품 ID"),
 					fieldWithPath("stockId.hubId").description("허브 ID"),
@@ -320,8 +377,12 @@ class StockExternalControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(stockIdRequest)))
 			.andExpect(status().isNoContent())
-			.andDo(document("stock-external/delete",
-				requestFields(
+			.andDo(document("stock-external/delete", (
+				ResourceSnippetParameters
+					.builder()
+					.description("재고를 삭제합니다")
+					.tag("Stock-External"))
+				.requestFields(
 					fieldWithPath("productId").description("삭제할 상품 ID"),
 					fieldWithPath("hubId").description("삭제할 허브 ID")
 				)));
