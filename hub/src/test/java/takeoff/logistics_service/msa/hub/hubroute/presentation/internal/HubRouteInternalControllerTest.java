@@ -1,14 +1,14 @@
 package takeoff.logistics_service.msa.hub.hubroute.presentation.internal;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
@@ -101,8 +101,12 @@ class HubRouteInternalControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))  // 요청 본문 설정
             .andExpect(status().isOk())  // HTTP 201 Created 응답 확인
-            .andDo(document("hubRoute/create-hubRoute",
-                requestFields(
+            .andDo(document("hubRoute/create-hubRoute",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브 경로를 생성합니다")
+                        .tag("HubRoute-Internal"))
+                    .requestFields(
                     fieldWithPath("fromHubId").description("출발 허브 ID"),
                     fieldWithPath("toHubId").description("도착 허브 ID")
                 ),
@@ -151,8 +155,12 @@ class HubRouteInternalControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))  // 요청 본문 설정
             .andExpect(status().isOk())  // HTTP 200 OK 응답 확인
-            .andDo(document("hubRoute/get-delivery-hubRouteList",
-                requestFields(
+            .andDo(document("hubRoute/get-delivery-hubRouteList",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브 경로 목록을 조회합니다")
+                        .tag("HubRoute-Internal"))
+                    .requestFields(
                     fieldWithPath("fromHubId").description("출발 허브 ID"),
                     fieldWithPath("toHubId").description("도착 허브 ID")
                 ),

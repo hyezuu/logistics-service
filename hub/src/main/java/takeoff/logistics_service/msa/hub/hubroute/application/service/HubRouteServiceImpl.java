@@ -179,8 +179,8 @@ public class HubRouteServiceImpl implements HubRouteService {
             })
             .block();
 
-        HubRoute hubRoute = result
-            .toEntity(
+        HubRoute hubRoute = GetHubRouteNaverResponseDto
+            .toEntity(result,
                 PostHubRouteRequestDto
                     .createDto(fromHub.hubId(), toHub.hubId()));
         FindHubRoutesDto.from(hubRouteRepository.save(hubRoute));

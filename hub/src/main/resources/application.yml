@@ -47,8 +47,12 @@ NAVER:
   URL: ${NAVER_URL}
 
 springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs
+    url: /springdoc/openapi3-hub-service.json
+    operations-sorter: method
+    tags-sorter: alpha
   api-docs:
-    path: hub/v3/api-docs
-    version: openapi_3_1
-  default-consumes-media-type: application/json
-  default-produces-media-type: application/json
+    enabled: true
+    path: /api-docs-hub-service

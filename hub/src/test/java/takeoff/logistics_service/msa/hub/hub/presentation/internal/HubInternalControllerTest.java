@@ -1,17 +1,16 @@
 package takeoff.logistics_service.msa.hub.hub.presentation.internal;
 
+import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
@@ -86,8 +85,12 @@ class HubInternalControllerTest {
         // When & Then
         mockMvc.perform(get("/api/v1/app/hubs/{hubId}", hubId))
             .andExpect(status().isOk()) // HTTP 200 OK 응답 확인
-            .andDo(document("hub/find-hub-by-id",
-                pathParameters(
+            .andDo(document("hub/find-hub-by-id",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브를 조회합니다")
+                        .tag("Hub-Internal"))
+                    .pathParameters(
                     parameterWithName("hubId").description("허브의 고유 ID")
                 ),
                 responseFields(
@@ -134,8 +137,12 @@ class HubInternalControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(hubIds))) // 요청 본문에 hubIds 객체 전달
             .andExpect(status().isOk()) // HTTP 200 OK 응답 확인
-            .andDo(document("hub/find-stopover-routes",
-                requestFields(
+            .andDo(document("hub/find-stopover-routes",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브를 경로를 탐색합니다")
+                        .tag("Hub-Internal"))
+                    .requestFields(
                     fieldWithPath("fromHubId").description("출발지 허브 ID"),
                     fieldWithPath("toHubId").description("도착지 허브 ID")
                 ),
@@ -175,8 +182,12 @@ class HubInternalControllerTest {
         // When & Then
         mockMvc.perform(get("/api/v1/app/hubs/allHub"))
             .andExpect(status().isOk()) // HTTP 200 OK 응답 확인
-            .andDo(document("hub/find-all-hubs",
-                responseFields(
+            .andDo(document("hub/find-all-hubs",(
+                    ResourceSnippetParameters
+                        .builder()
+                        .description("허브를 모두 조회합니다")
+                        .tag("Hub-Internal"))
+                .responseFields(
                     fieldWithPath("[].hubId").description("허브 ID"),
                     fieldWithPath("[].hubName").description("허브 이름"),
                     fieldWithPath("[].address").description("허브 주소"),
