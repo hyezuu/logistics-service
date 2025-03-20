@@ -50,3 +50,9 @@ management:
   endpoint:
     gateway:
       enabled: true   # 게이트웨이 액추에이터 활성화
+
+springdoc:
+  swagger-ui:
+    urls[0]:
+        name: hub
+        url: /hub/v3/api-docs

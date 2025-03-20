@@ -45,3 +45,10 @@ NAVER:
   ID: ${NAVER_Client_ID}
   KEY: ${NAVER_Secret_KEY}
   URL: ${NAVER_URL}
+
+springdoc:
+  api-docs:
+    path: hub/v3/api-docs
+    version: openapi_3_1
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json

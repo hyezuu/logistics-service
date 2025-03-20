@@ -36,14 +36,14 @@ public class HubServiceImpl implements HubService {
     private final HubRepository hubRepository;
 
     @Override
-    @Cacheable(value = "hubs", key = "#result.hubId")
+    @Cacheable(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'")
     public PostHubResponseDto saveHub(PostHubRequestDto requestDto) {
         return PostHubResponseDto.from(hubRepository.save(requestDto.toEntity()));
     }
 
     @Override
     @Caching(evict = {
-        @CacheEvict(value = "hubs", key = "#result.hubId"),
+        @CacheEvict(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'"),
         //검색에 있는 모든 캐시를 삭제함..아쉽지만 더 공부하고 수정 예정..
         @CacheEvict(value = "hubSearch", allEntries = true),
         @CacheEvict(value = "hubsRoute", allEntries = true)
@@ -56,7 +56,7 @@ public class HubServiceImpl implements HubService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "hubs", key = "#result.hubId")
+    @Cacheable(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'")
     public GetHubResponseDto findByHubId(UUID hubId) {
         Hub hub = getHub(hubId);
         return GetHubResponseDto.from(hub);

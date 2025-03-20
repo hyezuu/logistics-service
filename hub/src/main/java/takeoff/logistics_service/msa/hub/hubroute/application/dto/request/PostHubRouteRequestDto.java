@@ -2,7 +2,6 @@ package takeoff.logistics_service.msa.hub.hubroute.application.dto.request;
 
 import java.util.UUID;
 import lombok.Builder;
-import takeoff.logistics_service.msa.hub.hubroute.domain.entity.HubRoute;
 
 /**
  * @author : hanjihoon

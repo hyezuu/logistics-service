@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Mono;
 import takeoff.logistics_service.msa.slack.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PatchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
@@ -36,7 +35,7 @@ public class SlackServiceImpl implements SlackService {
     private final SlackAlarmService slackAlarmService;
 
     @Override
-    public Mono<PostSlackResponseDto> saveSlackMessage(PostSlackMessageRequestDto requestDto, Long userId) {
+    public PostSlackResponseDto saveSlackMessage(PostSlackMessageRequestDto requestDto, Long userId) {
          return webRequestClient.sendRequestToGemini(requestDto)
              .onErrorMap(error -> {
                  log.error("AI 응답을 받을 수 없습니다.", error);
@@ -47,7 +46,7 @@ public class SlackServiceImpl implements SlackService {
                 Slack savedSlack = slackRepository.save(slack);
                 slackAlarmService.sendSlackMessageToDeliveryChannel(savedSlack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
                 return PostSlackResponseDto.from(savedSlack);
-            });
+            }).block();
     }
 
     @Override

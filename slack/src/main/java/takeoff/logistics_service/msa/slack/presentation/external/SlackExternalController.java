@@ -49,10 +49,11 @@ public class SlackExternalController {
                     requestDto.userId()))));
     }
 
-    @DeleteMapping("/{slackId}")
-    public ResponseEntity<Void> deleteBySlack(@PathVariable("slackId")UUID slackId,
-        Long userId) {
-        slackService.deleteSlack(slackId,userId);
+    @DeleteMapping("/{slackId}/{userId}")
+    public ResponseEntity<Void> deleteBySlack(
+        @PathVariable("slackId") UUID slackId,
+        @PathVariable("userId") Long userId) {
+        slackService.deleteSlack(slackId, userId);
         return ResponseEntity.noContent().build();
     }
 
