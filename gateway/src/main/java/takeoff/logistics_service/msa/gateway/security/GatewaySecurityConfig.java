@@ -23,7 +23,7 @@ public class GatewaySecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/login", "/auth/token/refresh", "/api/v1/users/signup").permitAll()
+                        .requestMatchers("/auth/login", "/auth/token/refresh", "/api/v1/users/signup", "/api/v1/app/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

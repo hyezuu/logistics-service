@@ -10,15 +10,19 @@ spring:
           enabled: true
       routes:
         - id: auth
-          uri: lb://auth
+          uri: lb://user
           predicates:
-            - Path=/api/v1/auth/**
+            - Path=/api/v1/auth/**,/api/v1/app/auth/**
         - id: user
           uri: lb://user
           predicates:
             - Path=/api/v1/users/**,/api/v1/app/users/**
+        - id: user-internal
+          uri: lb://user
+          predicates:
+            - Path=/api/v1/app/users/**
           filters:
-            - name: JwtAuthFilter
+            - RemoveRequestHeader=Authorization
         - id: company
           uri: lb://company
           predicates:
@@ -26,25 +30,47 @@ spring:
         - id: slack
           uri: lb://slack
           predicates:
-            - Path=/api/v1/slacks/**,/api/v1/app/slacks/**
+            - Path=/api/v1/slacks/**,/api/v1/app/slacks/**,/springdoc/openapi3-slack-service.json
         - id: product
           uri: lb://product
           predicates:
-            - Path=/api/v1/products/**,/api/v1/app/products/**,/api/v1/stock/**,/api/v1/app/stock/**
+            - Path=/api/v1/products/**,/api/v1/app/products/**,/api/v1/stock/**,/api/v1/app/stock/**,/springdoc/openapi3-product-service.json
         - id: hub
           uri: lb://hub
           predicates:
-            - Path=/api/v1/hubs/**,/api/v1/app/hubs/**,/api/v1/hubRoutes/**,/api/v1/app/hubRoutes/**
+            - Path=/api/v1/hubs/**,/api/v1/app/hubs/**,/api/v1/hubRoutes/**,/api/v1/app/hubRoutes/**,/springdoc/openapi3-hub-service.json
         - id: order
           uri: lb://order
           predicates:
-            - Path=/api/v1/orders/**,/api/v1/app/orders/**
+            - Path=/api/v1/orders/**,/api/v1/app/orders**/
+
+      default-filters:
+        - name: AddRequestHeader
+          args:
+            name: Authorization
+            value: "{Authorization}"
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: user
+        url: /springdoc/openapi3-user-service.json
+      - name: company
+        url: /springdoc/openapi3-company-service.json
+      - name: slack
+        url: /springdoc/openapi3-slack-service.json
+      - name: product
+        url: /springdoc/openapi3-product-service.json
+      - name: hub
+        url: /springdoc/openapi3-hub-service.json
+      - name: order
+        url: /springdoc/openapi3-order-service.json
+    path: /docs
+  api-docs:
+    enabled: true
 
 server:
   port: 19000
-
-jwt:
-  secret: "cJI/zwDDsqA6ZN9XEZ+jnB86KV0iAx7AF4sXHrmEJkg="
 
 eureka:
   client:
