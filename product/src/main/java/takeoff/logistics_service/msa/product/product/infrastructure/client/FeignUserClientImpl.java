@@ -15,8 +15,8 @@ import takeoff.logistics_service.msa.product.product.application.dto.response.Ge
 import takeoff.logistics_service.msa.product.product.application.exception.ProductBusinessException;
 import takeoff.logistics_service.msa.product.product.application.service.UserClient;
 
-@Component
 @RequiredArgsConstructor
+@Component("productFeignUserClientImpl")
 public class FeignUserClientImpl implements UserClient {
 
 	private final FeignUserClient feignUserClient;
