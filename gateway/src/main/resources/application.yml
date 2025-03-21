@@ -10,7 +10,7 @@ spring:
           enabled: true
       routes:
         - id: auth
-          uri: lb://user
+          uri: lb://auth
           predicates:
             - Path=/api/v1/auth/**,/api/v1/app/auth/**
         - id: user
@@ -41,11 +41,11 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**,/api/v1/app/orders**/
-      default-filters:
-        - name: AddRequestHeader
-          args:
-            name: Authorization
-            value: "{Authorization}"
+#      default-filters:
+#        - name: AddRequestHeader
+#          args:
+#            name: Authorization
+#            value: "{Authorization}"
 
 springdoc:
   swagger-ui:
@@ -95,3 +95,12 @@ management:
   endpoint:
     gateway:
       enabled: true   # 게이트웨이 액추에이터 활성화
+
+logging:
+  level:
+    takeoff:
+      logistics_service:
+        msa:
+          gateway:
+            security:
+              GatewayJwtFilter: DEBUG

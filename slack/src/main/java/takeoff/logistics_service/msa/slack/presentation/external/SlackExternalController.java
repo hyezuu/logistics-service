@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import takeoff.logistics_service.msa.common.domain.UserInfo;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
 import takeoff.logistics_service.msa.slack.application.service.SlackService;
 import takeoff.logistics_service.msa.slack.presentation.dto.PaginatedResultApi;
 import takeoff.logistics_service.msa.slack.presentation.dto.request.PatchSlackRequest;
@@ -33,14 +35,16 @@ public class SlackExternalController {
 
     //생성 이외 엔드포인트는 외부에서 호출
     @GetMapping("/{slackId}")
-    public ResponseEntity<GetSlackResponse> findBySlackId(@PathVariable("slackId")UUID slackId) {
+    public ResponseEntity<GetSlackResponse> findBySlackId(@PathVariable("slackId")UUID slackId,
+        @UserInfo UserInfoDto userInfo) {
         return ResponseEntity.ok(GetSlackResponse.from(slackService.findBySlackId(slackId)));
     }
 
 
     @PatchMapping("/{slackId}")
     public ResponseEntity<PatchSlackResponse> updateBySlack(@PathVariable("slackId")UUID slackId,
-        @Valid @RequestBody PatchSlackRequest requestDto) {
+        @Valid @RequestBody PatchSlackRequest requestDto,
+        @UserInfo UserInfoDto userInfo) {
         return ResponseEntity.ok(PatchSlackResponse
             .from(slackService.updateBySlack(
                 slackId,
@@ -49,17 +53,18 @@ public class SlackExternalController {
                     requestDto.userId()))));
     }
 
-    @DeleteMapping("/{slackId}/{userId}")
+    @DeleteMapping("/{slackId}/")
     public ResponseEntity<Void> deleteBySlack(
         @PathVariable("slackId") UUID slackId,
-        @PathVariable("userId") Long userId) {
-        slackService.deleteSlack(slackId, userId);
+        @UserInfo UserInfoDto userInfo) {
+        slackService.deleteSlack(slackId, userInfo.userId());
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/search")
     public ResponseEntity<PaginatedResultApi<SearchSlackResponse>> searchSlack(
-        SearchSlackRequest searchSlackRequest) {
+        SearchSlackRequest searchSlackRequest,
+        @UserInfo UserInfoDto userInfo) {
         return ResponseEntity.ok(PaginatedResultApi.from(
             slackService.searchSlack(searchSlackRequest.toApplicationDto())
         ));

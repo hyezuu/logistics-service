@@ -20,7 +20,7 @@ public class GatewaySecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/auth/login", "/auth/token/refresh", "/api/v1/users/signup", "/api/v1/app/**").permitAll()
+                        .pathMatchers("api/v1/auth/login", "/auth/token/refresh", "/api/v1/users/signup", "/api/v1/app/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .build();

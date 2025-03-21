@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.slack.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PatchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
@@ -35,14 +37,14 @@ public class SlackServiceImpl implements SlackService {
     private final SlackAlarmService slackAlarmService;
 
     @Override
-    public PostSlackResponseDto saveSlackMessage(PostSlackMessageRequestDto requestDto, Long userId) {
+    public PostSlackResponseDto saveSlackMessage(PostSlackMessageRequestDto requestDto, UserInfoDto userInfo) {
          return webRequestClient.sendRequestToGemini(requestDto)
              .onErrorMap(error -> {
                  log.error("AI 응답을 받을 수 없습니다.", error);
                  return SlackGeminiException.from(SlackErrorCode.GEMINI_ERROR);
              })
             .map(resultMessage -> {
-                Slack slack = Slack.createSlack(userId, resultMessage);
+                Slack slack = Slack.createSlack(userInfo.userId(), resultMessage);
                 Slack savedSlack = slackRepository.save(slack);
                 slackAlarmService.sendSlackMessageToDeliveryChannel(savedSlack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
                 return PostSlackResponseDto.from(savedSlack);
@@ -51,10 +53,10 @@ public class SlackServiceImpl implements SlackService {
 
     @Override
     public PostSlackResponseDto saveSlackMessageToUser(PostUserSlackRequestDto requestDto,
-        Long userId) {
+        UserInfoDto userInfo) {
         slackAlarmService.sendSlackMessageToUserChannel(requestDto.postContentsRequestDto().message(),
             SlackConstant.USER_CHANNEL);
-        return PostSlackResponseDto.from(slackRepository.save(requestDto.toEntity(userId)));
+        return PostSlackResponseDto.from(slackRepository.save(requestDto.toEntity(userInfo.userId())));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package takeoff.logistics_service.msa.gateway.security;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -17,16 +18,22 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
 
     private final JwtUtil jwtUtil;
 
+    @PostConstruct
+    public void init() {
+        log.info("bean 초기화");
+    }
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getURI().getPath();
+        log.debug("Request path: {}", path);
 
-        String token = request.getHeaders().getFirst("Authorization");
         if (path.startsWith("/api/v1/users/signup") || path.startsWith("/api/v1/auth/login") || path.startsWith("/api/v1/auth/token/refresh")) {
             log.debug("인증 예외 경로 → 필터 통과");
             return chain.filter(exchange);
         }
+        String token = request.getHeaders().getFirst("Authorization");
 
         if (token == null || !token.startsWith("Bearer ")) {
             log.warn("JWT 토큰 누락 또는 형식 오류 → 401 Unauthorized");

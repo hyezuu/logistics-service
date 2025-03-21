@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import takeoff.logistics_service.msa.auth.application.client.UserServiceFeignClient;
@@ -19,6 +20,7 @@ import takeoff.logistics_service.msa.auth.presentation.dto.response.LoginRespons
 import java.io.IOException;
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserServiceFeignClient userServiceFeignClient;
@@ -30,6 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         if (!request.getRequestURI().equals("/api/v1/auth/login")) {
+            log.info(request.getRequestURI());
             chain.doFilter(request, response);
             return;
         }

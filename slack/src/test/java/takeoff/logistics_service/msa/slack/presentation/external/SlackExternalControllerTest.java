@@ -92,7 +92,7 @@ class SlackExternalControllerTest {
         PostSlackResponseDto mockResponse = new PostSlackResponseDto(slackId, userId, new PostContentsResponseDto("test", LocalDateTime.now()));
         GetSlackResponseDto getSlackResponseDto = new GetSlackResponseDto(slackId, userId, new GetContentsResponseDto("test", LocalDateTime.now()));
 
-        when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId))).thenReturn((mockResponse));
+        when(slackServiceImpl.saveSlackMessageToUser(any(), any())).thenReturn((mockResponse));
         when(slackServiceImpl.findBySlackId(any())).thenReturn(getSlackResponseDto);
         // Slack 메시지 전송 Mock 설정
         doNothing().when(slackAlarmService)
@@ -136,7 +136,7 @@ class SlackExternalControllerTest {
         Long userId = 1L;
         // SlackResponseDto 객체 준비
         PostSlackResponseDto mockResponse = new PostSlackResponseDto(slackId, userId, new PostContentsResponseDto("updated-message", LocalDateTime.now()));
-        when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId))).thenReturn((mockResponse));
+        when(slackServiceImpl.saveSlackMessageToUser(any(), any())).thenReturn((mockResponse));
         when(slackServiceImpl.updateBySlack(any(),any()))
             .thenReturn(new PatchSlackResponseDto
                 (slackId, userId, new PatchContentsResponseDto("updated-message", LocalDateTime.now())));
@@ -186,7 +186,7 @@ class SlackExternalControllerTest {
         Long userId = 1L;
         // SlackResponseDto 객체 준비
         PostSlackResponseDto mockResponse = new PostSlackResponseDto(slackId, userId, new PostContentsResponseDto("updated-message", LocalDateTime.now()));
-        when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId))).thenReturn((mockResponse));
+        when(slackServiceImpl.saveSlackMessageToUser(any(), any())).thenReturn((mockResponse));
         mockMvc.perform(post("/api/v1/app/slacks/message/users/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userSlackRequest)))
@@ -218,7 +218,7 @@ class SlackExternalControllerTest {
         Long userId = 1L;
         // SlackResponseDto 객체 준비
         PostSlackResponseDto mockResponse = new PostSlackResponseDto(slackId, userId, new PostContentsResponseDto("updated-message", LocalDateTime.now()));
-        when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId))).thenReturn(mockResponse);
+        when(slackServiceImpl.saveSlackMessageToUser(any(), any())).thenReturn(mockResponse);
         when(slackServiceImpl.searchSlack(any()))
             .thenReturn(new PaginatedResultDto<>(
                 List.of(new SearchSlackResponseDto(slackId, userId,
