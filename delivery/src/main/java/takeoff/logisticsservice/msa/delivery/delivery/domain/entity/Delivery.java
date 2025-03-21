@@ -34,6 +34,9 @@ public class Delivery extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private DeliveryStatus status;
 
+  @Column(name = "deliveryManager_Id", nullable = false)
+  private Long deliveryManagerId;
+
   @Column(name = "from_hub_id", nullable = false)
   private UUID fromHubId;
 
