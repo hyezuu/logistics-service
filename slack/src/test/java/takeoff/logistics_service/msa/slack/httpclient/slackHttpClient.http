@@ -1,6 +1,7 @@
 ### 내부에서 사용하는 엔드포인트
-POST {{baseUrl}}/api/v1/app/slacks/message/1
+POST http://localhost:19000/api/v1/app/slacks/message/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNTc5NTg0LCJleHAiOjE3NDI1ODMxODR9.Eo7fMoI4s7egl2EEoigCWpbNQmn7ijKH0EU1bp9vdGs
 
 {
   "orderNumber": 1,

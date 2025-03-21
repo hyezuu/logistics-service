@@ -1,5 +1,6 @@
 package takeoff.logistics_service.msa.gateway.security;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -17,14 +18,26 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
 
     private final JwtUtil jwtUtil;
 
+    @PostConstruct
+    public void init() {
+        log.info("bean 초기화");
+    }
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        String path = request.getURI().getPath();
+        log.debug("Request path: {}", path);
 
+        if (path.startsWith("/api/v1/users/signup") || path.startsWith("/api/v1/auth/login") || path.startsWith("/api/v1/auth/token/refresh")) {
+            log.debug("인증 예외 경로 → 필터 통과");
+            return chain.filter(exchange);
+        }
         String token = request.getHeaders().getFirst("Authorization");
+
         if (token == null || !token.startsWith("Bearer ")) {
-            log.debug("JWT 토큰이 존재하지 않음 → 인증 없이 통과");
-            return chain.filter(exchange); // 인증 없는 요청도 통과 (예: 회원가입 등)
+            log.warn("JWT 토큰 누락 또는 형식 오류 → 401 Unauthorized");
+            return exchange.getResponse().setComplete();
         }
 
         token = token.substring(7);
@@ -37,19 +50,17 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
         String userId = jwtUtil.getUserIdFromToken(token);
         String role = jwtUtil.getUserRoleFromToken(token);
 
-        log.info("✅ 인증 완료: userId={}, role={}", userId, role);
+        log.info("인증 완료: userId={}, role={}", userId, role);
 
         // 요청에 헤더 추가
         ServerHttpRequest modifiedRequest = request.mutate()
                 .header("X-User-Id", userId)
                 .header("X-User-Role", role)
                 .build();
-
         return chain.filter(exchange.mutate().request(modifiedRequest).build());
     }
-
     @Override
     public int getOrder() {
-        return -1;
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }

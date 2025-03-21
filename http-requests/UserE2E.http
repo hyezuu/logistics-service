@@ -1,38 +1,51 @@
 ### 회원가입 (Signup)
-POST {{user}}/api/v1/users/signup
+POST http://localhost:19000/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "testuser1",
-  "slackEmail": "testuser1@email.com",
+  "username": "testuser7",
+  "slackEmail": "testuser7@email.com",
   "password": "Password1!",
-  "role": "MASTER_ADMIN"
+  "role": "HUB_MANAGER"
 }
 
 ### 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)
-POST {{user}}/api/v1/app/users/validate
+POST http://localhost:19000/api/v1/app/users/validate
 Content-Type: application/json
 
 {
-  "username": "testuser1",
+  "username": "testuser7",
   "password": "Password1!"
 }
-> {% client.global.set("user_id", response.body.userId) %}
-> {% client.global.set("username", response.body.username) %}
-> {% client.global.set("role", response.body.role) %}
+> {%
+    if (response.body.userId) {
+        client.global.set("user_id", response.body.userId.toString());
+    } else {
+        throw new Error("userId가 응답에 존재하지 않음");
+    }
+    client.global.set("username", response.body.username);
+    client.global.set("role", response.body.role);
+%}
 
 ### 로그인 (JWT 발급)
-POST {{auth}}/api/v1/auth/login
+POST http://localhost:19000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "testuser1",
+  "username": "testuser7",
   "password": "Password1!"
 }
-> {% client.global.set("access_token", response.headers.valueOf("Authorization")) %}
+> {%
+    let authHeader = response.headers.valueOf("Authorization");
+    if (authHeader) {
+        client.global.set("access_token", authHeader);
+    } else {
+        throw new Error("Authorization 헤더가 응답에 존재하지 않음");
+    }
+%}
 
-### 사용자 검증 (Gateway에서 X-User-Id, X-User-Role 전달 확인)
+### 사용자 정보 조회 (Gateway에서 X-User-Id, X-User-Role 전달 확인)
 GET {{user}}/api/v1/users/1
 Authorization: Bearer {{access_token}}
-X-User-Id: {{user_id}}}
-X-User-Role: {{role}}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}

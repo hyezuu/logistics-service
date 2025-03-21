@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.user.application.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateDuplicateUser(String slackEmail, String username, UserRole role) {
-        if (userRepository.findByEmail(slackEmail).isPresent()) {
+        if (userRepository.findBySlackEmail(slackEmail).isPresent()) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
         if (userRepository.findByUsername(username).isPresent()) {
@@ -96,6 +98,10 @@ public class UserServiceImpl implements UserService {
     public UserValidationResponseDto validateUser(UserValidationRequestDto requestDto) {
         User user = userRepository.findByUsername(requestDto.username())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        log.info(user.getUsername());
+        log.info(String.valueOf(user.getId()));
+        log.info(String.valueOf(user.getRole()));
+        log.info("실행--------");
 
         if (!passwordEncoder.matches(requestDto.password(), user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");

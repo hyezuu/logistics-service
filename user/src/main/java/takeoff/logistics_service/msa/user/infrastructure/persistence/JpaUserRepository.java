@@ -15,7 +15,7 @@ import java.util.Optional;
 public interface JpaUserRepository extends JpaRepository<User, Long>, UserRepository, JpaSpecificationExecutor<User> {
     @Override
     @Query("SELECT u FROM User u WHERE u.slackEmail = :slackEmail AND u.deletedAt IS NULL")
-    Optional<User> findByEmail(String email);
+    Optional<User> findBySlackEmail(String slackEmail);
 
     @Override
     @Query("SELECT u FROM User u WHERE u.username = :username AND u.deletedAt IS NULL")

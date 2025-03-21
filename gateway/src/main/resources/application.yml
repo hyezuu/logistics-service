@@ -10,7 +10,7 @@ spring:
           enabled: true
       routes:
         - id: auth
-          uri: lb://user
+          uri: lb://auth
           predicates:
             - Path=/api/v1/auth/**,/api/v1/app/auth/**
         - id: user
@@ -21,8 +21,6 @@ spring:
           uri: lb://user
           predicates:
             - Path=/api/v1/app/users/**
-          filters:
-            - RemoveRequestHeader=Authorization
         - id: company
           uri: lb://company
           predicates:
@@ -43,13 +41,11 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**,/api/v1/app/orders**/
-
-      default-filters:
-        - name: AddRequestHeader
-          args:
-            name: Authorization
-            value: "{Authorization}"
-
+#      default-filters:
+#        - name: AddRequestHeader
+#          args:
+#            name: Authorization
+#            value: "{Authorization}"
 
 springdoc:
   swagger-ui:
@@ -71,6 +67,9 @@ springdoc:
     urls[5]:
       name: order
       url: /springdoc/openapi3-order-service.json
+    urls[6]:
+      name: auth
+      url: /springdoc/openapi3-auth-service.json
     path: /docs
   api-docs:
     enabled: true
@@ -83,6 +82,11 @@ eureka:
     service-url:
       defaultZone: http://localhost:18999/eureka/  # Eureka 서버의 URL을 지정
 
+jwt:
+  secret: "cJI/zwDDsqA6ZN9XEZ+jnB86KV0iAx7AF4sXHrmEJkg="
+  access-expiration: 3600000  # AccessToken 만료 시간 (1시간)
+  refresh-expiration: 604800000  # RefreshToken 만료 시간 (7일)
+
 management:
   endpoints:
     web:
@@ -92,7 +96,11 @@ management:
     gateway:
       enabled: true   # 게이트웨이 액추에이터 활성화
 
-jwt:
-  secret: "cJI/zwDDsqA6ZN9XEZ+jnB86KV0iAx7AF4sXHrmEJkg="
-#  access-expiration: 3600000  # AccessToken 만료 시간 (1시간)
-#  refresh-expiration: 604800000  # RefreshToken 만료 시간 (7일)
+logging:
+  level:
+    takeoff:
+      logistics_service:
+        msa:
+          gateway:
+            security:
+              GatewayJwtFilter: DEBUG

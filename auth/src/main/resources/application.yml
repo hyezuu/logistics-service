@@ -4,23 +4,11 @@ server:
 spring:
   application:
     name: auth
-  datasource:
-    url: jdbc:postgresql://localhost:5432/users
-    username: sa
-    password: sa
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
-      password: 8939
+      password:
 
 jwt:
   secret: "cJI/zwDDsqA6ZN9XEZ+jnB86KV0iAx7AF4sXHrmEJkg="

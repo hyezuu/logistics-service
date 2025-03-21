@@ -24,6 +24,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.slack.application.dto.response.PostContentsResponseDto;
 import takeoff.logistics_service.msa.slack.application.dto.response.PostSlackResponseDto;
 import takeoff.logistics_service.msa.slack.application.service.SlackAlarmService;
@@ -85,10 +87,11 @@ class SlackInternalControllerTest {
             "테스트 배송 담당자" // 회사 배송 담당자 이름
         );
 
+        UserInfoDto userInfo = new UserInfoDto(1L, UserRole.COMPANY_MANAGER);
         PostSlackResponseDto postSlackResponseDto = new PostSlackResponseDto(
-            slackId, userId, new PostContentsResponseDto("긴급 배송 요청", LocalDateTime.now()));
+            slackId, userInfo.userId(), new PostContentsResponseDto("긴급 배송 요청", LocalDateTime.now()));
 
-        when(slackServiceImpl.saveSlackMessage(any(), eq(userId)))
+        when(slackServiceImpl.saveSlackMessage(any(), any()))
             .thenReturn(postSlackResponseDto);
 
         // When & Then
@@ -133,7 +136,7 @@ class SlackInternalControllerTest {
         PostContentsRequest postContentsRequest = new PostContentsRequest(message);
         PostUserSlackRequest postUserSlackRequest = new PostUserSlackRequest(postContentsRequest);
 
-        when(slackServiceImpl.saveSlackMessageToUser(any(), eq(userId)))
+        when(slackServiceImpl.saveSlackMessageToUser(any(), any()))
             .thenReturn(new PostSlackResponseDto(slackId, userId,
                 new PostContentsResponseDto(message, LocalDateTime.now())));
 
