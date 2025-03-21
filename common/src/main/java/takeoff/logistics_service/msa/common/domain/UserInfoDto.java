@@ -24,4 +24,16 @@ public record UserInfoDto(Long userId, UserRole role) {
 	public boolean isValid() {
 		return userId != null && userId > 0 && role != null;
 	}
+
+	public boolean isAdmin() {
+		return role == UserRole.MASTER_ADMIN;
+	}
+
+	public boolean isCompanyManager() {
+		return role == UserRole.COMPANY_MANAGER;
+	}
+
+	public boolean isHubManager() {
+		return role == UserRole.HUB_MANAGER;
+	}
 }

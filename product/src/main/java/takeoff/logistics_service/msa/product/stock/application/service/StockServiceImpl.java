@@ -8,7 +8,6 @@ import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
-import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.product.stock.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.request.AbortStockRequestDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.request.DecreaseStockRequestDto;
@@ -44,21 +43,19 @@ public class StockServiceImpl implements StockService {
 	}
 
 	private void validateStockNotExists(PostStockRequestDto requestDto) {
-		if(stockRepository.existsById(StockId.create(requestDto.stockId().toCommand()))){
+		if (stockRepository.existsById(StockId.create(requestDto.stockId().toCommand()))) {
 			throw StockBusinessException.from(StockErrorCode.DUPLICATE_STOCK_ID);
 		}
 	}
 
 	private void validateAccess(UUID resourceId, UserInfoDto userInfo) {
-		if (userInfo.role() == UserRole.MASTER_ADMIN
-			|| userInfo.role() == UserRole.COMPANY_MANAGER) {
-			return;
-		}
-		if (userInfo.role() == UserRole.HUB_MANAGER &&
-			userClient.findByUserId(userInfo.userId()).hubId().equals(resourceId)) {
-			return;
-		}
+		if (userInfo.isAdmin() || userInfo.isCompanyManager()) return;
+		if (userInfo.isHubManager() && getHubId(userInfo).equals(resourceId)) return;
 		throw StockBusinessException.from(StockErrorCode.ACCESS_DENIED);
+	}
+
+	private UUID getHubId(UserInfoDto userInfo) {
+		return userClient.findByUserId(userInfo.userId()).hubId();
 	}
 
 	@Override
@@ -170,8 +167,9 @@ public class StockServiceImpl implements StockService {
 	@Transactional(readOnly = true)
 	public GetStockResponseDto findStockWithProductId(UUID productId) {
 		return stockRepository
-			.findAllById_ProductIdAndDeletedAtIsNullOrderByQuantityDesc(productId)
-			.stream().findFirst().map(GetStockResponseDto::from)
+			.findAllById_ProductIdAndDeletedAtIsNullOrderByQuantityDesc(productId).stream()
+			.findFirst()
+			.map(GetStockResponseDto::from)
 			.orElseThrow(() -> StockBusinessException.from(StockErrorCode.STOCK_NOT_FOUND));
 	}
 }
