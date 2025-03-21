@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.response.GetCompanyResponse;
 
-@FeignClient(name = "companies")
+@FeignClient(name = "company")
 public interface FeignCompanyClient {
 
 	@GetMapping("/api/v1/app/companies/{companyId}")

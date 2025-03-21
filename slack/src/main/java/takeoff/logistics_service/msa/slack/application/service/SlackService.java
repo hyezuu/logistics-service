@@ -1,7 +1,6 @@
 package takeoff.logistics_service.msa.slack.application.service;
 
 import java.util.UUID;
-import reactor.core.publisher.Mono;
 import takeoff.logistics_service.msa.slack.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PatchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
@@ -18,7 +17,7 @@ import takeoff.logistics_service.msa.slack.application.dto.response.SearchSlackR
  */
 public interface SlackService {
 
-    Mono<PostSlackResponseDto> saveSlackMessage(PostSlackMessageRequestDto requestDto, Long userId);
+    PostSlackResponseDto saveSlackMessage(PostSlackMessageRequestDto requestDto, Long userId);
 
     GetSlackResponseDto findBySlackId(UUID slackId);
 

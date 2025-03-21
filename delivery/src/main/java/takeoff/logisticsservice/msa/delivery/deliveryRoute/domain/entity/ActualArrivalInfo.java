@@ -27,5 +27,4 @@ public class ActualArrivalInfo {
     this.actualDistance = actualDistance;
     this.actualDuration = actualDuration;
   }
-
 }

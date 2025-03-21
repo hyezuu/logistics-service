@@ -1,5 +1,6 @@
 package takeoff.logisticsservice.msa.delivery.delivery.infrastructure.persistence;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.entity.Delivery;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.entity.DeliveryId;

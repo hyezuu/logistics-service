@@ -12,3 +12,4 @@ public interface DeliveryRouteRepository {
 
   <S extends DeliveryRoute> Iterable<S> saveAll(Iterable<S> deliveryRoutes);
 }
+

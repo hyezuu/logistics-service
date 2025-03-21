@@ -2,6 +2,37 @@
 @host = http://localhost:19000
 @contentType = application/json
 
+
+POST http://{{host}}/api/v1/hubs
+Content-Type: application/json
+
+{
+  "hubName": "서울특별시 센터",
+  "locationApi": {
+    "address": "서울특별시 송파구 송파대로 55",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+  client.global.set("hubId", response.body.hubId)
+%}
+
+### 업체 생성 요청
+# @name createCompany
+POST {{host}}/api/v1/companies
+Content-Type: {{contentType}}
+
+{
+  "companyName": "덜푸른~ 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123"
+}
+> {%
+  client.global.set("companyId", response.body.companyId)
+%}
+
 ### 상품 생성 요청 (재고 수량 지정) - ID 저장
 # @name createProduct
 POST {{host}}/api/v1/products
@@ -9,8 +40,8 @@ Content-Type: {{contentType}}
 
 {
   "name": "유기농 바나나",
-  "companyId": "550e8400-e29b-41d4-a716-446655440000",
-  "hubId": "550e8400-e29b-41d4-a716-446655440001",
+  "companyId": "{{companyId}}",
+  "hubId": "{{hubId}}",
   "quantity": 0
 }
 > {%

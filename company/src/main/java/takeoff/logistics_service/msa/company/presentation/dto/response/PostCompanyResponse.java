@@ -18,6 +18,7 @@ public record PostCompanyResponse(
 			.hubId(responseDto.hubId())
 			.address(responseDto.address())
 			.createdAt(responseDto.createdAt())
+			.updatedAt(responseDto.updatedAt())
 			.build();
 	}
 }

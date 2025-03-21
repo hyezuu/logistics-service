@@ -45,3 +45,14 @@ NAVER:
   ID: ${NAVER_Client_ID}
   KEY: ${NAVER_Secret_KEY}
   URL: ${NAVER_URL}
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs
+    url: /springdoc/openapi3-hub-service.json
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    enabled: true
+    path: /api-docs-hub-service
