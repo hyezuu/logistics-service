@@ -49,9 +49,9 @@ public class StockServiceImpl implements StockService {
 	}
 
 	private void validateAccess(UUID resourceId, UserInfoDto userInfo) {
-		if (userInfo.isAdmin() || userInfo.isCompanyManager()) return;
-		if (userInfo.isHubManager() && getHubId(userInfo).equals(resourceId)) return;
-		throw StockBusinessException.from(StockErrorCode.ACCESS_DENIED);
+		if (userInfo.isHubManager() && !getHubId(userInfo).equals(resourceId)){
+			throw StockBusinessException.from(StockErrorCode.ACCESS_DENIED);
+		}
 	}
 
 	private UUID getHubId(UserInfoDto userInfo) {
@@ -159,6 +159,7 @@ public class StockServiceImpl implements StockService {
 	@Override
 	@Transactional
 	public void deleteAllByHubId(UUID hubId, UserInfoDto userInfo) {
+		validateAccess(hubId, userInfo);
 		stockRepository.findAllById_HubIdAndDeletedAtIsNull(hubId)
 			.forEach(stock -> stock.delete(userInfo.userId()));
 	}

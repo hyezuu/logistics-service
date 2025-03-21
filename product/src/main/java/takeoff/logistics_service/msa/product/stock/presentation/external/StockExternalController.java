@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import takeoff.logistics_service.msa.common.annotation.RoleCheck;
 import takeoff.logistics_service.msa.common.domain.UserInfo;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.product.stock.application.service.StockService;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.PaginatedResultApi;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.DecreaseStockRequest;
@@ -46,6 +48,7 @@ public class StockExternalController {
 	}
 
 	@PatchMapping("/increase")
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER})
 	public ResponseEntity<IncreaseStockResponse> increaseStock(
 		@Valid @RequestBody IncreaseStockRequest requestDto, @UserInfo UserInfoDto userInfo) {
 
@@ -54,6 +57,7 @@ public class StockExternalController {
 	}
 
 	@PatchMapping("/decrease")
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER})
 	public ResponseEntity<DecreaseStockResponse> decreaseStock(
 		@Valid @RequestBody DecreaseStockRequest requestDto, @UserInfo UserInfoDto userInfo) {
 
@@ -62,6 +66,7 @@ public class StockExternalController {
 	}
 
 	@DeleteMapping
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER})
 	public ResponseEntity<Void> deleteStock(
 		@Valid @RequestBody StockIdRequest requestDto, @UserInfo UserInfoDto userInfo) {
 
