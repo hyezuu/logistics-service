@@ -9,10 +9,20 @@ spring:
         locator:
           enabled: true
       routes:
+        - id: auth
+          uri: lb://user
+          predicates:
+            - Path=/api/v1/auth/**,/api/v1/app/auth/**
         - id: user
           uri: lb://user
           predicates:
             - Path=/api/v1/users/**,/api/v1/app/users/**
+        - id: user-internal
+          uri: lb://user
+          predicates:
+            - Path=/api/v1/app/users/**
+          filters:
+            - RemoveRequestHeader=Authorization
         - id: company
           uri: lb://company
           predicates:
@@ -32,7 +42,32 @@ spring:
         - id: order
           uri: lb://order
           predicates:
-            - Path=/api/v1/orders/**,/api/v1/app/orders/**
+            - Path=/api/v1/orders/**,/api/v1/app/orders**/
+
+      default-filters:
+        - name: AddRequestHeader
+          args:
+            name: Authorization
+            value: "{Authorization}"
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: user
+        url: /springdoc/openapi3-user-service.json
+      - name: company
+        url: /springdoc/openapi3-company-service.json
+      - name: slack
+        url: /springdoc/openapi3-slack-service.json
+      - name: product
+        url: /springdoc/openapi3-product-service.json
+      - name: hub
+        url: /springdoc/openapi3-hub-service.json
+      - name: order
+        url: /springdoc/openapi3-order-service.json
+    path: /docs
+  api-docs:
+    enabled: true
 
 springdoc:
   swagger-ui:

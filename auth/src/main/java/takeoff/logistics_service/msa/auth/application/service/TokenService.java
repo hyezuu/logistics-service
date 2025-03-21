@@ -14,35 +14,15 @@ public class TokenService {
     private final JwtUtil jwtUtil;
     private final RedisTokenService redisTokenService;
 
-    public String createAccessToken(String userId, String role) {
-        return jwtUtil.createAccessToken(userId, role);
-    }
-
-    public String createRefreshToken(String userId) {
-        return jwtUtil.createRefreshToken(userId);
-    }
-
-    public boolean validateToken(String token) {
-        return jwtUtil.validateToken(token);
-    }
-
-    public String getUserIdFromToken(String token) {
-        return jwtUtil.getUserIdFromToken(token);
-    }
-
-    public String getUserRoleFromToken(String token) {
-        return jwtUtil.getUserRoleFromToken(token);
-    }
-
     public Optional<String> refreshAccessToken(String refreshToken) {
-        if (validateToken(refreshToken)) {
-            String userId = getUserIdFromToken(refreshToken);
-            String role = getUserRoleFromToken(refreshToken);
-
-            Optional<String> storedRefreshToken = redisTokenService.findTokenByUserId(userId);
-            if (storedRefreshToken.isPresent() && storedRefreshToken.get().equals(refreshToken)) {
-                return Optional.of(createAccessToken(userId, role));
-            }
+        if (!jwtUtil.validateToken(refreshToken)) {
+            return Optional.empty();
+        }
+        String userId = jwtUtil.getUserIdFromToken(refreshToken);
+        String role = jwtUtil.getUserRoleFromToken(refreshToken);
+        Optional<String> storedRefreshToken = redisTokenService.findTokenByUserId(userId);
+        if (storedRefreshToken.isPresent() && storedRefreshToken.get().equals(refreshToken)) {
+            return Optional.of(jwtUtil.createAccessToken(userId, role));
         }
         return Optional.empty();
     }

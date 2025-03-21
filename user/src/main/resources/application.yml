@@ -3,15 +3,15 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: user
   datasource:
     url: jdbc:postgresql://localhost:5432/users
-    username: postgres
-    password: abcde12345
+    username: sa
+    password: sa
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
