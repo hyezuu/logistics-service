@@ -30,7 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/login", "/api/v1/auth/token/refresh").permitAll() // 로그인 및 토큰 갱신 API는 인증 없이 허용
                         .anyRequest().authenticated() // 나머지 모든 요청은 인증 필요
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // 직접 생성하지 않고, 빈으로 등록된 필터 사용
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 
         return http.build();

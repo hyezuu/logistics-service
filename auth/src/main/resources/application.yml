@@ -4,11 +4,6 @@ server:
 spring:
   application:
     name: auth
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: sa
-    password: sa
-    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: create

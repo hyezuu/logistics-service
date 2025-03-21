@@ -4,15 +4,17 @@ import lombok.Builder;
 import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.domain.vo.UserId;
 
+import java.util.Optional;
+
 @Builder
 public record UserValidationResponseDto(
-        UserId userId,
+        String userId,
         String username,
         String role
 ) {
     public static UserValidationResponseDto from(User user) {
         return UserValidationResponseDto.builder()
-                .userId(UserId.from(user.getId()))
+                .userId(Optional.ofNullable(user.getId()).map(id -> id.toString()).orElse(null))
                 .username(user.getUsername())
                 .role(user.getRole().name())
                 .build();

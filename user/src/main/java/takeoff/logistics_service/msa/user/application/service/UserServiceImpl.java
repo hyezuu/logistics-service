@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateDuplicateUser(String slackEmail, String username, UserRole role) {
-        if (userRepository.findByEmail(slackEmail).isPresent()) {
+        if (userRepository.findBySlackEmail(slackEmail).isPresent()) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
         if (userRepository.findByUsername(username).isPresent()) {

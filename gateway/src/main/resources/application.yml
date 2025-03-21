@@ -21,8 +21,6 @@ spring:
           uri: lb://user
           predicates:
             - Path=/api/v1/app/users/**
-          filters:
-            - RemoveRequestHeader=Authorization
         - id: company
           uri: lb://company
           predicates:
@@ -43,7 +41,6 @@ spring:
           uri: lb://order
           predicates:
             - Path=/api/v1/orders/**,/api/v1/app/orders**/
-
       default-filters:
         - name: AddRequestHeader
           args:
