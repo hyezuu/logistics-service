@@ -8,12 +8,13 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import takeoff.logistics_service.msa.order.domain.entity.Order;
+import takeoff.logistics_service.msa.order.domain.entity.OrderId;
 import takeoff.logistics_service.msa.order.domain.entity.QOrder;
 import takeoff.logistics_service.msa.order.domain.repository.OrderRepository;
 import takeoff.logistics_service.msa.order.infrastructure.persistence.querydsl.JpaOrderRepositoryCustom;
 
 public interface JpaOrderRepository extends
-    JpaRepository<Order, UUID>,
+    JpaRepository<Order, OrderId>,
     QuerydslPredicateExecutor<Order>,
     QuerydslBinderCustomizer<QOrder>,
     JpaOrderRepositoryCustom,
