@@ -39,14 +39,11 @@ public class FeignStockClientImpl implements StockClient {
 	}
 
 	private BusinessException handleFeignException(FeignClientException e) {
-		if (e.status() == HttpStatus.BAD_REQUEST.value()) {
-			return ProductBusinessException.from(ProductErrorCode.INVALID_STOCK_REQUEST);
-		} else if (e.status() == HttpStatus.NOT_FOUND.value()) {
-			return ProductBusinessException.from(ProductErrorCode.STOCK_NOT_FOUND);
-		} else if (e.status() == HttpStatus.CONFLICT.value()) {
-			return ProductBusinessException.from(ProductErrorCode.STOCK_CONFLICT);
-		} else {
-			return ProductBusinessException.from(CommonErrorCode.BAD_GATEWAY);
-		}
+		return switch (e.status()) {
+			case 400 -> ProductBusinessException.from(ProductErrorCode.INVALID_STOCK_REQUEST);
+			case 404 -> ProductBusinessException.from(ProductErrorCode.STOCK_NOT_FOUND);
+			case 409 -> ProductBusinessException.from(ProductErrorCode.STOCK_CONFLICT);
+			default -> ProductBusinessException.from(CommonErrorCode.BAD_GATEWAY);
+		};
 	}
 }

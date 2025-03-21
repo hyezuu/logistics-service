@@ -27,11 +27,11 @@ public class FeignCompanyClientImpl implements CompanyClient {
 	}
 
 	private BusinessException handleFeignException(FeignClientException e) {
-		if (e.status() == HttpStatus.NOT_FOUND.value()) {
-			return ProductBusinessException.from(ProductErrorCode.COMPANY_NOT_FOUND);
-		} else {
-			return ProductBusinessException.from(CommonErrorCode.BAD_GATEWAY);
-		}
+		return switch (e.status()) {
+			case 400 -> ProductBusinessException.from(ProductErrorCode.INVALID_COMPANY_REQUEST);
+			case 404 -> ProductBusinessException.from(ProductErrorCode.COMPANY_NOT_FOUND);
+			default -> ProductBusinessException.from(CommonErrorCode.BAD_GATEWAY);
+		};
 	}
 }
 

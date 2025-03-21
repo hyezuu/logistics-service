@@ -27,10 +27,10 @@ public class FeignHubClientImpl implements HubClient {
 	}
 
 	private BusinessException handleFeignException(FeignClientException e) {
-		if (e.status() == HttpStatus.NOT_FOUND.value()) {
-			return ProductBusinessException.from(ProductErrorCode.HUB_NOT_FOUND);
-		} else {
-			return ProductBusinessException.from(CommonErrorCode.BAD_GATEWAY);
-		}
+		return switch (e.status()) {
+			case 400 -> ProductBusinessException.from(ProductErrorCode.INVALID_HUB_REQUEST);
+			case 404 -> ProductBusinessException.from(ProductErrorCode.HUB_NOT_FOUND);
+			default -> ProductBusinessException.from(CommonErrorCode.BAD_GATEWAY);
+		};
 	}
 }
