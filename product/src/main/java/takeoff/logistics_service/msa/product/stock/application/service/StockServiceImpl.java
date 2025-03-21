@@ -20,7 +20,6 @@ import takeoff.logistics_service.msa.product.stock.application.dto.request.Stock
 import takeoff.logistics_service.msa.product.stock.application.dto.request.StockItemRequestDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.response.DecreaseStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.response.GetStockResponseDto;
-import takeoff.logistics_service.msa.product.stock.application.dto.response.GetUserResponseDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.response.IncreaseStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.response.PostStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.application.exception.StockBusinessException;
@@ -33,47 +32,33 @@ import takeoff.logistics_service.msa.product.stock.domain.repository.StockReposi
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
 
-	private final StockRepository stockRepository;
 	private final UserClient userClient;
+	private final StockRepository stockRepository;
 
 	@Override
 	public PostStockResponseDto saveStock(PostStockRequestDto requestDto, UserInfoDto userInfo) {
-		validateUserInfo(requestDto, userInfo);
+		validateStockNotExists(requestDto);
+		validateAccess(requestDto.stockId().hubId(), userInfo);
 		return PostStockResponseDto.from(
 			stockRepository.save(Stock.create(requestDto.toCommand())));
 	}
 
-	//유 저 정보를 기반으로 해서 요청을 보내서 받아옵니다.
-
-	private void validateUserInfo(PostStockRequestDto requestDto, UserInfoDto userInfo) {
-		if (!userInfo.isValid()) {
-			throw StockBusinessException.from(StockErrorCode.INVALID_USER_REQUEST);
-		}
-		GetUserResponseDto userResponse = userClient.findByUserId(userInfo.userId());
-		if (!isAccessible(requestDto, userResponse)) {
-			throw StockBusinessException.from(StockErrorCode.ACCESS_DENIED);
+	private void validateStockNotExists(PostStockRequestDto requestDto) {
+		if(stockRepository.existsById(StockId.create(requestDto.stockId().toCommand()))){
+			throw StockBusinessException.from(StockErrorCode.DUPLICATE_STOCK_ID);
 		}
 	}
 
-	private boolean isAccessible(PostStockRequestDto requestDto, GetUserResponseDto userResponse) {
-		return isMaster(userResponse)
-			|| isCompanyManager(userResponse)
-			|| isValidHubManager(requestDto, userResponse);
-	}
-
-	private boolean isMaster(GetUserResponseDto userResponseDto) {
-		return userResponseDto.role() == UserRole.MASTER_ADMIN;
-	}
-
-	private boolean isCompanyManager(GetUserResponseDto userResponseDto) {
-		return userResponseDto.role() == UserRole.COMPANY_MANAGER;
-	}
-
-	private boolean isValidHubManager(PostStockRequestDto requestDto,
-		GetUserResponseDto userResponseDto) {
-		return userResponseDto.role() == UserRole.HUB_MANAGER &&
-			userResponseDto.hubId() != null && userResponseDto.hubId()
-			.equals(requestDto.stockId().hubId());
+	private void validateAccess(UUID resourceId, UserInfoDto userInfo) {
+		if (userInfo.role() == UserRole.MASTER_ADMIN
+			|| userInfo.role() == UserRole.COMPANY_MANAGER) {
+			return;
+		}
+		if (userInfo.role() == UserRole.HUB_MANAGER &&
+			userClient.findByUserId(userInfo.userId()).hubId().equals(resourceId)) {
+			return;
+		}
+		throw StockBusinessException.from(StockErrorCode.ACCESS_DENIED);
 	}
 
 	@Override
@@ -89,8 +74,43 @@ public class StockServiceImpl implements StockService {
 
 	@Override
 	@Transactional
-	public void delete(StockIdRequestDto requestDto) {
-		getStock(StockId.create(requestDto.toCommand())).delete(0L);
+	public void delete(StockIdRequestDto requestDto, UserInfoDto userInfo) {
+		validateAccess(requestDto.hubId(), userInfo);
+		getStock(StockId.create(requestDto.toCommand())).delete(userInfo.userId());
+	}
+
+	@Override
+	@Transactional
+	public IncreaseStockResponseDto increaseStock(
+		IncreaseStockRequestDto requestDto, UserInfoDto userInfoDto) {
+
+		validateAccess(requestDto.stockId().hubId(), userInfoDto);
+		try {
+			return IncreaseStockResponseDto.from(getStockWithLock(requestDto.stockId())
+				.increaseStock(requestDto.quantity()));
+		} catch (PessimisticLockingFailureException e) {
+			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
+		}
+	}
+
+	@Override
+	@Transactional
+	public DecreaseStockResponseDto decreaseStock(
+		DecreaseStockRequestDto requestDto, UserInfoDto userInfoDto) {
+
+		validateAccess(requestDto.stockId().hubId(), userInfoDto);
+		try {
+			return DecreaseStockResponseDto.from(getStockWithLock(requestDto.stockId())
+				.decreaseStock(requestDto.quantity()));
+		} catch (PessimisticLockingFailureException e) {
+			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
+		}
+	}
+
+	private Stock getStockWithLock(StockIdRequestDto requestDto) {
+		return stockRepository
+			.findByIdWithLock(StockId.create(requestDto.toCommand()))
+			.orElseThrow(() -> StockBusinessException.from(StockErrorCode.STOCK_NOT_FOUND));
 	}
 
 	@Override
@@ -113,12 +133,6 @@ public class StockServiceImpl implements StockService {
 			.toList();
 	}
 
-	private Stock getStockWithLock(StockIdRequestDto requestDto) {
-		return stockRepository
-			.findByIdWithLock(StockId.create(requestDto.toCommand()))
-			.orElseThrow(() -> StockBusinessException.from(StockErrorCode.STOCK_NOT_FOUND));
-	}
-
 	@Override
 	@Transactional
 	public void abortStock(AbortStockRequestDto requestDto) {
@@ -126,30 +140,6 @@ public class StockServiceImpl implements StockService {
 			getSortedStocks(requestDto.stocks())
 				.forEach(stockItem ->
 					getStockWithLock(stockItem.stockId()).increaseStock(stockItem.quantity()));
-		} catch (PessimisticLockingFailureException e) {
-			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
-		}
-	}
-
-	@Override
-	@Transactional
-	public IncreaseStockResponseDto increaseStock(IncreaseStockRequestDto requestDto) {
-		try {
-			Stock stock = getStockWithLock(requestDto.stockId());
-			stock.increaseStock(requestDto.quantity());
-			return IncreaseStockResponseDto.from(stock);
-		} catch (PessimisticLockingFailureException e) {
-			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
-		}
-	}
-
-	@Override
-	@Transactional
-	public DecreaseStockResponseDto decreaseStock(DecreaseStockRequestDto requestDto) {
-		try {
-			Stock stock = getStockWithLock(requestDto.stockId());
-			stock.decreaseStock(requestDto.quantity());
-			return DecreaseStockResponseDto.from(stock);
 		} catch (PessimisticLockingFailureException e) {
 			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
 		}
@@ -164,16 +154,16 @@ public class StockServiceImpl implements StockService {
 
 	@Override
 	@Transactional
-	public void deleteAllByProductId(UUID productId) {
+	public void deleteAllByProductId(UUID productId, UserInfoDto userInfo) {
 		stockRepository.findAllById_ProductIdAndDeletedAtIsNull(productId)
-			.forEach(stock -> stock.delete(0L));
+			.forEach(stock -> stock.delete(userInfo.userId()));
 	}
 
 	@Override
 	@Transactional
-	public void deleteAllByHubId(UUID hubId) {
+	public void deleteAllByHubId(UUID hubId, UserInfoDto userInfo) {
 		stockRepository.findAllById_HubIdAndDeletedAtIsNull(hubId)
-			.forEach(stock -> stock.delete(0L));
+			.forEach(stock -> stock.delete(userInfo.userId()));
 	}
 
 	@Override

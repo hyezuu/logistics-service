@@ -51,14 +51,14 @@ public class StockInternalController {
 	}
 
 	@DeleteMapping("/all-by-product")
-	public void deleteAllByProductId(@RequestParam UUID productId) {
+	public void deleteAllByProductId(@RequestParam UUID productId, @UserInfo UserInfoDto userInfo) {
 
-		stockService.deleteAllByProductId(productId);
+		stockService.deleteAllByProductId(productId, userInfo);
 	}
 
 	@DeleteMapping("/all-by-hub")
-	public void deleteAllByHubId(@RequestParam UUID hubId) {
+	public void deleteAllByHubId(@RequestParam UUID hubId, @UserInfo UserInfoDto userInfo) {
 
-		stockService.deleteAllByHubId(hubId);
+		stockService.deleteAllByHubId(hubId, userInfo);
 	}
 }

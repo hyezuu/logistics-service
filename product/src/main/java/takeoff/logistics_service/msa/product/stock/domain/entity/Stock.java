@@ -21,9 +21,7 @@ public class Stock extends BaseEntity {
 	private Integer quantity;
 
 	public static Stock create(CreateStock command){
-		return new Stock(
-			command.stockId(),
-			command.quantity());
+		return new Stock(command.stockId(), command.quantity());
 	}
 
 	private Stock(StockId id, Integer quantity) {
@@ -31,11 +29,12 @@ public class Stock extends BaseEntity {
 		this.quantity = quantity;
 	}
 
-	public void increaseStock(Integer quantity) {
+	public Stock increaseStock(Integer quantity) {
 		this.quantity += quantity;
+		return this;
 	}
 
-	public void decreaseStock(Integer quantity) {
+	public Stock decreaseStock(Integer quantity) {
 		if (quantity == null || quantity <= 0) {
 			throw new IllegalArgumentException("수량은 양수여야 합니다.");
 		}
@@ -43,6 +42,7 @@ public class Stock extends BaseEntity {
 			throw new IllegalStateException("재고가 부족합니다.");
 		}
 		this.quantity -= quantity;
+		return this;
 	}
 
 	@Override

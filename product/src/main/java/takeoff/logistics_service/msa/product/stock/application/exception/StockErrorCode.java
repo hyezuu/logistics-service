@@ -9,6 +9,7 @@ public enum StockErrorCode implements ErrorCode {
 
 	INVALID_REQUEST("STK_001", "잘못된 요청입니다.", HttpStatus.BAD_REQUEST),
 	INVALID_USER_REQUEST("STK_002", "잘못된 유저 요청입니다.", HttpStatus.BAD_REQUEST),
+	DUPLICATE_STOCK_ID("STK_003", "해당 상품이 이미 존재합니다.", HttpStatus.CONFLICT),
 	STOCK_NOT_FOUND("STK_004", "요청하신 재고를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 	STOCK_LOCK_TIMEOUT("STK_005", "재고 처리 중 락 타임아웃이 발생했습니다.", HttpStatus.CONFLICT),
 	ACCESS_DENIED("STK_010", "해당 리소스에 대한 접근 권한이 없습니다.", HttpStatus.FORBIDDEN),

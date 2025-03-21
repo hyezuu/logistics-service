@@ -19,11 +19,11 @@ public interface StockService {
 
 	PostStockResponseDto saveStock(PostStockRequestDto requestDto, UserInfoDto userInfo);
 
-	IncreaseStockResponseDto increaseStock(IncreaseStockRequestDto requestDto);
+	IncreaseStockResponseDto increaseStock(IncreaseStockRequestDto requestDto, UserInfoDto userInfo);
 
-	DecreaseStockResponseDto decreaseStock(DecreaseStockRequestDto requestDto);
+	DecreaseStockResponseDto decreaseStock(DecreaseStockRequestDto requestDto, UserInfoDto userInfo);
 
-	void delete(StockIdRequestDto requestDto);
+	void delete(StockIdRequestDto requestDto, UserInfoDto userInfo);
 
 	GetStockResponseDto findStock(StockIdRequestDto requestDto);
 
@@ -33,9 +33,9 @@ public interface StockService {
 
 	PaginatedResultDto<GetStockResponseDto> searchStock(SearchStockRequestDto requestDto);
 
-	void deleteAllByProductId(UUID productId);
+	void deleteAllByProductId(UUID productId, UserInfoDto userInfo);
 
-	void deleteAllByHubId(UUID hubId);
+	void deleteAllByHubId(UUID hubId, UserInfoDto userInfo);
 
 	GetStockResponseDto findStockWithProductId(UUID productId);
 }
