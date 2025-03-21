@@ -13,17 +13,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import takeoff.logistics_service.msa.common.domain.BaseEntity;
 
 @Entity
 @Table(name = "p_delivery_route")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class DeliveryRoute {
+public class DeliveryRoute extends BaseEntity {
 
   @EmbeddedId
   @Column(name = "delivery_route_id")
@@ -56,7 +58,7 @@ public class DeliveryRoute {
 
   @Builder
   public DeliveryRoute(UUID deliveryId, Long deliveryManagerId, Integer sequenceNumber,
-      UUID fromHubId, UUID toHubId, String status, Integer estimatedDuration,
+      UUID fromHubId, UUID toHubId,  Integer estimatedDuration,
       Integer estimatedDistance
   ) {
     this.deliveryId = deliveryId;
@@ -64,11 +66,11 @@ public class DeliveryRoute {
     this.sequenceNumber = sequenceNumber;
     this.fromHubId = fromHubId;
     this.toHubId = toHubId;
-    modifyStatus(status);
+    this.status = DeliveryRouteStatus.WAITING_HUB;
     this.estimatedArrivalInfo = EstimatedArrivalInfo.of(estimatedDuration, estimatedDistance);
   }
 
-  private void modifyStatus(String status) {
+  public void modifyStatus(String status) {
     switch (status) {
       case WAITING_HUB -> this.status = DeliveryRouteStatus.WAITING_HUB;
       case IN_TRANSIENT -> this.status = DeliveryRouteStatus.IN_TRANSIENT;
@@ -78,5 +80,49 @@ public class DeliveryRoute {
       default -> throw new IllegalArgumentException("Invalid status: " + status);
       // TODO : 글로벌 예외로 변경
     }
+  }
+
+  public void modifyArrivalInfo(Integer actualDuration, Integer actualDistance) {
+    this.actualArrivalInfo = ActualArrivalInfo.of(actualDuration, actualDistance);
+  }
+
+  public UUID getId() {
+    return id.getId();
+  }
+
+  public String getStatusLiteral() {
+    return status.getStatus();
+  }
+
+  public Integer getEstimatedDistance() {
+    return estimatedArrivalInfo.getEstimatedDistance();
+  }
+
+  public Integer getEstimatedDuration() {
+    return estimatedArrivalInfo.getEstimatedDuration();
+  }
+
+  public Integer getActualDistance() {
+    return actualArrivalInfo.getActualDistance();
+  }
+
+  public Integer getActualDuration() {
+    return actualArrivalInfo.getActualDuration();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof DeliveryRoute that)) {
+      return false;
+    }
+    return Objects.equals(id, that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(id);
   }
 }
