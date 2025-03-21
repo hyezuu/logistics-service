@@ -24,6 +24,8 @@ public class DeliveryService {
   public UUID saveDelivery(PostDeliveryRequestDto dto) {
     Delivery delivery = Delivery.builder()
         .orderId(dto.orderID())
+        .fromHubId(dto.fromHubId())
+        .toHubId(dto.toHubId())
         .build();
 
     deliveryRepository.save(delivery);
