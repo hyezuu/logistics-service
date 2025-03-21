@@ -90,7 +90,6 @@ jwt:
   access-expiration: 3600000  # AccessToken 만료 시간 (1시간)
   refresh-expiration: 604800000  # RefreshToken 만료 시간 (7일)
 
-
 management:
   endpoints:
     web:

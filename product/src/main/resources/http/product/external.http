@@ -20,7 +20,7 @@ Content-Type: application/json
 
 ### 업체 생성 요청
 # @name createCompany
-POST {{host}}/api/v1/companies
+POST http://localhost:19000/api/v1/companies
 Content-Type: {{contentType}}
 
 {
@@ -35,13 +35,15 @@ Content-Type: {{contentType}}
 
 ### 상품 생성 요청 (재고 수량 지정) - ID 저장
 # @name createProduct
-POST {{host}}/api/v1/products
-Content-Type: {{contentType}}
+POST http://localhost:19001/api/v1/products
+Content-Type: application/json
+X-User-Id: 123
+X-User-Role: MASTER_ADMIN
 
 {
   "name": "유기농 바나나",
-  "companyId": "{{companyId}}",
-  "hubId": "{{hubId}}",
+  "companyId": "550e8400-e29b-41d4-a716-446655440002",
+  "hubId": "550e8400-e29b-41d4-a716-446655440001",
   "quantity": 0
 }
 > {%

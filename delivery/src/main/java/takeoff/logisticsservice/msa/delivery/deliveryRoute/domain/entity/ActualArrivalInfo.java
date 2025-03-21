@@ -18,4 +18,13 @@ public class ActualArrivalInfo {
 
   @Column(name = "actual_duration", nullable = false)
   private Integer actualDuration;
+
+  public static ActualArrivalInfo of(Integer actualDuration, Integer actualDistance) {
+    return new ActualArrivalInfo(actualDuration, actualDistance);
+  }
+
+  private ActualArrivalInfo(Integer actualDuration, Integer actualDistance) {
+    this.actualDistance = actualDistance;
+    this.actualDuration = actualDuration;
+  }
 }

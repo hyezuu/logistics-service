@@ -2,6 +2,7 @@ package takeoff.logistics_service.msa.order.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import java.io.Serializable;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -13,7 +14,7 @@ import org.hibernate.annotations.UuidGenerator;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
-public class OrderId {
+public class OrderId implements Serializable {
 
   @UuidGenerator
   @Column(name = "order_id", nullable = false)
