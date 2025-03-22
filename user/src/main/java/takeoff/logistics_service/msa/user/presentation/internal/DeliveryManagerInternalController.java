@@ -31,10 +31,8 @@ public class DeliveryManagerInternalController {
     }
 
     @GetMapping("/hub")
-    public ResponseEntity<List<GetDeliveryManagerListInfoDto>> getHubDeliveryManagersByHubId(
-            @RequestParam UUID hubId
-    ) {
-        List<GetDeliveryManagerListInfoDto> list = deliveryManagerService.getHubDeliveryManagersByHubId(hubId);
+    public ResponseEntity<List<GetDeliveryManagerListInfoDto>> getHubDeliveryManagersByHubId() {
+        List<GetDeliveryManagerListInfoDto> list = deliveryManagerService.getAllHubDeliveryManagers();
         return ResponseEntity.ok(list);
     }
 

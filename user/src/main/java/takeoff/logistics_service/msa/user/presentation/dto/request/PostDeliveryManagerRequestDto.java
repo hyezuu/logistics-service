@@ -44,4 +44,15 @@ public record PostDeliveryManagerRequestDto(
                 deliveryManagerType
         );
     }
+    public DeliveryManager toEntityWithSequence(DeliverySequence sequence) {
+        return DeliveryManager.create(
+                username,
+                slackEmail,
+                password,
+                role,
+                identifier,
+                sequence,
+                deliveryManagerType
+        );
+    }
 }

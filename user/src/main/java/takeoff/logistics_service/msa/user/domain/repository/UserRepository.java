@@ -18,9 +18,11 @@ public interface UserRepository {
     Page<DeliveryManager> findAllDeliveryManagers(Specification<DeliveryManager> spec, Pageable pageable);
     Optional<DeliveryManager> findDeliveryManagerById(Long id);
     List<CompanyDeliveryManager> findAllCompanyDeliveryManagersByHubId(UUID hubId);
-    List<HubDeliveryManager> findAllHubDeliveryManagersByHubId(UUID hubId);
+    List<HubDeliveryManager> findAllHubDeliveryManagers();
     List<User> findAllByCompanyId(UUID companyId);
     List<User> findAllByHubId(UUID hubId);
     Optional<CompanyManager> findCompanyManagerById(Long id);
     Optional<HubManager> findHubManagerById(Long id);
+    int countCompanyDeliveryManagersByHubId(UUID hubId);
+    int countHubDeliveryManagersByHubId(UUID hubId);
 }

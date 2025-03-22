@@ -15,6 +15,6 @@ public interface DeliveryManagerService {
     GetDeliveryManagerListResponseDto getAllDeliveryManagers(GetDeliveryManagerListRequestDto requestDto);
     DeleteDeliveryManagerResponseDto deleteDeliveryManager(Long id);
     List<GetDeliveryManagerListInfoDto> getCompanyDeliveryManagersByHubId(UUID hubId);
-    List<GetDeliveryManagerListInfoDto> getHubDeliveryManagersByHubId(UUID hubId);
+    List<GetDeliveryManagerListInfoDto> getAllHubDeliveryManagers();
 
 }

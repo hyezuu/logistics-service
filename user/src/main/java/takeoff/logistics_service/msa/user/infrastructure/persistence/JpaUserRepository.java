@@ -39,9 +39,8 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
     @Query("SELECT m FROM CompanyDeliveryManager m WHERE m.hubId.hubIdentifier = :hubId AND m.deletedAt IS NULL")
     List<CompanyDeliveryManager> findAllCompanyDeliveryManagersByHubId(UUID hubId);
 
-    @Override
-    @Query("SELECT m FROM HubDeliveryManager m WHERE m.hubId.hubIdentifier = :hubId AND m.deletedAt IS NULL")
-    List<HubDeliveryManager> findAllHubDeliveryManagersByHubId(UUID hubId);
+    @Query("SELECT m FROM HubDeliveryManager m WHERE m.hubId IS NULL AND m.deletedAt IS NULL")
+    List<HubDeliveryManager> findAllHubDeliveryManagers();
 
     @Query("SELECT u FROM User u WHERE TYPE(u) != CompanyManager AND u.companyId.companyIdentifier = :companyId AND u.deletedAt IS NULL")
     List<User> findAllByCompanyId(UUID companyId);
@@ -54,6 +53,12 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
 
     @Query("SELECT m FROM HubManager m WHERE m.id = :id AND m.deletedAt IS NULL")
     Optional<HubManager> findHubManagerById(Long id);
+
+    @Query("SELECT COUNT(m) FROM CompanyDeliveryManager m WHERE m.hubId.hubIdentifier = :hubId AND m.deletedAt IS NULL")
+    int countCompanyDeliveryManagersByHubId(UUID hubId);
+
+    @Query("SELECT COUNT(m) FROM HubDeliveryManager m WHERE m.hubId.hubIdentifier = :hubId AND m.deletedAt IS NULL")
+    int countHubDeliveryManagersByHubId(UUID hubId);
 
 
 }
