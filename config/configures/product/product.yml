@@ -1,3 +1,7 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+
 management:
   zipkin:
     tracing:
@@ -19,8 +23,3 @@ springdoc:
   api-docs:
     enabled: true
     path: /api-docs-product-service
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18999/eureka/

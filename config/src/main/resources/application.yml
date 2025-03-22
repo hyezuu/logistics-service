@@ -10,7 +10,7 @@ spring:
           search-paths: config/configures/**
 
 server:
-  port: 19010
+  port: 8888
 
 eureka:
   client:
