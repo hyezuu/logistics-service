@@ -6,11 +6,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import takeoff.logistics_service.msa.user.domain.entity.DeliveryManager;
-import takeoff.logistics_service.msa.user.domain.entity.User;
+import takeoff.logistics_service.msa.user.domain.entity.*;
 import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface JpaUserRepository extends JpaRepository<User, Long>, UserRepository, JpaSpecificationExecutor<User> {
     @Override
@@ -35,7 +36,24 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
     }
 
     @Override
-    @Query("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.deletedAt IS NULL")
-    Optional<User> findByUsernameAndPassword(String username, String password);
+    @Query("SELECT m FROM CompanyDeliveryManager m WHERE m.hubId.hubIdentifier = :hubId AND m.deletedAt IS NULL")
+    List<CompanyDeliveryManager> findAllCompanyDeliveryManagersByHubId(UUID hubId);
+
+    @Override
+    @Query("SELECT m FROM HubDeliveryManager m WHERE m.hubId.hubIdentifier = :hubId AND m.deletedAt IS NULL")
+    List<HubDeliveryManager> findAllHubDeliveryManagersByHubId(UUID hubId);
+
+    @Query("SELECT u FROM User u WHERE TYPE(u) != CompanyManager AND u.companyId.companyIdentifier = :companyId AND u.deletedAt IS NULL")
+    List<User> findAllByCompanyId(UUID companyId);
+
+    @Query("SELECT u FROM User u WHERE TYPE(u) != HubManager AND u.hubId.hubIdentifier = :hubId AND u.deletedAt IS NULL")
+    List<User> findAllByHubId(UUID hubId);
+
+    @Query("SELECT m FROM CompanyManager m WHERE m.id = :id AND m.deletedAt IS NULL")
+    Optional<CompanyManager> findCompanyManagerById(Long id);
+
+    @Query("SELECT m FROM HubManager m WHERE m.id = :id AND m.deletedAt IS NULL")
+    Optional<HubManager> findHubManagerById(Long id);
+
 
 }

@@ -1,12 +1,14 @@
 package takeoff.logistics_service.msa.user.presentation.internal;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import takeoff.logistics_service.msa.user.application.service.DeliveryManagerService;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerListInfoDto;
 import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerResponseDto;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/app/delivery-managers")
@@ -19,4 +21,22 @@ public class DeliveryManagerInternalController {
     public GetDeliveryManagerResponseDto getDeliveryManager(@PathVariable Long id) {
         return deliveryManagerService.getDeliveryManagerById(id);
     }
+
+    @GetMapping("/company")
+    public ResponseEntity<List<GetDeliveryManagerListInfoDto>> getCompanyDeliveryManagersByHubId(
+            @RequestParam UUID hubId
+    ) {
+        List<GetDeliveryManagerListInfoDto> list = deliveryManagerService.getCompanyDeliveryManagersByHubId(hubId);
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping("/hub")
+    public ResponseEntity<List<GetDeliveryManagerListInfoDto>> getHubDeliveryManagersByHubId(
+            @RequestParam UUID hubId
+    ) {
+        List<GetDeliveryManagerListInfoDto> list = deliveryManagerService.getHubDeliveryManagersByHubId(hubId);
+        return ResponseEntity.ok(list);
+    }
+
+
 }

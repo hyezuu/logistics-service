@@ -11,6 +11,8 @@ import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupReq
 import takeoff.logistics_service.msa.user.presentation.dto.request.UserValidationRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/app/users")
@@ -22,4 +24,19 @@ public class UserInternalController {
     public UserValidationResponseDto validateUser(@RequestBody UserValidationRequestDto requestDto) {
         return userService.validateUser(requestDto);
     }
+
+    @GetMapping("/managers/company/{managerId}/users")
+    public ResponseEntity<List<GetUserListInfoDto>> getUsersByCompanyManager(
+            @PathVariable Long managerId
+    ) {
+        return ResponseEntity.ok(userService.getUsersByCompanyManagerId(managerId));
+    }
+
+    @GetMapping("/managers/hub/{managerId}/users")
+    public ResponseEntity<List<GetUserListInfoDto>> getUsersByHubManager(
+            @PathVariable Long managerId
+    ) {
+        return ResponseEntity.ok(userService.getUsersByHubManagerId(managerId));
+    }
+
 }

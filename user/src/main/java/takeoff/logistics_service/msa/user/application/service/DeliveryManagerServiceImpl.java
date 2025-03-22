@@ -17,6 +17,7 @@ import takeoff.logistics_service.msa.user.presentation.dto.request.PostDeliveryM
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -89,4 +90,20 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
         manager.deleteDeliveryManager();
         return DeleteDeliveryManagerResponseDto.from(manager.getId());
     }
+
+    @Override
+    public List<GetDeliveryManagerListInfoDto> getCompanyDeliveryManagersByHubId(UUID hubId) {
+        return userRepository.findAllCompanyDeliveryManagersByHubId(hubId).stream()
+                .map(GetDeliveryManagerListInfoDto::from)
+                .toList();
+    }
+
+    @Override
+    public List<GetDeliveryManagerListInfoDto> getHubDeliveryManagersByHubId(UUID hubId) {
+        return userRepository.findAllHubDeliveryManagersByHubId(hubId).stream()
+                .map(GetDeliveryManagerListInfoDto::from)
+                .toList();
+    }
+
+
 }

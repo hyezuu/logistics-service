@@ -3,10 +3,11 @@ package takeoff.logistics_service.msa.user.domain.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import takeoff.logistics_service.msa.user.domain.entity.DeliveryManager;
-import takeoff.logistics_service.msa.user.domain.entity.User;
+import takeoff.logistics_service.msa.user.domain.entity.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository {
     User save(User user);
@@ -16,6 +17,10 @@ public interface UserRepository {
     Page<User> findAll(Specification<User> spec, Pageable pageable);
     Page<DeliveryManager> findAllDeliveryManagers(Specification<DeliveryManager> spec, Pageable pageable);
     Optional<DeliveryManager> findDeliveryManagerById(Long id);
-    Optional<User> findByUsernameAndPassword(String username, String password);
-
+    List<CompanyDeliveryManager> findAllCompanyDeliveryManagersByHubId(UUID hubId);
+    List<HubDeliveryManager> findAllHubDeliveryManagersByHubId(UUID hubId);
+    List<User> findAllByCompanyId(UUID companyId);
+    List<User> findAllByHubId(UUID hubId);
+    Optional<CompanyManager> findCompanyManagerById(Long id);
+    Optional<HubManager> findHubManagerById(Long id);
 }
