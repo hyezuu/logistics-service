@@ -94,15 +94,18 @@ class SlackExternalControllerTest {
 
         when(slackServiceImpl.saveSlackMessageToUser(any(), any())).thenReturn((mockResponse));
         when(slackServiceImpl.findBySlackId(any())).thenReturn(getSlackResponseDto);
+
         // Slack 메시지 전송 Mock 설정
         doNothing().when(slackAlarmService)
-            .sendSlackMessageToDeliveryChannel(any(), eq(SlackConstant.USER_CHANNEL));
+            .sendSlackMessageToChannel(any(), eq(SlackConstant.USER_CHANNEL));
         doNothing().when(slackAlarmService)
-            .sendSlackMessageToDeliveryChannel(any(), eq(SlackConstant.PROJECT_CHANNEL));
+            .sendSlackMessageToChannel(any(), eq(SlackConstant.PROJECT_CHANNEL));
+
         mockMvc.perform(post("/api/v1/app/slacks/message/users/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userSlackRequest)))
             .andExpect(status().isOk());
+
         // When & Then
         mockMvc.perform(get("/api/v1/slacks/{slackId}", slackId))
             .andExpect(status().isOk())
@@ -142,9 +145,9 @@ class SlackExternalControllerTest {
                 (slackId, userId, new PatchContentsResponseDto("updated-message", LocalDateTime.now())));
         // Slack 메시지 전송 Mock 설정
         doNothing().when(slackAlarmService)
-            .sendSlackMessageToDeliveryChannel(any(), eq(SlackConstant.USER_CHANNEL));
+            .sendSlackMessageToChannel(any(), eq(SlackConstant.USER_CHANNEL));
         doNothing().when(slackAlarmService)
-            .sendSlackMessageToDeliveryChannel(any(), eq(SlackConstant.PROJECT_CHANNEL));
+            .sendSlackMessageToChannel(any(), eq(SlackConstant.PROJECT_CHANNEL));
         mockMvc.perform(post("/api/v1/app/slacks/message/users/{userId}", userId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(userSlackRequest)))

@@ -29,6 +29,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.hub.hub.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PatchHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PostHubResponseDto;
@@ -168,9 +170,10 @@ class HubExternalControllerTest {
     void 허브_삭제_성공() throws Exception {
         // Given
         UUID hubId = UUID.randomUUID();
+        UserInfoDto userInfoDto = new UserInfoDto(1L, UserRole.MASTER_ADMIN);
 
         // HubService mock
-        doNothing().when(hubService).deleteHub(hubId);
+        doNothing().when(hubService).deleteHub(hubId,userInfoDto.userId());
 
         // When & Then
         mockMvc.perform(delete("/api/v1/hubs/{hubId}", hubId))

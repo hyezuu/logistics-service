@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
-import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.slack.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PatchSlackRequestDto;
 import takeoff.logistics_service.msa.slack.application.dto.request.PostSlackMessageRequestDto;
@@ -46,7 +45,7 @@ public class SlackServiceImpl implements SlackService {
             .map(resultMessage -> {
                 Slack slack = Slack.createSlack(userInfo.userId(), resultMessage);
                 Slack savedSlack = slackRepository.save(slack);
-                slackAlarmService.sendSlackMessageToDeliveryChannel(savedSlack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
+                slackAlarmService.sendSlackMessageToChannel(savedSlack.getContents().getMessage(), SlackConstant.PROJECT_CHANNEL);
                 return PostSlackResponseDto.from(savedSlack);
             }).block();
     }
@@ -54,7 +53,7 @@ public class SlackServiceImpl implements SlackService {
     @Override
     public PostSlackResponseDto saveSlackMessageToUser(PostUserSlackRequestDto requestDto,
         UserInfoDto userInfo) {
-        slackAlarmService.sendSlackMessageToUserChannel(requestDto.postContentsRequestDto().message(),
+        slackAlarmService.sendSlackMessageToChannel(requestDto.postContentsRequestDto().message(),
             SlackConstant.USER_CHANNEL);
         return PostSlackResponseDto.from(slackRepository.save(requestDto.toEntity(userInfo.userId())));
     }
