@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   application:
-    name: product
+    name: slack
   profiles:
     active: local
   cloud:

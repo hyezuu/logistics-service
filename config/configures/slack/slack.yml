@@ -7,7 +7,7 @@ management:
       probability: 1.0
 
 server:
-  port: 19001
+  port: 19041
 
 springdoc:
   swagger-ui:
