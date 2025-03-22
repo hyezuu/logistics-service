@@ -13,9 +13,16 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /docs
-    url: /springdoc/openapi3-product-service.json
+    url: /springdoc/openapi3-slack-service.json
     operations-sorter: method
     tags-sorter: alpha
   api-docs:
     enabled: true
-    path: /api-docs-product-service
+    path: /api-docs-slack-service
+slack:
+  key: ${SLACK_KEY}
+
+ai:
+  api:
+    key: ${AI_API_KEY}
+    url: ${AI_API_URL}
