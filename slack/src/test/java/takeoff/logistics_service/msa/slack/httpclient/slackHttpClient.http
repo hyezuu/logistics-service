@@ -103,6 +103,7 @@ Authorization: {{access_token}}
 
 ###
 GET {{baseUrl}}/api/v1/slacks/{{slackId}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNjc3Njg0LCJleHAiOjE3NDI2ODEyODR9.7UJlCM3grooUAXTz6dFyOdFo-_l881GmMsWV_xOb35w
 
 ###
 PATCH {{baseUrl}}/api/v1/slacks/{{slackId}}
