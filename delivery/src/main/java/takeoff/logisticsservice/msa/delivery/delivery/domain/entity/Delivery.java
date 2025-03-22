@@ -44,11 +44,10 @@ public class Delivery extends BaseEntity {
   private UUID toHubId;
 
   @Builder
-  public Delivery(UUID orderId, UUID fromHubId, UUID toHubId) {
+  public Delivery(UUID orderId, Long deliveryManagerId, UUID fromHubId, UUID toHubId) {
     this.orderId = orderId;
+    this.deliveryManagerId = deliveryManagerId;
     this.status = DeliveryStatus.ORDERED;
-
-    // TODO : 배송 경로 관련 로직 추가 + 허브 서비스와 연결
     this.fromHubId = fromHubId;
     this.toHubId = toHubId;
   }

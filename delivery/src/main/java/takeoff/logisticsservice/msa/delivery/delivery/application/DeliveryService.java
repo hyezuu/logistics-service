@@ -4,6 +4,8 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logisticsservice.msa.delivery.delivery.application.client.DeliverySequenceClientInternalDelivery;
+import takeoff.logisticsservice.msa.delivery.delivery.application.client.dto.request.GetCompanyDeliverySequenceRequestDto;
 import takeoff.logisticsservice.msa.delivery.delivery.application.dto.request.GetDeliveryRequestDto;
 import takeoff.logisticsservice.msa.delivery.delivery.application.dto.response.GetDeliveryResponseDto;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.entity.Delivery;
@@ -18,12 +20,20 @@ import takeoff.logisticsservice.msa.delivery.delivery.presentation.dto.request.P
 public class DeliveryService {
 
   private final DeliveryRepository deliveryRepository;
+  private final DeliverySequenceClientInternalDelivery deliverySequenceClient;
 
   // TODO : 분산 트랜잭션
   @Transactional
   public UUID saveDelivery(PostDeliveryRequestDto dto) {
+
+    Long deliveryManagerId = deliverySequenceClient.findNextCompanyDeliverySequence(
+        new GetCompanyDeliverySequenceRequestDto(
+            dto.toHubId()
+        )).companyDeliveryManagerId();
+
     Delivery delivery = Delivery.builder()
         .orderId(dto.orderID())
+        .deliveryManagerId(deliveryManagerId)
         .fromHubId(dto.fromHubId())
         .toHubId(dto.toHubId())
         .build();
