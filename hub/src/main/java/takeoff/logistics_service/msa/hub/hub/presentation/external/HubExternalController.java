@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.common.annotation.RoleCheck;
+import takeoff.logistics_service.msa.common.domain.UserInfo;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
 import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.hub.hub.application.service.HubService;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.PaginatedResultApi;
@@ -53,8 +55,10 @@ public class HubExternalController {
 
     @DeleteMapping("/{hubId}")
     @RoleCheck(roles = {UserRole.MASTER_ADMIN})
-    public ResponseEntity<Void> deleteHub(@PathVariable("hubId") UUID hubId) {
-        hubService.deleteHub(hubId);
+    public ResponseEntity<Void> deleteHub(
+        @PathVariable("hubId") UUID hubId,
+        @UserInfo UserInfoDto userInfo) {
+        hubService.deleteHub(hubId,userInfo.userId());
         return ResponseEntity.noContent().build();
     }
 
