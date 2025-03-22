@@ -5,7 +5,6 @@ import static takeoff.logistics_service.msa.product.product.application.exceptio
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +34,6 @@ public class ProductServiceImpl implements ProductService {
 	private final UserClient userClient;
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public PostProductResponseDto saveProduct(
 		PostProductRequestDto requestDto, UserInfoDto userInfo) {
 		validateRequest(requestDto.hubId(), requestDto.companyId());
@@ -57,7 +55,6 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
-	@Transactional
 	protected Product getSavedProduct(Product product) {
 		return productRepository.save(product);
 	}
