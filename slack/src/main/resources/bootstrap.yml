@@ -1,0 +1,14 @@
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  application:
+    name: slack
+  profiles:
+    active: local
+  cloud:
+    config:
+      uri: http://localhost:8888
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:18999/eureka/

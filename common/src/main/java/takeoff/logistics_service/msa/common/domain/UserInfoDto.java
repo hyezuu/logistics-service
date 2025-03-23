@@ -20,12 +20,4 @@ public record UserInfoDto(Long userId, UserRole role) {
 			return empty();
 		}
 	}
-
-	public boolean isCompanyManager() {
-		return role == UserRole.COMPANY_MANAGER;
-	}
-
-	public boolean isHubManager() {
-		return role == UserRole.HUB_MANAGER;
-	}
 }

@@ -1,0 +1,69 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    circuitbreakers:
+      enabled: true
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:9411/api/v2/spans"
+  tracing:
+    sampling:
+      probability: 1.0
+
+server:
+  port: 19041
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs
+    url: /springdoc/openapi3-slack-service.json
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    enabled: true
+    path: /api-docs-slack-service
+slack:
+  key: ${SLACK_KEY}
+
+ai:
+  api:
+    key: ${AI_API_KEY}
+    url: ${AI_API_URL}
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        #실패 요청(failure call) 임계치 설정 요청 실패가 50 이상시 OPEN 상태로 전환
+        failure-rate-threshold: 50
+        #지연 요청(slow call)의 임계치 설정 기본값이 100이지만 지연 요청이 100일 때 서버 스레드를
+        #전부 점유할 수 있으므로 100 보다 적게 설정
+        slow-call-rate-threshold: 80
+        #지연 요청이라고 판단할 시간 설정 5초로 지정 했습니다.
+        slow-call-duration-threshold: 5s
+        #Half-Open에서 Open,Close 상태 전환을 판단할 요청 개수
+        #ex)3개 요청이 전부 성공시 Closed, 하나라도 실패시 Open
+        permitted-number-of-calls-in-half-open-state: 3
+        #기본 값은 0으로 위 설정한 permitted 요청 개수가 모두 올 때까지 Half_Open으로 대기
+        max-wait-duration-in-half-open-state: 0
+        #요청 시간 기반과 요청 요청 개수 기반으로 슬라이딩 윈도우 타입을 설정
+        sliding-window-type: COUNT_BASED
+        #사이즈를 10으로 요청 개수가 10개가 될 때마다 집계 되도록 설정
+        sliding-window-size: 10
+        #지연 요청과 실패 요청이 계산되는 최소 요청 수
+        #ex) 슬라이딩 윈도우 사이즈 10이라면 아래 값이 슬라이딩 윈도우 사이즈보다 낮을 때
+        # -> 낮은 수의 요청이 들어왔을 때 해당 요청의 지연, 실패 요청을 계산해 상태 전환을 판단.
+        #ex) 아래 설정 값이 슬라이딩 윈도우 사이즈보다 클 때는 윈도우 사이즈만큼 계산된다.
+        minimum-number-of-calls: 10
+        #Open에서 최소 5초가 지나고 요청이 왔을 때 Half-Open이 되도록 설정
+        wait-duration-in-open-state: 5s
+    instances:
+      shboard-circuit-breaker:
+        base-config: default

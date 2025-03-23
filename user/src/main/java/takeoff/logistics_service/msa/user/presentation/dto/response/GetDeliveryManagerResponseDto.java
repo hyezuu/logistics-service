@@ -20,7 +20,7 @@ public record GetDeliveryManagerResponseDto(
                 .slackEmail(manager.getSlackEmail())
                 .deliveryManagerType(manager.getDeliveryManagerType())
                 .identifier(manager.getIdentifier())
-                .deliverySequence(manager.getDeliverySequence().getValue())
+                .deliverySequence(manager.getDeliverySequence().getSequenceNumber())
                 .build();
     }
 }

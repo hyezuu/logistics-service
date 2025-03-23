@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 public class DeliverySequence {
 
     @Column(name = "delivery_sequence", nullable = false)
-    private int value;
+    private int sequenceNumber;
 
-    private DeliverySequence(int value) {
-        this.value = value;
+    private DeliverySequence(int sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 
-    public static DeliverySequence from(int value) {
-        return new DeliverySequence(value);
+    public static DeliverySequence from(int sequenceNumber) {
+        return new DeliverySequence(sequenceNumber);
     }
 }

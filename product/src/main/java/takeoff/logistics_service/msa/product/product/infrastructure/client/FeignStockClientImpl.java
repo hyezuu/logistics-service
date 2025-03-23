@@ -1,12 +1,16 @@
 package takeoff.logistics_service.msa.product.product.infrastructure.client;
 
 import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.INVALID_STOCK_REQUEST;
+import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.STOCK_CLIENT_TIMEOUT;
 import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.STOCK_CONFLICT;
 import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.STOCK_NOT_FOUND;
 
+import feign.FeignException;
 import feign.FeignException.FeignClientException;
+import java.util.Arrays;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
 import takeoff.logistics_service.msa.common.exception.code.CommonErrorCode;
@@ -16,6 +20,7 @@ import takeoff.logistics_service.msa.product.product.application.exception.Produ
 import takeoff.logistics_service.msa.product.product.application.service.StockClient;
 import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.request.PostStockRequest;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FeignStockClientImpl implements StockClient {
@@ -28,7 +33,10 @@ public class FeignStockClientImpl implements StockClient {
 			return feignStockClient.saveStock(
 				PostStockRequest.from(requestDto)).toApplicationDto();
 		} catch (FeignClientException e) {
+			e.printStackTrace();
 			throw handleFeignException(e);
+		} catch (FeignException e) {
+			throw ProductBusinessException.from(STOCK_CLIENT_TIMEOUT);
 		}
 	}
 
@@ -38,6 +46,8 @@ public class FeignStockClientImpl implements StockClient {
 			feignStockClient.deleteStock(productId);
 		} catch (FeignClientException e) {
 			throw handleFeignException(e);
+		} catch (FeignException e) {
+			throw ProductBusinessException.from(STOCK_CLIENT_TIMEOUT);
 		}
 	}
 

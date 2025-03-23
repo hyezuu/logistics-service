@@ -1,7 +1,57 @@
-### 내부에서 사용하는 엔드포인트
-POST http://localhost:19000/api/v1/app/slacks/message/1
+### 로그인
+### 회원가입 (Signup)
+POST http://localhost:19000/api/v1/users/signup
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNTc5NTg0LCJleHAiOjE3NDI1ODMxODR9.Eo7fMoI4s7egl2EEoigCWpbNQmn7ijKH0EU1bp9vdGs
+
+{
+  "username": "testuser6",
+  "slackEmail": "testuser6@email.com",
+  "password": "Password1!",
+  "role": "HUB_MANAGER"
+}
+
+### 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)
+POST http://localhost:19000/api/v1/app/users/validate
+Content-Type: application/json
+
+{
+  "username": "testuser6",
+  "password": "Password1!"
+}
+> {%
+  if (response.body.userId) {
+    client.global.set("user_id", response.body.userId.toString());
+  } else {
+    throw new Error("userId가 응답에 존재하지 않음");
+  }
+  client.global.set("username", response.body.username);
+  client.global.set("role", response.body.role);
+%}
+
+### 로그인 (JWT 발급)
+POST http://localhost:19000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser6",
+  "password": "Password1!"
+}
+> {%
+  let authHeader = response.headers.valueOf("Authorization");
+  if (authHeader) {
+    client.global.set("access_token", authHeader);
+  } else {
+    throw new Error("Authorization 헤더가 응답에 존재하지 않음");
+  }
+%}
+
+
+
+
+### 내부에서 사용하는 엔드포인트
+POST {{baseUrl}}/api/v1/app/slacks/message/1
+Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "orderNumber": 1,
@@ -25,6 +75,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR
 ###
 POST {{baseUrl}}/api/v1/app/slacks/message/users/1
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "postContentsRequest": {
@@ -34,8 +85,25 @@ Content-Type: application/json
 > {%
   client.global.set("slackId", response.body.slackId)
 %}
+
+###
+POST {{baseUrl}}/api/v1/app/slacks/message/users/1
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "postContentsRequest": {
+    "message": "서킷 브레이커"
+  }
+}
+> {%
+  client.global.set("slackId", response.body.slackId)
+%}
+
+
 ###
 GET {{baseUrl}}/api/v1/slacks/{{slackId}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNjc3Njg0LCJleHAiOjE3NDI2ODEyODR9.7UJlCM3grooUAXTz6dFyOdFo-_l881GmMsWV_xOb35w
 
 ###
 PATCH {{baseUrl}}/api/v1/slacks/{{slackId}}

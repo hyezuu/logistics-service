@@ -23,6 +23,7 @@ public class FeignHubClientImpl implements HubClient {
 		try {
 			feignHubClient.findByHubId(hubId);
 		} catch (FeignClientException e) {
+			e.printStackTrace();
 			throw handleFeignException(e);
 		}
 	}

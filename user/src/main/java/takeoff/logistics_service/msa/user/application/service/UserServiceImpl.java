@@ -7,16 +7,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.user.domain.entity.CompanyManager;
+import takeoff.logistics_service.msa.user.domain.entity.HubManager;
 import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.domain.entity.UserRole;
 import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
 import takeoff.logistics_service.msa.user.domain.service.SearchQueryService;
 import takeoff.logistics_service.msa.user.domain.service.UserSearchCondition;
+import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
+import takeoff.logistics_service.msa.user.domain.vo.HubId;
 import takeoff.logistics_service.msa.user.presentation.common.dto.PaginationDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.*;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -110,5 +115,21 @@ public class UserServiceImpl implements UserService {
         return UserValidationResponseDto.from(user);
     }
 
+    @Override
+    public List<GetManagerListInfoDto> getUsersByCompanyManagerId(Long managerId) {
+        CompanyManager manager = userRepository.findCompanyManagerById(managerId)
+                .orElseThrow(() -> new IllegalArgumentException("회사 매니저를 찾을 수 없습니다."));
+        return userRepository.findAllEmployeesByCompanyId(manager.getCompanyId()).stream()
+                .map(GetManagerListInfoDto::from)
+                .toList();
+    }
 
+    @Override
+    public List<GetManagerListInfoDto> getUsersByHubManagerId(Long managerId) {
+        HubManager manager = userRepository.findHubManagerById(managerId)
+                .orElseThrow(() -> new IllegalArgumentException("허브 매니저를 찾을 수 없습니다."));
+        return userRepository.findAllEmployeesByHubId(manager.getHubId()).stream()
+                .map(GetManagerListInfoDto::from)
+                .toList();
+    }
 }

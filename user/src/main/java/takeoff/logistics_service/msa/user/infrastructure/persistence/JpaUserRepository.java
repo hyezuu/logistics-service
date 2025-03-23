@@ -6,11 +6,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import takeoff.logistics_service.msa.user.domain.entity.DeliveryManager;
-import takeoff.logistics_service.msa.user.domain.entity.User;
+import org.springframework.data.repository.query.Param;
+import takeoff.logistics_service.msa.user.domain.entity.*;
 import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
+import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
+import takeoff.logistics_service.msa.user.domain.vo.HubId;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface JpaUserRepository extends JpaRepository<User, Long>, UserRepository, JpaSpecificationExecutor<User> {
     @Override
@@ -35,7 +39,36 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
     }
 
     @Override
-    @Query("SELECT u FROM User u WHERE u.username = :username AND u.password = :password AND u.deletedAt IS NULL")
-    Optional<User> findByUsernameAndPassword(String username, String password);
+    @Query("SELECT m FROM CompanyDeliveryManager m WHERE m.hubId = :hubId AND m.deletedAt IS NULL")
+    List<CompanyDeliveryManager> findAllCompanyDeliveryManagersByHubId(HubId hubId);
+
+    @Override
+    @Query("SELECT m FROM HubDeliveryManager m WHERE m.hubId IS NULL AND m.deletedAt IS NULL")
+    List<HubDeliveryManager> findAllHubDeliveryManagers();
+
+    @Override
+    @Query("SELECT e FROM Employee e WHERE e.companyId = :companyId AND e.deletedAt IS NULL")
+    List<Employee> findAllEmployeesByCompanyId(@Param("companyId") CompanyId companyId);
+
+    @Override
+    @Query("SELECT e FROM Employee e WHERE e.hubId = :hubId AND e.deletedAt IS NULL")
+    List<Employee> findAllEmployeesByHubId(@Param("hubId") HubId hubId);
+
+    @Override
+    @Query("SELECT m FROM CompanyManager m WHERE m.id = :id AND m.deletedAt IS NULL")
+    Optional<CompanyManager> findCompanyManagerById(Long id);
+
+    @Override
+    @Query("SELECT m FROM HubManager m WHERE m.id = :id AND m.deletedAt IS NULL")
+    Optional<HubManager> findHubManagerById(Long id);
+
+    @Override
+    @Query("SELECT COUNT(m) FROM CompanyDeliveryManager m WHERE m.hubId = :hubId AND m.deletedAt IS NULL")
+    int countCompanyDeliveryManagersByHubId(HubId hubId);
+
+    @Override
+    @Query("SELECT COUNT(m) FROM HubDeliveryManager m WHERE m.hubId = :hubId AND m.deletedAt IS NULL")
+    int countHubDeliveryManagersByHubId(HubId hubId);
+
 
 }
