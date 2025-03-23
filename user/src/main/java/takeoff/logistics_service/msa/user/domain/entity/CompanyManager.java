@@ -22,13 +22,10 @@ public class CompanyManager extends Employee {
 
     @Embedded
     private CompanyId companyId;
-    @Embedded
-    private HubId hubId;
 
     protected CompanyManager(String username, String slackEmail, String password, UserRole role, CompanyId companyId, HubId hubId) {
         super(username, slackEmail, password, role);
         this.companyId = companyId;
-        this.hubId = hubId;
     }
 
     public static CompanyManager createFromFeign(String username, String slackEmail, String password, UserRole role, GetCompanyFeignResponse companyResponse) {
@@ -44,10 +41,6 @@ public class CompanyManager extends Employee {
 
     public void updateCompanyId(UUID newCompanyId) {
         this.companyId = CompanyId.from(newCompanyId);
-    }
-
-    public void updateHubId(UUID newHubId) {
-        this.hubId = HubId.from(newHubId);
     }
 
     @Override

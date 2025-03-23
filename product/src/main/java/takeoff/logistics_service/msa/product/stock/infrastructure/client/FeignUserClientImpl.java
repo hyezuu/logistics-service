@@ -14,6 +14,7 @@ import takeoff.logistics_service.msa.common.exception.code.CommonErrorCode;
 import takeoff.logistics_service.msa.product.stock.application.dto.response.GetUserResponseDto;
 import takeoff.logistics_service.msa.product.stock.application.exception.StockBusinessException;
 import takeoff.logistics_service.msa.product.stock.application.service.UserClient;
+import takeoff.logistics_service.msa.product.stock.infrastructure.client.dto.response.GetUserResponse;
 
 @RequiredArgsConstructor
 @Component("stockFeignUserClientImpl")
@@ -22,9 +23,13 @@ public class FeignUserClientImpl implements UserClient {
 	private final FeignUserClient feignUserClient;
 
 	@Override
-	public GetUserResponseDto findByUserId(Long userId) {
+	public GetUserResponseDto findByHubManagerId(Long managerId) {
 		try {
-			return GetUserResponseDto.from(feignUserClient.findByUserId(userId));
+			return feignUserClient.getUsersByHubManager(managerId).users().stream()
+				.filter(user -> user.userId().equals(managerId))
+				.findFirst()
+				.map(GetUserResponse::toApplicationDto)
+				.orElseThrow(() -> StockBusinessException.from(USER_NOT_FOUND));
 		} catch (FeignClientException e) {
 			throw handleFeignException(e);
 		}

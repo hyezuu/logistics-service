@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private UUID getCompanyId(UserInfoDto userInfo) {
-		return userClient.findByUserId(userInfo.userId()).companyId();
+		return userClient.findByCompanyManagerId(userInfo.userId()).companyId();
 	}
 
 	@Override

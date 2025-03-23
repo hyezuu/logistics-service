@@ -2,7 +2,12 @@ package takeoff.logistics_service.msa.product.product.infrastructure.client.dto.
 
 import java.util.UUID;
 import takeoff.logistics_service.msa.common.domain.UserRole;
+import takeoff.logistics_service.msa.product.product.application.dto.response.GetUserResponseDto;
 
 public record GetUserResponse(
-	Long userId, String username, String slackEmail, UserRole role, UUID hubId, UUID companyId) {
+	Long userId, String username, String slackEmail, UserRole role, UUID companyId, UUID hubId) {
+
+	public GetUserResponseDto toApplicationDto(){
+		return new GetUserResponseDto(userId, role, hubId, companyId);
+	}
 }

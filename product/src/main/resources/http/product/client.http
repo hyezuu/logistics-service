@@ -1,0 +1,129 @@
+### 환경 변수 설정
+@host = http://localhost:19000
+@contentType = application/json
+
+### 1. 허브 조회 또는 생성
+# 허브 정보가 필요할 경우, 허브를 조회하거나 생성합니다
+POST localhost:19042/api/v1/hubs
+Content-Type: {{contentType}}
+X-User-Id: 123
+X-User-Role: MASTER_ADMIN
+
+{
+  "hubName": "서울특별시 센터",
+  "locationApi": {
+    "address": "서울특별시 송파구 송파대로 55",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+  client.global.set("hubId", response.body.hubId)
+%}
+
+### 2. 업체 조회 또는 생성
+# 업체 정보가 필요할 경우, 업체를 조회하거나 생성합니다
+POST localhost:19030/api/v1/companies
+Content-Type: {{contentType}}
+X-User-Id: 123
+X-User_Role: MASTER_ADMIN
+
+{
+  "companyName": "푸른 22농장3",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123"
+}
+> {%
+  client.global.set("companyId", response.body.companyId)
+%}
+
+### 3. 일반 사용자 회원가입
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "normaluser",
+  "slackEmail": "normal@example.com",
+  "password": "Password1!",
+  "role": "MASTER_ADMIN"
+}
+
+### 4. 허브 매니저 회원가입
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "hubmana",
+  "slackEmail": "hub2@example.com",
+  "password": "Password1!",
+  "role": "HUB_MANAGER",
+  "hubFeignResponse": {
+  "hubId": "77c813b8-9c57-440c-a06d-e6a85fa34aac",
+  "hubName": "서울특별시 센터",
+  "address": "서울특별시 송파구 송파대로 55",
+  "latitude": 37.514219,
+  "longitude": 127.112628
+}
+}
+
+### 5. 업체 매니저 회원가입
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "companyer",
+  "slackEmail": "company@example.com",
+  "password": "Password1!",
+  "role": "COMPANY_MANAGER",
+  "companyFeignResponse": {
+  "companyId": "7fb3d858-8ade-4311-9ad1-d1aaa33f22e5",
+  "companyName": "푸른 22농장3",
+  "companyType": "SUPPLIER",
+  "hubId": "50e9c670-5195-4972-8a95-64d6bc33bbc4",
+  "address": "서울특별시 강남구 테헤란로 123",
+  "createdAt": "2025-03-24T00:39:45.070923",
+  "updatedAt": "2025-03-24T00:39:45.070923"
+}
+}
+
+### 6. 사용자 검증
+POST localhost:19000/api/v1/app/users/validate
+Content-Type: {{contentType}}
+
+{
+  "username": "hubmanage",
+  "password": "Password1!"
+}
+> {%
+  if (response.body.userId) {
+    client.global.set("user_id", response.body.userId.toString());
+  } else {
+    throw new Error("userId가 응답에 존재하지 않음");
+  }
+  client.global.set("username", response.body.username);
+  client.global.set("role", response.body.role);
+%}
+### 7. 로그인
+POST localhost:19000/api/v1/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "hubmanage",
+  "password": "Password1!"
+}
+> {%
+  let authHeader = response.headers.valueOf("Authorization");
+  if (authHeader) {
+    client.global.set("access_token", authHeader);
+  }
+%}
+
+### 8. 사용자 정보 조회
+GET localhost:19021/api/v1/users/{{user_Id}}
+Authorization: {{access_token}}
+X-User-Id: {{user_Id}}
+X-User-Role: {{role}}
+
+###
+POST localhost:19000//api/v1/auth/token/refresh?refresh

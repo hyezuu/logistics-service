@@ -4,5 +4,5 @@ import takeoff.logistics_service.msa.product.product.application.dto.response.Ge
 
 public interface UserClient {
 
-	GetUserResponseDto findByUserId(Long userId);
+	GetUserResponseDto findByCompanyManagerId(Long userId);
 }
