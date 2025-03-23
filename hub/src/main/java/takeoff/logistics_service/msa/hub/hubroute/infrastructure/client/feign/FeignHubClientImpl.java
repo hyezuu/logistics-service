@@ -1,8 +1,10 @@
 package takeoff.logistics_service.msa.hub.hubroute.infrastructure.client.feign;
 
 import feign.FeignException.FeignClientException;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
@@ -22,6 +24,7 @@ import takeoff.logistics_service.msa.hub.hubroute.infrastructure.dto.response.Ge
  * @Date : 2025. 03. 18.
  */
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class FeignHubClientImpl implements HubClient {
 
@@ -60,4 +63,5 @@ public class FeignHubClientImpl implements HubClient {
             return HubRouteBusinessException.from(CommonErrorCode.BAD_GATEWAY);
         }
     }
+
 }

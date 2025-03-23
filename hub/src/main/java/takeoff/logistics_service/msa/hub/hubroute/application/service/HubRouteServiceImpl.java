@@ -188,20 +188,29 @@ public class HubRouteServiceImpl implements HubRouteService {
     }
 
     //목적지에서 가장 가까운 허브 찾기
-    //출발지에서 중간 허브가 200km가 넘으면 예외발생
     private HubAllListResponseDto findClosestHubWithinDistance(
         HubAllListResponseDto fromHub,
         HubAllListResponseDto toHub,
         List<HubAllListResponseDto> hubs) {
 
+        // 출발 허브에서 목적지 허브까지의 거리 계산
+        double directDistance = calculateDistance(fromHub.latitude(), fromHub.longitude(),
+            toHub.latitude(), toHub.longitude());
+
         return hubs.stream()
             .filter(hub -> !hub.hubId().equals(fromHub.hubId()) && !hub.hubId().equals(toHub.hubId()))
             .filter(hub -> calculateDistance(fromHub.latitude(), fromHub.longitude(), hub.latitude(), hub.longitude()) <= 200)
+            .filter(hub -> {
+                // 출발 허브에서 중간 허브까지의 거리와 출발 허브에서 목적지 허브까지의 거리를 비교
+                double distanceToHub = calculateDistance(fromHub.latitude(), fromHub.longitude(), hub.latitude(), hub.longitude());
+                return distanceToHub <= directDistance;
+            })
             .min(Comparator.comparingDouble(hub ->
                 calculateDistance(toHub.latitude(), toHub.longitude(), hub.latitude(), hub.longitude())
             ))
             .orElseThrow(() -> HubRouteBusinessException.from(HubRouteErrorCode.HUB_ROUTE_NOT_FOUND));
     }
+
 
 
     @Override
