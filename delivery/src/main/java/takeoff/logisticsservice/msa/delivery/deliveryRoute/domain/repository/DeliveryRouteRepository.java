@@ -10,6 +10,8 @@ public interface DeliveryRouteRepository {
 
   List<DeliveryRoute> findAllByDeliveryId(UUID deliveryId);
 
+  List<DeliveryRoute> findAllByDeliveryManagerId(Long deliveryManagerId);
+
   <S extends DeliveryRoute> Iterable<S> saveAll(Iterable<S> deliveryRoutes);
 }
 
