@@ -1,4 +1,4 @@
-@host = http://localhost:19001
+@host = http://localhost:19000
 @contentType = application/json
 
 ### 재고 생성 API (PostStockRequestDto 사용)

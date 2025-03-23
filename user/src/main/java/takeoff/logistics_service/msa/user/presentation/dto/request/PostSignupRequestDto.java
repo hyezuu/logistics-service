@@ -5,6 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import takeoff.logistics_service.msa.user.application.dto.GetCompanyFeignResponse;
+import takeoff.logistics_service.msa.user.application.dto.GetHubFeignResponse;
+import takeoff.logistics_service.msa.user.domain.entity.CompanyManager;
+import takeoff.logistics_service.msa.user.domain.entity.HubManager;
 import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.domain.entity.UserRole;
 import takeoff.logistics_service.msa.user.domain.vo.SlackId;
@@ -27,15 +31,20 @@ public record PostSignupRequestDto(
         @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
                 message = "비밀번호는 대소문자, 숫자, 특수문자를 포함해야 합니다.")
         String password,
-        UserRole role
+        UserRole role,
+        GetCompanyFeignResponse companyFeignResponse,
+        GetHubFeignResponse hubFeignResponse
 ) {
     public User toEntity(String encodedPassword){
-        return User.builder()
-                .username(username)
-                .slackEmail(slackEmail)
-                .password(encodedPassword)
-                .role(role)
-                .build();
+        return switch (role) {
+            case COMPANY_MANAGER -> CompanyManager.createFromFeign(
+                    username, slackEmail, encodedPassword, role, companyFeignResponse
+            );
+            case HUB_MANAGER -> HubManager.createFromFeign(
+                    username, slackEmail, encodedPassword, role, hubFeignResponse
+            );
+            default -> User.create(username, slackEmail, encodedPassword, role);
+        };
     }
 
 }

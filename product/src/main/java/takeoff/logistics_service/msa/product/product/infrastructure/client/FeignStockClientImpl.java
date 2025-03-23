@@ -1,16 +1,18 @@
 package takeoff.logistics_service.msa.product.product.infrastructure.client;
 
+import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.INVALID_STOCK_REQUEST;
+import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.STOCK_CONFLICT;
+import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.STOCK_NOT_FOUND;
+
 import feign.FeignException.FeignClientException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
 import takeoff.logistics_service.msa.common.exception.code.CommonErrorCode;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PostStockRequestDto;
 import takeoff.logistics_service.msa.product.product.application.dto.response.PostStockResponseDto;
 import takeoff.logistics_service.msa.product.product.application.exception.ProductBusinessException;
-import takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode;
 import takeoff.logistics_service.msa.product.product.application.service.StockClient;
 import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.request.PostStockRequest;
 
@@ -23,7 +25,8 @@ public class FeignStockClientImpl implements StockClient {
 	@Override
 	public PostStockResponseDto saveStock(PostStockRequestDto requestDto) {
 		try {
-			return feignStockClient.saveStock(PostStockRequest.from(requestDto)).toApplicationDto();
+			return feignStockClient.saveStock(
+				PostStockRequest.from(requestDto)).toApplicationDto();
 		} catch (FeignClientException e) {
 			throw handleFeignException(e);
 		}
@@ -39,14 +42,13 @@ public class FeignStockClientImpl implements StockClient {
 	}
 
 	private BusinessException handleFeignException(FeignClientException e) {
-		if (e.status() == HttpStatus.BAD_REQUEST.value()) {
-			return ProductBusinessException.from(ProductErrorCode.INVALID_STOCK_REQUEST);
-		} else if (e.status() == HttpStatus.NOT_FOUND.value()) {
-			return ProductBusinessException.from(ProductErrorCode.STOCK_NOT_FOUND);
-		} else if (e.status() == HttpStatus.CONFLICT.value()) {
-			return ProductBusinessException.from(ProductErrorCode.STOCK_CONFLICT);
-		} else {
-			return ProductBusinessException.from(CommonErrorCode.BAD_GATEWAY);
-		}
+		return ProductBusinessException.from(
+			switch (e.status()) {
+				case 400 -> INVALID_STOCK_REQUEST;
+				case 404 -> STOCK_NOT_FOUND;
+				case 409 -> STOCK_CONFLICT;
+				default -> CommonErrorCode.BAD_GATEWAY;
+			}
+		);
 	}
 }

@@ -29,7 +29,6 @@ public class CompanyDeliveryManager extends DeliveryManager {
     public void updateIdentifier(String identifier) {
         this.hubId = HubId.from(UUID.fromString(identifier));
     }
-
     public static CompanyDeliveryManager create(String username, String slackEmail, String password, UserRole role, HubId hubId, DeliverySequence deliverySequence) {
         return new CompanyDeliveryManager(username, slackEmail, password, role, hubId, deliverySequence);
     }

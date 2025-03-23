@@ -1,16 +1,31 @@
 package takeoff.logistics_service.msa.common.domain;
 
-import java.util.Optional;
-
 public record UserInfoDto(Long userId, UserRole role) {
 
-	public static Optional<UserInfoDto> of(String userId, String role) {
-		try {
-			Long parsedUserId = Long.parseLong(userId);
-			UserRole parsedRole = UserRole.valueOf(role);
-			return Optional.of(new UserInfoDto(parsedUserId, parsedRole));
-		} catch (IllegalArgumentException e) {
-			return Optional.empty();
+	public static UserInfoDto of(String userId, String role) {
+		if(userId == null || role == null) {
+			return empty();
 		}
+		return parseUserInfo(userId, role);
+	}
+
+	public static UserInfoDto empty() {
+		return new UserInfoDto(null, null);
+	}
+
+	private static UserInfoDto parseUserInfo(String userId, String role) {
+		try {
+			return new UserInfoDto(Long.parseLong(userId), UserRole.valueOf(role));
+		} catch (IllegalArgumentException e) {
+			return empty();
+		}
+	}
+
+	public boolean isCompanyManager() {
+		return role == UserRole.COMPANY_MANAGER;
+	}
+
+	public boolean isHubManager() {
+		return role == UserRole.HUB_MANAGER;
 	}
 }

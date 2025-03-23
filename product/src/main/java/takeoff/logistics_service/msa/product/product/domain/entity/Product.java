@@ -30,8 +30,9 @@ public class Product extends BaseEntity {
 		return new Product(command.name(), command.companyId());
 	}
 
-	public void modify(ModifyProduct command){
+	public Product modify(ModifyProduct command){
 		this.name = command.name();
+		return this;
 	}
 
 	private Product(String name, UUID companyId) {
