@@ -2,9 +2,11 @@
 @host = http://localhost:19000
 @contentType = application/json
 
-
-POST http://{{host}}/api/v1/hubs
+### 허브 생성 요청
+POST localhost:19000/api/v1/hubs
 Content-Type: application/json
+X-User-Id: 1
+X-User-Role: MASTER_ADMIN
 
 {
   "hubName": "서울특별시 센터",
@@ -33,6 +35,60 @@ Content-Type: {{contentType}}
   client.global.set("companyId", response.body.companyId)
 %}
 
+### 회원가입 (Signup)
+POST http://localhost:19000/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "username": "testuser7",
+  "slackEmail": "testuser7@email.com",
+  "password": "Password1!",
+  "role": "HUB_MANAGER"
+}
+
+### 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)
+POST http://localhost:19000/api/v1/app/users/validate
+Content-Type: application/json
+
+{
+  "username": "testuser7",
+  "password": "Password1!"
+}
+
+> {%
+  if (response.body.userId) {
+    client.global.set("user_id", response.body.userId.toString());
+  } else {
+    throw new Error("userId가 응답에 존재하지 않음");
+  }
+  client.global.set("username", response.body.username);
+  client.global.set("role", response.body.role);
+%}
+
+### 로그인 (JWT 발급)
+POST http://localhost:19000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "testuser7",
+  "password": "Password1!"
+}
+> {%
+  let authHeader = response.headers.valueOf("Authorization");
+  if (authHeader) {
+    client.global.set("access_token", authHeader);
+  } else {
+    throw new Error("Authorization 헤더가 응답에 존재하지 않음");
+  }
+%}
+
+### 사용자 정보 조회 (Gateway에서 X-User-Id, X-User-Role 전달 확인)
+GET {{user}}/api/v1/users/1
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+
 ### 상품 생성 요청 (재고 수량 지정) - ID 저장
 # @name createProduct
 POST http://localhost:19001/api/v1/products
@@ -51,13 +107,14 @@ X-User-Role: MASTER_ADMIN
 %}
 
 ### 상품 생성 요청 (재고 수량 미지정 - 기본값 0 적용)
-POST {{host}}/api/v1/products
+POST localhost:19000/api/v1/products
 Content-Type: {{contentType}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNzU5MDc5LCJleHAiOjE3NDI3NjI2Nzl9.BGaQ6heVUJrG41HXkmWyRzlqz24IaSpYNmCBHuh1w8g
 
 {
   "name": "프리미엄 사과",
-  "companyId": "550e8400-e29b-41d4-a716-446655440002",
-  "hubId": "550e8400-e29b-41d4-a716-446655440001",
+  "companyId": "33df8f81-e526-4587-804d-e5a634d4e131",
+  "hubId": "50e9c670-5195-4972-8a95-64d6bc33bbc4",
   "quantity": null
 }
 

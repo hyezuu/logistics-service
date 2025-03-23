@@ -7,6 +7,7 @@ import static takeoff.logistics_service.msa.product.product.application.exceptio
 
 import feign.FeignException;
 import feign.FeignException.FeignClientException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
@@ -14,6 +15,8 @@ import takeoff.logistics_service.msa.common.exception.code.CommonErrorCode;
 import takeoff.logistics_service.msa.product.product.application.dto.response.GetUserResponseDto;
 import takeoff.logistics_service.msa.product.product.application.exception.ProductBusinessException;
 import takeoff.logistics_service.msa.product.product.application.service.UserClient;
+import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.response.GetManagerListResponse;
+import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.response.GetUserResponse;
 
 @RequiredArgsConstructor
 @Component("productFeignUserClientImpl")
@@ -22,9 +25,13 @@ public class FeignUserClientImpl implements UserClient {
 	private final FeignUserClient feignUserClient;
 
 	@Override
-	public GetUserResponseDto findByUserId(Long userId) {
+	public GetUserResponseDto findByCompanyManagerId(Long managerId) {
 		try {
-			return GetUserResponseDto.from(feignUserClient.findByUserId(userId));
+			return feignUserClient.getUsersByCompanyManager(managerId).users().stream()
+				.filter(user -> user.userId().equals(managerId))
+				.findFirst()
+				.map(GetUserResponse::toApplicationDto)
+				.orElseThrow(() -> ProductBusinessException.from(USER_NOT_FOUND));
 		} catch (FeignClientException e) {
 			throw handleFeignException(e);
 		}

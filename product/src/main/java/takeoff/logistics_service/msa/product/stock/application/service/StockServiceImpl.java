@@ -59,7 +59,7 @@ public class StockServiceImpl implements StockService {
 	}
 
 	private UUID getHubId(UserInfoDto userInfo) {
-		return userClient.findByUserId(userInfo.userId()).hubId();
+		return userClient.findByHubManagerId(userInfo.userId()).hubId();
 	}
 
 	@Override

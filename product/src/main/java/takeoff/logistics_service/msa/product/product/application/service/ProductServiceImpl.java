@@ -5,6 +5,7 @@ import static takeoff.logistics_service.msa.product.product.application.exceptio
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	private UUID getCompanyId(UserInfoDto userInfo) {
-		return userClient.findByUserId(userInfo.userId()).companyId();
+		return userClient.findByCompanyManagerId(userInfo.userId()).companyId();
 	}
 
 	@Override

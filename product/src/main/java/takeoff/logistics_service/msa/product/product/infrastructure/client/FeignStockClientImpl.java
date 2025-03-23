@@ -28,6 +28,7 @@ public class FeignStockClientImpl implements StockClient {
 			return feignStockClient.saveStock(
 				PostStockRequest.from(requestDto)).toApplicationDto();
 		} catch (FeignClientException e) {
+			e.printStackTrace();
 			throw handleFeignException(e);
 		}
 	}

@@ -5,9 +5,6 @@ spring:
     web-application-type: reactive  # Spring 애플리케이션이 리액티브 웹 애플리케이션으로 설정됨
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
       routes:
         - id: auth
           uri: lb://auth
@@ -17,10 +14,6 @@ spring:
           uri: lb://user
           predicates:
             - Path=/api/v1/users/**,/api/v1/app/users/**
-        - id: user-internal
-          uri: lb://user
-          predicates:
-            - Path=/api/v1/app/users/**
         - id: company
           uri: lb://company
           predicates:
@@ -40,12 +33,7 @@ spring:
         - id: order
           uri: lb://order
           predicates:
-            - Path=/api/v1/orders/**,/api/v1/app/orders**/
-#      default-filters:
-#        - name: AddRequestHeader
-#          args:
-#            name: Authorization
-#            value: "{Authorization}"
+            - Path=/api/v1/orders/**,/api/v1/app/orders/**
 
 springdoc:
   swagger-ui:
