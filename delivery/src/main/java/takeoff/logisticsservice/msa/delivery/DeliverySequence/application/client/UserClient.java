@@ -13,7 +13,7 @@ import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.client
 public interface UserClient {
 
   @GetMapping("/api/v1/users")
-  List<GetCompanyDeliveryManagerResponseDto> findAllCompanyDeliveryManagerByHubId(UUID hubid);
+  List<GetCompanyDeliveryManagerResponseDto> findAllCompanyDeliveryManagerByHubId(UUID hubId);
 
   @GetMapping("/api/v1/users")
   List<GetHubDeliveryManagerResponseDto> findAllHubDeliveryManager();
