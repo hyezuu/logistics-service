@@ -11,6 +11,7 @@ import takeoff.logistics_service.msa.user.domain.service.DeliveryManagerSearchCo
 import takeoff.logistics_service.msa.user.domain.service.SearchQueryService;
 import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
 import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
+import takeoff.logistics_service.msa.user.domain.vo.HubId;
 import takeoff.logistics_service.msa.user.presentation.common.dto.PaginationDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.GetDeliveryManagerListRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchDeliveryManagerRequestDto;
@@ -39,7 +40,7 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
             throw new IllegalArgumentException("해당 사용자 이름과 역할이 이미 존재합니다: " + requestDto.username());
         }
         int nextSequence = 0;
-        UUID hubId = UUID.fromString(requestDto.identifier());
+        HubId hubId = HubId.from(UUID.fromString(requestDto.identifier()));
 
         if (requestDto.deliveryManagerType() == DeliveryManagerType.COMPANY_DELIVERY_MANAGER) {
             nextSequence = userRepository.countCompanyDeliveryManagersByHubId(hubId);
@@ -113,7 +114,7 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
 
     @Override
     public List<GetDeliveryManagerListInfoDto> getCompanyDeliveryManagersByHubId(UUID hubId) {
-        return userRepository.findAllCompanyDeliveryManagersByHubId(hubId).stream()
+        return userRepository.findAllCompanyDeliveryManagersByHubId(HubId.from(hubId)).stream()
                 .map(GetDeliveryManagerListInfoDto::from)
                 .toList();
     }

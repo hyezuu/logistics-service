@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import takeoff.logistics_service.msa.user.domain.entity.*;
+import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
+import takeoff.logistics_service.msa.user.domain.vo.HubId;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,12 +19,12 @@ public interface UserRepository {
     Page<User> findAll(Specification<User> spec, Pageable pageable);
     Page<DeliveryManager> findAllDeliveryManagers(Specification<DeliveryManager> spec, Pageable pageable);
     Optional<DeliveryManager> findDeliveryManagerById(Long id);
-    List<CompanyDeliveryManager> findAllCompanyDeliveryManagersByHubId(UUID hubId);
+    List<CompanyDeliveryManager> findAllCompanyDeliveryManagersByHubId(HubId hubId);
     List<HubDeliveryManager> findAllHubDeliveryManagers();
-    List<User> findAllByCompanyId(UUID companyId);
-    List<User> findAllByHubId(UUID hubId);
+    List<Employee> findAllEmployeesByCompanyId(CompanyId companyId);
+    List<Employee> findAllEmployeesByHubId(HubId hubId);
     Optional<CompanyManager> findCompanyManagerById(Long id);
     Optional<HubManager> findHubManagerById(Long id);
-    int countCompanyDeliveryManagersByHubId(UUID hubId);
-    int countHubDeliveryManagersByHubId(UUID hubId);
+    int countCompanyDeliveryManagersByHubId(HubId hubId);
+    int countHubDeliveryManagersByHubId(HubId hubId);
 }

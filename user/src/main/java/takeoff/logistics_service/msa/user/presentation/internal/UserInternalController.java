@@ -1,15 +1,12 @@
 package takeoff.logistics_service.msa.user.presentation.internal;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import takeoff.logistics_service.msa.user.application.service.UserService;
-import takeoff.logistics_service.msa.user.presentation.dto.request.GetUserListRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.UserValidationRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.response.*;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetManagerListInfoDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetManagerListInternalResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.UserValidationResponseDto;
 
 import java.util.List;
 
@@ -25,18 +22,21 @@ public class UserInternalController {
         return userService.validateUser(requestDto);
     }
 
-    @GetMapping("/managers/company/{managerId}/users")
-    public ResponseEntity<List<GetUserListInfoDto>> getUsersByCompanyManager(
-            @PathVariable Long managerId
+    @GetMapping("/managers/company/users")
+    public GetManagerListInternalResponseDto getUsersByCompanyManager(
+            @RequestParam Long managerId
     ) {
-        return ResponseEntity.ok(userService.getUsersByCompanyManagerId(managerId));
+        List<GetManagerListInfoDto> list = userService.getUsersByCompanyManagerId(managerId);
+        return GetManagerListInternalResponseDto.from(list);
     }
 
-    @GetMapping("/managers/hub/{managerId}/users")
-    public ResponseEntity<List<GetUserListInfoDto>> getUsersByHubManager(
-            @PathVariable Long managerId
+    @GetMapping("/managers/hub/users")
+    public GetManagerListInternalResponseDto getUsersByHubManager(
+            @RequestParam Long managerId
     ) {
-        return ResponseEntity.ok(userService.getUsersByHubManagerId(managerId));
+        List<GetManagerListInfoDto> list = userService.getUsersByHubManagerId(managerId);
+        return GetManagerListInternalResponseDto.from(list);
     }
+
 
 }

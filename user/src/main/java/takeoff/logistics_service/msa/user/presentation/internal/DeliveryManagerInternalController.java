@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import takeoff.logistics_service.msa.user.application.service.DeliveryManagerService;
 import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerListInfoDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerListInternalResponseDto;
 import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerResponseDto;
 
 import java.util.List;
@@ -18,22 +19,22 @@ public class DeliveryManagerInternalController {
     private final DeliveryManagerService deliveryManagerService;
 
     @GetMapping("/{id}")
-    public GetDeliveryManagerResponseDto getDeliveryManager(@PathVariable Long id) {
+    public GetDeliveryManagerResponseDto getDeliveryManagerById(@PathVariable Long id) {
         return deliveryManagerService.getDeliveryManagerById(id);
     }
 
     @GetMapping("/company")
-    public ResponseEntity<List<GetDeliveryManagerListInfoDto>> getCompanyDeliveryManagersByHubId(
+    public GetDeliveryManagerListInternalResponseDto getCompanyDeliveryManagersByHubId(
             @RequestParam UUID hubId
     ) {
         List<GetDeliveryManagerListInfoDto> list = deliveryManagerService.getCompanyDeliveryManagersByHubId(hubId);
-        return ResponseEntity.ok(list);
+        return GetDeliveryManagerListInternalResponseDto.from(list);
     }
 
     @GetMapping("/hub")
-    public ResponseEntity<List<GetDeliveryManagerListInfoDto>> getHubDeliveryManagersByHubId() {
+    public GetDeliveryManagerListInternalResponseDto getAllHubDeliveryManagers() {
         List<GetDeliveryManagerListInfoDto> list = deliveryManagerService.getAllHubDeliveryManagers();
-        return ResponseEntity.ok(list);
+        return GetDeliveryManagerListInternalResponseDto.from(list);
     }
 
 

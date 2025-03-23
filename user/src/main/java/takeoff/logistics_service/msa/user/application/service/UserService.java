@@ -12,6 +12,6 @@ public interface UserService {
     DeleteUserResponseDto deleteUser(Long id);
     GetUserListResponseDto getAllUsers(GetUserListRequestDto requestDto);
     UserValidationResponseDto validateUser(UserValidationRequestDto requestDto);
-    List<GetUserListInfoDto> getUsersByCompanyManagerId(Long managerId);
-    List<GetUserListInfoDto> getUsersByHubManagerId(Long managerId);
+    List<GetManagerListInfoDto> getUsersByCompanyManagerId(Long managerId);
+    List<GetManagerListInfoDto> getUsersByHubManagerId(Long managerId);
 }

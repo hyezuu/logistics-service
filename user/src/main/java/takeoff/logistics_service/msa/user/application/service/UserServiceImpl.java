@@ -13,6 +13,8 @@ import takeoff.logistics_service.msa.user.domain.entity.UserRole;
 import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
 import takeoff.logistics_service.msa.user.domain.service.SearchQueryService;
 import takeoff.logistics_service.msa.user.domain.service.UserSearchCondition;
+import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
+import takeoff.logistics_service.msa.user.domain.vo.HubId;
 import takeoff.logistics_service.msa.user.presentation.common.dto.PaginationDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.*;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
@@ -108,24 +110,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GetUserListInfoDto> getUsersByCompanyManagerId(Long managerId) {
+    public List<GetManagerListInfoDto> getUsersByCompanyManagerId(Long managerId) {
         CompanyManager manager = userRepository.findCompanyManagerById(managerId)
                 .orElseThrow(() -> new IllegalArgumentException("회사 매니저를 찾을 수 없습니다."));
-
-        UUID companyId = manager.getCompanyId().getCompanyIdentifier();
-        return userRepository.findAllByCompanyId(companyId).stream()
-                .map(GetUserListInfoDto::from)
+        return userRepository.findAllEmployeesByCompanyId(manager.getCompanyId()).stream()
+                .map(GetManagerListInfoDto::from)
                 .toList();
     }
 
     @Override
-    public List<GetUserListInfoDto> getUsersByHubManagerId(Long managerId) {
+    public List<GetManagerListInfoDto> getUsersByHubManagerId(Long managerId) {
         HubManager manager = userRepository.findHubManagerById(managerId)
                 .orElseThrow(() -> new IllegalArgumentException("허브 매니저를 찾을 수 없습니다."));
-
-        UUID hubId = manager.getHubId().getHubIdentifier();
-        return userRepository.findAllByHubId(hubId).stream()
-                .map(GetUserListInfoDto::from)
+        return userRepository.findAllEmployeesByHubId(manager.getHubId()).stream()
+                .map(GetManagerListInfoDto::from)
                 .toList();
     }
 }

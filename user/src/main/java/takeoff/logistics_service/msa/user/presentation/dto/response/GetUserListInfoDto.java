@@ -3,12 +3,17 @@ package takeoff.logistics_service.msa.user.presentation.dto.response;
 import lombok.Builder;
 import takeoff.logistics_service.msa.user.domain.entity.User;
 
+import java.util.UUID;
+
 @Builder
 public record GetUserListInfoDto(
         Long userId,
         String username,
         String slackEmail,
-        String role) {
+        String role,
+        UUID companyId,
+        UUID hubId
+) {
     public static GetUserListInfoDto from(User user) {
         return GetUserListInfoDto.builder()
                 .userId(user.getId())
