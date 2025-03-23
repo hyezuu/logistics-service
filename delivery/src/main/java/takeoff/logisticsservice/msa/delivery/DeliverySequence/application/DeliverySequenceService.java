@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.client.UserClient;
-import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.client.response.GetCompanyDeliveryManagerResponseDto;
-import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.client.response.GetHubDeliveryManagerResponseDto;
+import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.client.response.GetDeliveryManagerListInfoDto;
 import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.dto.request.GetCompanyDeliverySequenceRequestDto;
 import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.dto.response.GetCompanyDeliverySequenceResponseDto;
 import takeoff.logisticsservice.msa.delivery.DeliverySequence.application.dto.response.GetHubDeliverySequenceResponseDto;
@@ -46,58 +45,65 @@ public class DeliverySequenceService {
   }
 
   private Long determineNextCompanyDeliveryManager(Integer currentSequence, UUID hubId) {
-    List<GetCompanyDeliveryManagerResponseDto> companyDeliveryManagers = userClient.findAllCompanyDeliveryManagerByHubId(
-        hubId);
+    List<GetDeliveryManagerListInfoDto> companyDeliveryManagers = userClient.findAllCompanyDeliveryManagerByHubId(
+        hubId).deliveryManagers();
     companyDeliveryManagers.sort(
-        Comparator.comparing(GetCompanyDeliveryManagerResponseDto::deliverySequence));
+        Comparator.comparing(GetDeliveryManagerListInfoDto::sequenceNumber));
 
     Integer maxSequence = companyDeliveryManagers.get(companyDeliveryManagers.size() - 1)
-        .deliverySequence();
-    Integer minSequence = companyDeliveryManagers.get(0).deliverySequence();
+        .sequenceNumber();
+    Integer minSequence = companyDeliveryManagers.get(0).sequenceNumber();
 
     if (Objects.equals(currentSequence, maxSequence)) {
-      Integer nextSequence = companyDeliveryManagers.get(minSequence).deliverySequence();
-      Long nextCompanyDeliveryManager = companyDeliveryManagers.get(minSequence).userId();
+      Integer nextSequence = companyDeliveryManagers.get(minSequence).sequenceNumber();
+      Long nextCompanyDeliveryManager = companyDeliveryManagers.get(minSequence)
+          .deliveryManagerId();
       companyDeliverySequenceRepository.updateCurrentSequence(nextSequence, hubId);
 
       return nextCompanyDeliveryManager;
     }
 
-    int currentSequenceIdx = findCurrentSequenceCompanyDeliveryManagerIdx(companyDeliveryManagers, currentSequence);
-    Integer nextSequence = companyDeliveryManagers.get(currentSequenceIdx + 1).deliverySequence();
-    Long nextCompanyDeliveryManager = companyDeliveryManagers.get(currentSequenceIdx + 1).userId();
+    int currentSequenceIdx = findCurrentSequenceCompanyDeliveryManagerIdx(companyDeliveryManagers,
+        currentSequence);
+    Integer nextSequence = companyDeliveryManagers.get(currentSequenceIdx + 1).sequenceNumber();
+    Long nextCompanyDeliveryManager = companyDeliveryManagers.get(currentSequenceIdx + 1)
+        .deliveryManagerId();
     companyDeliverySequenceRepository.updateCurrentSequence(nextSequence, hubId);
 
     return nextCompanyDeliveryManager;
   }
 
   private Integer findCurrentSequenceCompanyDeliveryManagerIdx(
-      List<GetCompanyDeliveryManagerResponseDto> companyDeliveryManagers, Integer currentSequence) {
+      List<GetDeliveryManagerListInfoDto> companyDeliveryManagers, Integer currentSequence) {
     return companyDeliveryManagers.stream()
-        .map(GetCompanyDeliveryManagerResponseDto::deliverySequence).toList()
+        .map(GetDeliveryManagerListInfoDto::sequenceNumber)
+        .toList()
         .indexOf(currentSequence);
   }
-  // TODO: 커스텀 예외로 변경
 
   private Long determineNextHubDeliverySequence(Integer currentSequence) {
-    List<GetHubDeliveryManagerResponseDto> hubDeliveryManagers = userClient.findAllHubDeliveryManager();
+    List<GetDeliveryManagerListInfoDto> hubDeliveryManagers = userClient.findAllHubDeliveryManager()
+        .deliveryManagers();
     hubDeliveryManagers.sort(
-        Comparator.comparing(GetHubDeliveryManagerResponseDto::deliverySequence));
+        Comparator.comparing(GetDeliveryManagerListInfoDto::sequenceNumber));
 
-    Integer maxSequence = hubDeliveryManagers.get(hubDeliveryManagers.size() - 1).deliverySequence();
-    Integer minSequence = hubDeliveryManagers.get(0).deliverySequence();
+    Integer maxSequence = hubDeliveryManagers.get(hubDeliveryManagers.size() - 1)
+        .sequenceNumber();
+    Integer minSequence = hubDeliveryManagers.get(0).sequenceNumber();
 
     if (Objects.equals(currentSequence, maxSequence)) {
-      Integer nextSequence = hubDeliveryManagers.get(minSequence).deliverySequence();
-      Long nextHubDeliveryManager = hubDeliveryManagers.get(minSequence).userId();
+      Integer nextSequence = hubDeliveryManagers.get(minSequence).sequenceNumber();
+      Long nextHubDeliveryManager = hubDeliveryManagers.get(minSequence).deliveryManagerId();
       hubDeliverySequenceRepository.updateCurrentSequence(nextSequence);
 
       return nextHubDeliveryManager;
     }
 
-    int currentSequenceIdx = findCurrentSequenceHubDeliveryManagerIdx(hubDeliveryManagers, currentSequence);
-    Integer nextSequence = hubDeliveryManagers.get(currentSequenceIdx + 1).deliverySequence();
-    Long nextCompanyDeliveryManager = hubDeliveryManagers.get(currentSequenceIdx + 1).userId();
+    int currentSequenceIdx = findCurrentSequenceHubDeliveryManagerIdx(hubDeliveryManagers,
+        currentSequence);
+    Integer nextSequence = hubDeliveryManagers.get(currentSequenceIdx + 1).sequenceNumber();
+    Long nextCompanyDeliveryManager = hubDeliveryManagers.get(currentSequenceIdx + 1)
+        .deliveryManagerId();
     hubDeliverySequenceRepository.updateCurrentSequence(nextSequence);
 
     return nextCompanyDeliveryManager;
@@ -105,9 +111,10 @@ public class DeliverySequenceService {
   }
 
   private Integer findCurrentSequenceHubDeliveryManagerIdx(
-      List<GetHubDeliveryManagerResponseDto> hubDeliveryManagers, Integer currentSequence) {
+      List<GetDeliveryManagerListInfoDto> hubDeliveryManagers, Integer currentSequence) {
     return hubDeliveryManagers.stream()
-        .map(GetHubDeliveryManagerResponseDto::deliverySequence).toList()
+        .map(GetDeliveryManagerListInfoDto::sequenceNumber)
+        .toList()
         .indexOf(currentSequence);
   }
 }
