@@ -1,58 +1,58 @@
-spring:
-  config:
-    import: optional:file:.env[.properties]
-  application:
-    name: hub
-  datasource:
-    url: jdbc:postgresql://localhost:5432/hub
-    username: sa
-    password: sa
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        default_batch_fetch_size: 30
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      username: default
-      password: systempass
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18999/eureka/
-
-
-management:
-  zipkin:
-    tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
-  tracing:
-    sampling:
-      probability: 1.0
-
-server:
-  port: 19042
-
-NAVER:
-  ID: ${NAVER_Client_ID}
-  KEY: ${NAVER_Secret_KEY}
-  URL: ${NAVER_URL}
-
-springdoc:
-  swagger-ui:
-    enabled: true
-    path: /docs
-    url: /springdoc/openapi3-hub-service.json
-    operations-sorter: method
-    tags-sorter: alpha
-  api-docs:
-    enabled: true
-    path: /api-docs-hub-service
+#spring:
+#  config:
+#    import: optional:file:.env[.properties]
+#  application:
+#    name: hub
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/hub
+#    username: sa
+#    password: sa
+#    driver-class-name: org.postgresql.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#        default_batch_fetch_size: 30
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+#      username: default
+#      password: systempass
+#
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:18999/eureka/
+#
+#
+#management:
+#  zipkin:
+#    tracing:
+#      endpoint: "http://localhost:9411/api/v2/spans"
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#server:
+#  port: 19042
+#
+#NAVER:
+#  ID: ${NAVER_Client_ID}
+#  KEY: ${NAVER_Secret_KEY}
+#  URL: ${NAVER_URL}
+#
+#springdoc:
+#  swagger-ui:
+#    enabled: true
+#    path: /docs
+#    url: /springdoc/openapi3-hub-service.json
+#    operations-sorter: method
+#    tags-sorter: alpha
+#  api-docs:
+#    enabled: true
+#    path: /api-docs-hub-service
