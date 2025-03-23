@@ -1,90 +1,42 @@
-spring:
-  profiles:
-    group:
-      "local": "localDB, common"
-      "test": "testDB, common"
-    active: local
-
----
-spring:
-  config:
-    activate:
-      on-profile: "common"
-  application:
-    name: product
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18999/eureka/
-management:
-  zipkin:
-    tracing:
-      endpoint: "http://localhost:9411/api/v2/spans"
-  tracing:
-    sampling:
-      probability: 1.0
-
-server:
-  port: 19001
-
-springdoc:
-  swagger-ui:
-    enabled: true
-    path: /docs
-    url: /springdoc/openapi3-product-service.json
-    operations-sorter: method
-    tags-sorter: alpha
-  api-docs:
-    enabled: true
-    path: /api-docs-product-service
----
-spring:
-  config:
-    activate:
-      on-profile: "localDB"
-  datasource:
-    url: jdbc:postgresql://localhost:5432/product
-    username: sa
-    password: sa
-    driver-class-name: org.postgresql.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        default_batch_fetch_size: 30
-
----
-spring:
-  config:
-    activate:
-      on-profile: "testDB"
-  datasource:
-    url: jdbc:h2:mem:test
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: create-drop
-  h2:
-    console:
-      enabled: true
-      path: /h2
-  sql:
-    init:
-      mode: never
-logging:
-  level:
-    org:
-      springframework:
-        security: DEBUG
-    sql: DEBUG
-eureka:
-  client:
-    register-with-eureka: false  # Eureka 서버에 등록
-    fetch-registry: false  # Eureka 서버로부터 레지스트리 정보 가져오기
+#spring:
+#  application:
+#    name: product
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/product
+#    username: sa
+#    password: sa
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#        default_batch_fetch_size: 30
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:18999/eureka/
+#management:
+#  zipkin:
+#    tracing:
+#      endpoint: "http://localhost:9411/api/v2/spans"
+#  tracing:
+#    sampling:
+#      probability: 1.0
+#
+#server:
+#  port: 19001
+#
+#springdoc:
+#  swagger-ui:
+#    enabled: true
+#    path: /docs
+#    url: /springdoc/openapi3-product-service.json
+#    operations-sorter: method
+#    tags-sorter: alpha
+#  api-docs:
+#    enabled: true
+#    path: /api-docs-product-service
+#
