@@ -22,7 +22,7 @@ X-User-Role: MASTER_ADMIN
 
 ### 업체 생성 요청
 # @name createCompany
-POST http://localhost:19000/api/v1/companies
+POST http://localhost:19001/api/v1/companies
 Content-Type: {{contentType}}
 
 {
@@ -93,13 +93,15 @@ X-User-Role: {{role}}
 # @name createProduct
 POST http://localhost:19001/api/v1/products
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNjc3Njg0LCJleHAiOjE3NDI2ODEyODR9.7UJlCM3grooUAXTz6dFyOdFo-_l881GmMsWV_xOb35w
 X-User-Id: 123
 X-User-Role: MASTER_ADMIN
+
 
 {
   "name": "유기농 바나나",
   "companyId": "550e8400-e29b-41d4-a716-446655440002",
-  "hubId": "550e8400-e29b-41d4-a716-446655440001",
+  "hubId": "550e8400-e29b-41d4-a716-446655440002",
   "quantity": 0
 }
 > {%

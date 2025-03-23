@@ -2,6 +2,7 @@ package takeoff.logistics_service.msa.slack.infrastructure.client.ai;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,16 @@ import takeoff.logistics_service.msa.slack.infrastructure.client.ai.GeminiWebCli
 @Slf4j
 public class GeminiWebClient implements WebClientAdapter{
 
+    private static final String GEMINI_CIRCUIT_BREAKER = "AiService";
+    private static final String FALL_BACK_RESPONSE = "fallbackResponse";
+
     private final WebClient webClient;
     @Value("${ai.api.key}")
     private String apiKey;
     @Value("${ai.api.url}")
     private String aiUrl;
 
+    @CircuitBreaker(name = GEMINI_CIRCUIT_BREAKER, fallbackMethod = FALL_BACK_RESPONSE)
     public Mono<String> sendRequestToGemini(PostSlackMessageRequestDto requestDto) {
         // 필요한 파라미터들 추출
         String prompt = generatePrompt(requestDto);
@@ -139,4 +144,12 @@ public class GeminiWebClient implements WebClientAdapter{
         promptBuilder.append(AiPromptEnum.DELIVERY_USERS.getPromptTemplate()).append(String.join(", ", requestDto.deliveryUsers().deliveryUserNames())).append("\n");
         return promptBuilder;
     }
+
+    //ai에 대한 요청은 내부적으로 슬랙에 보내기 위함으로 별도의 retry 설정은 하지 않고
+    //30분 이내로 출발해 달라는 요청을 남깁니다.
+    private Mono<String> fallbackResponse(Throwable t) {
+        log.error("Gemini AI 서비스 장애 발생 {}", t.getMessage());
+        return Mono.just("AI 서비스가 일시적으로 응답할 수 없습니다. 30분 이내로 출발 해주세요.");
+    }
+
 }

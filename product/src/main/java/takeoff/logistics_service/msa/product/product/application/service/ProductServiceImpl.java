@@ -2,13 +2,17 @@ package takeoff.logistics_service.msa.product.product.application.service;
 
 import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.ACCESS_DENIED;
 import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.PRODUCT_NOT_FOUND;
+import static takeoff.logistics_service.msa.product.product.application.exception.ProductErrorCode.PRODUCT_SAVE_FAILED;
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
+import takeoff.logistics_service.msa.common.exception.BusinessException;
 import takeoff.logistics_service.msa.product.product.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PatchProductRequestDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PostProductRequestDto;
@@ -22,6 +26,7 @@ import takeoff.logistics_service.msa.product.product.application.exception.Produ
 import takeoff.logistics_service.msa.product.product.domain.entity.Product;
 import takeoff.logistics_service.msa.product.product.domain.repository.ProductRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -33,12 +38,10 @@ public class ProductServiceImpl implements ProductService {
 	private final UserClient userClient;
 
 	@Override
-	@Transactional
 	public PostProductResponseDto saveProduct(
 		PostProductRequestDto requestDto, UserInfoDto userInfo) {
-
 		validateRequest(requestDto.hubId(), requestDto.companyId());
-		validateAccess(requestDto.companyId(), userInfo);
+		validateAccessToCompany(requestDto.companyId(), userInfo);
 		Product savedProduct = getSavedProduct(requestDto);
 		PostStockResponseDto savedStock = getSavedStock(requestDto, savedProduct);
 		return PostProductResponseDto.from(savedProduct, savedStock);
@@ -49,8 +52,9 @@ public class ProductServiceImpl implements ProductService {
 		companyClient.findByCompanyId(companyId);
 	}
 
-	private void validateAccess(UUID resourceId, UserInfoDto userInfo) {
-		if (userInfo.isCompanyManager() && !getCompanyId(userInfo).equals(resourceId)) {
+	private void validateAccessToCompany(UUID resourceId, UserInfoDto userInfo) {
+		boolean isCompanyManager = userInfo.role() == UserRole.COMPANY_MANAGER;
+		if (isCompanyManager && !getCompanyId(userInfo).equals(resourceId)) {
 			throw ProductBusinessException.from(ACCESS_DENIED);
 		}
 	}
@@ -61,8 +65,14 @@ public class ProductServiceImpl implements ProductService {
 
 	private PostStockResponseDto getSavedStock(
 		PostProductRequestDto requestDto, Product savedProduct) {
-		return stockClient.saveStock(
-			PostStockRequestDto.from(savedProduct.getId(), requestDto));
+		try {
+			return stockClient.saveStock(
+				PostStockRequestDto.from(savedProduct.getId(), requestDto));
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			productRepository.delete(savedProduct);
+			throw ProductBusinessException.from(PRODUCT_SAVE_FAILED);
+		}
 	}
 
 	private UUID getCompanyId(UserInfoDto userInfo) {
@@ -87,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
 		UUID productId, PatchProductRequestDto requestDto, UserInfoDto userInfo) {
 
 		Product product = getProduct(productId);
-		validateAccess(product.getCompanyId(), userInfo);
+		validateAccessToCompany(product.getCompanyId(), userInfo);
 		return PatchProductResponseDto.from(product.modify(requestDto.toCommand()));
 	}
 
@@ -95,7 +105,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public void deleteProduct(UUID productId, UserInfoDto userInfo) {
 		Product product = getProduct(productId);
-		validateAccess(product.getCompanyId(), userInfo);
+		validateAccessToCompany(product.getCompanyId(), userInfo);
 		product.delete(userInfo.userId());
 		stockClient.deleteStock(productId);
 	}

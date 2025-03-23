@@ -10,12 +10,12 @@ import takeoff.logistics_service.msa.slack.application.dto.response.PostContents
  */
 @Builder
 public record PostContentsResponse(String message,
-                                   LocalDateTime sent_At) {
+                                   LocalDateTime sentAt) {
 
     public static PostContentsResponse from(PostContentsResponseDto postContentsResponseDto) {
         return PostContentsResponse.builder()
             .message(postContentsResponseDto.message())
-            .sent_At(postContentsResponseDto.sentAt())
+            .sentAt(postContentsResponseDto.sentAt())
             .build();
     }
 

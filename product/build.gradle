@@ -56,6 +56,11 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0'
     testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.19.4'
+
+
+    //prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    
     //CONFIG
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
