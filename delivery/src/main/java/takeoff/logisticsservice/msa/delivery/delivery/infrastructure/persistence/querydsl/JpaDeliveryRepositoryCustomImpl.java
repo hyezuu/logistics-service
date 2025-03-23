@@ -78,7 +78,7 @@ public class JpaDeliveryRepositoryCustomImpl extends QuerydslRepositorySupport i
   }
 
   private BooleanExpression customerIdEq(Long customerId) {
-    return customerId != null ? QDelivery.delivery.customeerId.eq(customerId) : null;
+    return customerId != null ? QDelivery.delivery.customerId.eq(customerId) : null;
   }
 
   private BooleanExpression deliveryManagerIdEq(Long deliveryManagerId) {

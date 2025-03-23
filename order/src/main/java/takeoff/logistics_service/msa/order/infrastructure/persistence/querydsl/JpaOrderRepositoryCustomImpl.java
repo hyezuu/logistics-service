@@ -84,7 +84,7 @@ public class JpaOrderRepositoryCustomImpl extends
   }
 
   private BooleanExpression hubIdEq(UUID hubId) {
-    return hubId != null ? QOrder.order.hubId.eq(hubId) : null;
+    return hubId != null ? QOrder.order.managedHubId.eq(hubId) : null;
   }
 
   private BooleanExpression supplierIdEq(UUID supplierId) {
