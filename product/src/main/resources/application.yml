@@ -12,6 +12,13 @@ spring:
       on-profile: "common"
   application:
     name: product
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            readTimeout: 10000
+            connect-timeout: 3000
 eureka:
   client:
     service-url:
@@ -23,6 +30,7 @@ management:
   tracing:
     sampling:
       probability: 1.0
+
 
 server:
   port: 19001

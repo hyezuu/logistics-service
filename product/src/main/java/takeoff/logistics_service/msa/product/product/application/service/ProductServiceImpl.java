@@ -6,11 +6,13 @@ import static takeoff.logistics_service.msa.product.product.application.exceptio
 
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
 import takeoff.logistics_service.msa.common.domain.UserRole;
+import takeoff.logistics_service.msa.common.exception.BusinessException;
 import takeoff.logistics_service.msa.product.product.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PatchProductRequestDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PostProductRequestDto;
@@ -24,6 +26,7 @@ import takeoff.logistics_service.msa.product.product.application.exception.Produ
 import takeoff.logistics_service.msa.product.product.domain.entity.Product;
 import takeoff.logistics_service.msa.product.product.domain.repository.ProductRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -39,9 +42,9 @@ public class ProductServiceImpl implements ProductService {
 		PostProductRequestDto requestDto, UserInfoDto userInfo) {
 		validateRequest(requestDto.hubId(), requestDto.companyId());
 		validateAccessToCompany(requestDto.companyId(), userInfo);
-		Product product = Product.create(requestDto.toCommand());
-		PostStockResponseDto savedStock = getSavedStock(product.getId(), requestDto);
-		return PostProductResponseDto.from(getSavedProduct(product), savedStock);
+		Product savedProduct = getSavedProduct(requestDto);
+		PostStockResponseDto savedStock = getSavedStock(requestDto, savedProduct);
+		return PostProductResponseDto.from(savedProduct, savedStock);
 	}
 
 	private void validateRequest(UUID hubId, UUID companyId) {
@@ -56,18 +59,20 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
-	private Product getSavedProduct(Product product) {
-		try {
-			return productRepository.save(product);
-		} catch (Exception e) {// 제품 생성 실패시 고아 재고 삭제 요청
-			stockClient.deleteStock(product.getId());
-			throw ProductBusinessException.from(PRODUCT_SAVE_FAILED);
-		}
+	private Product getSavedProduct(PostProductRequestDto requestDto) {
+		return productRepository.save(Product.create(requestDto.toCommand()));
 	}
 
 	private PostStockResponseDto getSavedStock(
-		UUID productId, PostProductRequestDto requestDto) {
-		return stockClient.saveStock(PostStockRequestDto.from(productId, requestDto));
+		PostProductRequestDto requestDto, Product savedProduct) {
+		try {
+			return stockClient.saveStock(
+				PostStockRequestDto.from(savedProduct.getId(), requestDto));
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			productRepository.delete(savedProduct);
+			throw ProductBusinessException.from(PRODUCT_SAVE_FAILED);
+		}
 	}
 
 	private UUID getCompanyId(UserInfoDto userInfo) {

@@ -20,7 +20,7 @@ Content-Type: application/json
 
 ### 업체 생성 요청
 # @name createCompany
-POST http://localhost:19000/api/v1/companies
+POST http://localhost:19001/api/v1/companies
 Content-Type: {{contentType}}
 
 {
