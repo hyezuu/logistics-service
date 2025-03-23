@@ -1,8 +1,8 @@
-@host = http://localhost:19001
+@host = http://localhost:19000
 @contentType = application/json
 
 ### 재고 생성 API (PostStockRequestDto 사용)
-POST {{host}}/api/v1/app/stock
+POST localhost:19001/api/v1/app/stock
 Content-Type: {{contentType}}
 X-User-Id: 123
 X-User-Role: MASTER_ADMIN

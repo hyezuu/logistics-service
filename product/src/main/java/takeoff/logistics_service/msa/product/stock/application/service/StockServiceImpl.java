@@ -1,12 +1,20 @@
 package takeoff.logistics_service.msa.product.stock.application.service;
 
+import static takeoff.logistics_service.msa.product.stock.application.exception.StockErrorCode.ACCESS_DENIED;
+import static takeoff.logistics_service.msa.product.stock.application.exception.StockErrorCode.DUPLICATE_STOCK_ID;
+import static takeoff.logistics_service.msa.product.stock.application.exception.StockErrorCode.STOCK_LOCK_TIMEOUT;
+import static takeoff.logistics_service.msa.product.stock.application.exception.StockErrorCode.STOCK_NOT_FOUND;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Supplier;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.product.stock.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.request.AbortStockRequestDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.request.DecreaseStockRequestDto;
@@ -21,7 +29,6 @@ import takeoff.logistics_service.msa.product.stock.application.dto.response.GetS
 import takeoff.logistics_service.msa.product.stock.application.dto.response.IncreaseStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.application.dto.response.PostStockResponseDto;
 import takeoff.logistics_service.msa.product.stock.application.exception.StockBusinessException;
-import takeoff.logistics_service.msa.product.stock.application.exception.StockErrorCode;
 import takeoff.logistics_service.msa.product.stock.domain.entity.Stock;
 import takeoff.logistics_service.msa.product.stock.domain.entity.StockId;
 import takeoff.logistics_service.msa.product.stock.domain.repository.StockRepository;
@@ -30,12 +37,32 @@ import takeoff.logistics_service.msa.product.stock.domain.repository.StockReposi
 @RequiredArgsConstructor
 public class StockServiceImpl implements StockService {
 
+	private final UserClient userClient;
 	private final StockRepository stockRepository;
 
 	@Override
-	public PostStockResponseDto saveStock(PostStockRequestDto requestDto) {
+	public PostStockResponseDto saveStock(PostStockRequestDto requestDto, UserInfoDto userInfo) {
+		validateStockNotExists(requestDto);
+		validateAccessToHub(requestDto.stockId().hubId(), userInfo);
 		return PostStockResponseDto.from(
 			stockRepository.save(Stock.create(requestDto.toCommand())));
+	}
+
+	private void validateStockNotExists(PostStockRequestDto requestDto) {
+		if (stockRepository.existsById(StockId.create(requestDto.stockId().toCommand()))) {
+			throw StockBusinessException.from(DUPLICATE_STOCK_ID);
+		}
+	}
+
+	private void validateAccessToHub(UUID resourceId, UserInfoDto userInfo) {
+		boolean isHubManager = userInfo.role() == UserRole.HUB_MANAGER;
+		if (isHubManager && !getHubId(userInfo).equals(resourceId)) {
+			throw StockBusinessException.from(ACCESS_DENIED);
+		}
+	}
+
+	private UUID getHubId(UserInfoDto userInfo) {
+		return userClient.findByHubManagerId(userInfo.userId()).hubId();
 	}
 
 	@Override
@@ -46,24 +73,64 @@ public class StockServiceImpl implements StockService {
 
 	private Stock getStock(StockId stockId) {
 		return stockRepository.findByIdAndDeletedAtIsNull(stockId)
-			.orElseThrow(() -> StockBusinessException.from(StockErrorCode.STOCK_NOT_FOUND));
+			.orElseThrow(() -> StockBusinessException.from(STOCK_NOT_FOUND));
 	}
 
 	@Override
 	@Transactional
-	public void delete(StockIdRequestDto requestDto) {
-		getStock(StockId.create(requestDto.toCommand())).delete(0L);
+	public void delete(StockIdRequestDto requestDto, UserInfoDto userInfo) {
+		validateAccessToHub(requestDto.hubId(), userInfo);
+		getStock(StockId.create(requestDto.toCommand())).delete(userInfo.userId());
+	}
+
+	@Override
+	@Transactional
+	public IncreaseStockResponseDto increaseStock(
+		IncreaseStockRequestDto requestDto, UserInfoDto userInfo) {
+		validateAccessToHub(requestDto.stockId().hubId(), userInfo);
+		return withPessimisticLock(() ->
+			IncreaseStockResponseDto.from(getStockWithLock(requestDto.stockId())
+				.increaseStock(requestDto.quantity()))
+		);
+	}
+
+	private <T> T withPessimisticLock(Supplier<T> supplier) {
+		try {
+			return supplier.get();
+		} catch (PessimisticLockingFailureException e) {
+			throw StockBusinessException.from(STOCK_LOCK_TIMEOUT);
+		}
+	}
+
+	@Override
+	@Transactional
+	public DecreaseStockResponseDto decreaseStock(
+		DecreaseStockRequestDto requestDto, UserInfoDto userInfoDto) {
+		validateAccessToHub(requestDto.stockId().hubId(), userInfoDto);
+		return withPessimisticLock(() ->
+			DecreaseStockResponseDto.from(getStockWithLock(requestDto.stockId())
+				.decreaseStock(requestDto.quantity())));
+	}
+
+	private Stock getStockWithLock(StockIdRequestDto requestDto) {
+		return stockRepository
+			.findByIdWithLock(StockId.create(requestDto.toCommand()))
+			.orElseThrow(() -> StockBusinessException.from(STOCK_NOT_FOUND));
 	}
 
 	@Override
 	@Transactional
 	public void prepareStock(PrepareStockRequestDto requestDto) {
+		withPessimisticLock(() -> getSortedStocks(requestDto.stocks())
+			.forEach(stockItem ->
+				getStockWithLock(stockItem.stockId()).decreaseStock(stockItem.quantity())));
+	}
+
+	private void withPessimisticLock(Runnable runnable) {
 		try {
-			getSortedStocks(requestDto.stocks())
-				.forEach(stockItem ->
-					getStockWithLock(stockItem.stockId()).decreaseStock(stockItem.quantity()));
+			runnable.run();
 		} catch (PessimisticLockingFailureException e) {
-			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
+			throw StockBusinessException.from(STOCK_LOCK_TIMEOUT);
 		}
 	}
 
@@ -71,50 +138,15 @@ public class StockServiceImpl implements StockService {
 		return stocks.stream()
 			.sorted(Comparator
 				.comparing((StockItemRequestDto item) -> item.stockId().productId())
-				.thenComparing(item -> item.stockId().hubId()))
-			.toList();
-	}
-
-	private Stock getStockWithLock(StockIdRequestDto requestDto) {
-		return stockRepository
-			.findByIdWithLock(StockId.create(requestDto.toCommand()))
-			.orElseThrow(() -> StockBusinessException.from(StockErrorCode.STOCK_NOT_FOUND));
+				.thenComparing(item -> item.stockId().hubId())).toList();
 	}
 
 	@Override
 	@Transactional
 	public void abortStock(AbortStockRequestDto requestDto) {
-		try {
-			getSortedStocks(requestDto.stocks())
-				.forEach(stockItem ->
-					getStockWithLock(stockItem.stockId()).increaseStock(stockItem.quantity()));
-		} catch (PessimisticLockingFailureException e) {
-			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
-		}
-	}
-
-	@Override
-	@Transactional
-	public IncreaseStockResponseDto increaseStock(IncreaseStockRequestDto requestDto) {
-		try {
-			Stock stock = getStockWithLock(requestDto.stockId());
-			stock.increaseStock(requestDto.quantity());
-			return IncreaseStockResponseDto.from(stock);
-		} catch (PessimisticLockingFailureException e) {
-			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
-		}
-	}
-
-	@Override
-	@Transactional
-	public DecreaseStockResponseDto decreaseStock(DecreaseStockRequestDto requestDto) {
-		try {
-			Stock stock = getStockWithLock(requestDto.stockId());
-			stock.decreaseStock(requestDto.quantity());
-			return DecreaseStockResponseDto.from(stock);
-		} catch (PessimisticLockingFailureException e) {
-			throw StockBusinessException.from(StockErrorCode.STOCK_LOCK_TIMEOUT);
-		}
+		withPessimisticLock(() -> getSortedStocks(requestDto.stocks())
+			.forEach(stockItem ->
+				getStockWithLock(stockItem.stockId()).increaseStock(stockItem.quantity())));
 	}
 
 	@Override
@@ -126,24 +158,26 @@ public class StockServiceImpl implements StockService {
 
 	@Override
 	@Transactional
-	public void deleteAllByProductId(UUID productId) {
+	public void deleteAllByProductId(UUID productId, UserInfoDto userInfo) {
 		stockRepository.findAllById_ProductIdAndDeletedAtIsNull(productId)
-			.forEach(stock -> stock.delete(0L));
+			.forEach(stock -> stock.delete(userInfo.userId()));
 	}
 
 	@Override
 	@Transactional
-	public void deleteAllByHubId(UUID hubId) {
+	public void deleteAllByHubId(UUID hubId, UserInfoDto userInfo) {
+		validateAccessToHub(hubId, userInfo);
 		stockRepository.findAllById_HubIdAndDeletedAtIsNull(hubId)
-			.forEach(stock -> stock.delete(0L));
+			.forEach(stock -> stock.delete(userInfo.userId()));
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public GetStockResponseDto findStockWithProductId(UUID productId) {
 		return stockRepository
-			.findAllById_ProductIdAndDeletedAtIsNullOrderByQuantityDesc(productId)
-			.stream().findFirst().map(GetStockResponseDto::from)
-			.orElseThrow(() -> StockBusinessException.from(StockErrorCode.STOCK_NOT_FOUND));
+			.findAllById_ProductIdAndDeletedAtIsNullOrderByQuantityDesc(productId).stream()
+			.findFirst()
+			.map(GetStockResponseDto::from)
+			.orElseThrow(() -> StockBusinessException.from(STOCK_NOT_FOUND));
 	}
 }

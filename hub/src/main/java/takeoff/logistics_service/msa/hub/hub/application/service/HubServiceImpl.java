@@ -95,10 +95,9 @@ public class HubServiceImpl implements HubService {
         @CacheEvict(value = "hubs", key = "#hubId"),
         @CacheEvict(value = "hubsRoute", allEntries = true)
     })
-    public void deleteHub(UUID hubId) {
+    public void deleteHub(UUID hubId, Long userId) {
         Hub hub = getHub(hubId);
-        //Auth 개발시 수정 예정
-        hub.delete(1L);
+        hub.delete(userId);
     }
 
     private Hub getHub(UUID hubId) {

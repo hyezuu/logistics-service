@@ -24,7 +24,7 @@ public interface HubService {
 
     PatchHubResponseDto updateHub(UUID hubId, PatchHubRequestDto requestDto);
 
-    void deleteHub(UUID hubId);
+    void deleteHub(UUID hubId, Long userId);
 
     GetHubResponseDto findByHubId(UUID hubId);
 

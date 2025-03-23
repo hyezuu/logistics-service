@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import takeoff.logistics_service.msa.common.annotation.RoleCheck;
+import takeoff.logistics_service.msa.common.domain.UserInfo;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.product.product.application.service.ProductService;
 import takeoff.logistics_service.msa.product.product.presentation.dto.PaginatedResultApi;
 import takeoff.logistics_service.msa.product.product.presentation.dto.request.PatchProductRequest;
@@ -31,39 +35,44 @@ public class ProductExternalController {
 	private final ProductService productService;
 
 	@PostMapping
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER})
 	public ResponseEntity<PostProductResponse> saveProduct(
-		@Valid @RequestBody PostProductRequest requestDto) {
+		@Valid @RequestBody PostProductRequest requestDto, @UserInfo UserInfoDto userInfo) {
 
 		return ResponseEntity.status(HttpStatus.CREATED)
-			.body(PostProductResponse
-				.from(productService.saveProduct(requestDto.toApplicationDto())));
+			.body(PostProductResponse.from(
+				productService.saveProduct(requestDto.toApplicationDto(), userInfo)));
 	}
 
 	@PatchMapping("/{productId}")
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER})
 	public ResponseEntity<PatchProductResponse> updateProductName(
-		@PathVariable UUID productId, @Valid @RequestBody PatchProductRequest requestDto){
+		@PathVariable UUID productId,
+		@Valid @RequestBody PatchProductRequest requestDto, @UserInfo UserInfoDto userInfo) {
 
-		return ResponseEntity.ok(PatchProductResponse
-			.from(productService.updateProductName(
-				productId, requestDto.toApplicationDto())));
+		return ResponseEntity.ok(PatchProductResponse.from(
+			productService.updateProductName(productId, requestDto.toApplicationDto(), userInfo)));
 	}
 
 	@GetMapping("/{productId}")
-	public ResponseEntity<GetProductResponse> findProduct(@PathVariable UUID productId){
+	public ResponseEntity<GetProductResponse> findProduct(@PathVariable UUID productId) {
 
-		return ResponseEntity.ok(GetProductResponse.from(productService.findProduct(productId)));
+		return ResponseEntity.ok(GetProductResponse.from(
+			productService.findProduct(productId)));
 	}
 
 	@DeleteMapping("/{productId}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId){
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER})
+	public ResponseEntity<Void> deleteProduct(
+		@PathVariable UUID productId, @UserInfo UserInfoDto userInfo) {
 
-		productService.deleteProduct(productId);
+		productService.deleteProduct(productId, userInfo);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping("/search")
 	public ResponseEntity<PaginatedResultApi<GetProductResponse>> searchProduct(
-		@ModelAttribute SearchProductRequest requestDto){
+		@ModelAttribute SearchProductRequest requestDto) {
 
 		return ResponseEntity.ok(PaginatedResultApi.from(
 			productService.searchProduct(requestDto.toApplicationDto())));

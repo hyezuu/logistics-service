@@ -14,4 +14,6 @@ public interface ProductRepository {
 	Optional<Product> findByIdAndDeletedAtIsNull(UUID productId);
 
 	PaginatedResult<ProductSearchCriteriaResponse> search(ProductSearchCriteria searchCriteria);
+
+	void delete(Product product);
 }

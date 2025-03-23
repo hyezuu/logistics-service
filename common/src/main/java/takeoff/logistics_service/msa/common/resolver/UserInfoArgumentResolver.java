@@ -2,6 +2,7 @@ package takeoff.logistics_service.msa.common.resolver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import org.apache.catalina.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -19,8 +20,9 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.hasParameterAnnotation(UserInfo.class) &&
-			parameter.getParameterType().equals(UserInfoDto.class);
+
+		return parameter.hasParameterAnnotation(UserInfo.class)
+			&& parameter.getParameterType().equals(UserInfoDto.class);
 	}
 
 	@Override
@@ -32,14 +34,14 @@ public class UserInfoArgumentResolver implements HandlerMethodArgumentResolver {
 		return Optional.of(webRequest.getNativeRequest())
 			.filter(HttpServletRequest.class::isInstance)
 			.map(HttpServletRequest.class::cast)
-			.flatMap(this::extractUserInfo)
-			.orElse(null);
+			.map(this::extractUserInfo)
+			.orElse(UserInfoDto.empty());
 	}
 
-	private Optional<UserInfoDto> extractUserInfo(HttpServletRequest request) {
-		String userId = request.getHeader(USER_ID_HEADER);
-		String role = request.getHeader(USER_ROLE_HEADER);
+	private UserInfoDto extractUserInfo(HttpServletRequest request) {
 
-		return (userId != null && role != null) ? UserInfoDto.of(userId, role) : Optional.empty();
+		return UserInfoDto.of(
+			request.getHeader(USER_ID_HEADER),
+			request.getHeader(USER_ROLE_HEADER));
 	}
 }

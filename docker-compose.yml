@@ -24,10 +24,39 @@ services:
     container_name: redis
     image: redis:latest
     ports:
-      - "6379:6379"   # 레디스 기본 포트
+      - "6379:6379"  # 레디스 기본 포트
     networks:
       - app_network
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"  # Prometheus 기본 포트
+    networks:
+      - app_network
+    volumes:
+      - ./server/src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml  # prometheus.yml 파일 경로 수정
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:11.5.2
+    ports:
+      - "3000:3000"  # Grafana 기본 포트
+    networks:
+      - app_network
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: 'admin'  # Grafana 관리자 비밀번호
+    depends_on:
+      - prometheus
+    volumes:
+      - grafana-storage:/var/lib/grafana  # Grafana 데이터 저장소
 
 networks:
   app_network:
     driver: bridge
+
+volumes:
+  grafana-storage:

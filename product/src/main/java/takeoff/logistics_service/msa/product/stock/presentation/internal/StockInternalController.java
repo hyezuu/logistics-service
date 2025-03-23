@@ -3,7 +3,6 @@ package takeoff.logistics_service.msa.product.stock.presentation.internal;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import takeoff.logistics_service.msa.common.annotation.RoleCheck;
+import takeoff.logistics_service.msa.common.domain.UserInfo;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.product.stock.application.service.StockService;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.AbortStockRequest;
 import takeoff.logistics_service.msa.product.stock.presentation.dto.request.PostStockRequest;
@@ -25,10 +28,13 @@ public class StockInternalController {
 
 	private final StockService stockService;
 
-	// 권한검사
 	@PostMapping
-	public PostStockResponse saveStock(@RequestBody @Valid PostStockRequest requestDto) {
-		return PostStockResponse.from(stockService.saveStock(requestDto.toApplicationDto()));
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER})
+	public PostStockResponse saveStock(
+		@RequestBody @Valid PostStockRequest requestDto, @UserInfo UserInfoDto userInfo) {
+
+		return PostStockResponse
+			.from(stockService.saveStock(requestDto.toApplicationDto(), userInfo));
 	}
 
 	@GetMapping
@@ -48,14 +54,16 @@ public class StockInternalController {
 	}
 
 	@DeleteMapping("/all-by-product")
-	public void deleteAllByProductId(@RequestParam UUID productId) {
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN})
+	public void deleteAllByProductId(@RequestParam UUID productId, @UserInfo UserInfoDto userInfo) {
 
-		stockService.deleteAllByProductId(productId);
+		stockService.deleteAllByProductId(productId, userInfo);
 	}
 
 	@DeleteMapping("/all-by-hub")
-	public void deleteAllByHubId(@RequestParam UUID hubId) {
+	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER})
+	public void deleteAllByHubId(@RequestParam UUID hubId, @UserInfo UserInfoDto userInfo) {
 
-		stockService.deleteAllByHubId(hubId);
+		stockService.deleteAllByHubId(hubId, userInfo);
 	}
 }
