@@ -49,26 +49,12 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
         if (isDuplicate) {
             throw UserBusinessException.from(USERNAME_ALREADY_EXISTS);
         }
-
-//        int nextSequence = 0;
-//        if (requestDto.role().equals(UserRole.COMPANY_DELIVERY_MANAGER)) {
-//            HubId hubId = HubId.from(UUID.fromString(requestDto.identifier()));
-//
-//            if (requestDto.deliveryManagerType() == DeliveryManagerType.COMPANY_DELIVERY_MANAGER) {
-//                nextSequence = userRepository.countCompanyDeliveryManagersByHubId(hubId);
-//            } else if (requestDto.deliveryManagerType() == DeliveryManagerType.HUB_DELIVERY_MANAGER) {
-//                nextSequence = userRepository.countHubDeliveryManagersByHubId(hubId);
-//            } else {
-//                throw new IllegalArgumentException("지원하지 않는 배송 관리자 타입입니다.");
-//            }
-//            if (nextSequence >= 10) {
-//                throw new IllegalStateException("해당 허브에는 최대 10명의 배송 담당자만 등록할 수 있습니다.");
-//            }
-//        }
+        UUID identifier = requestDto.identifier();
 
         String encodePassword = passwordEncoder.encode(requestDto.password());
         log.info(encodePassword);
-        DeliveryManager deliveryManager = requestDto.toEntityWithSequence(encodePassword);
+        log.info(String.valueOf(identifier));
+        DeliveryManager deliveryManager = requestDto.toEntityWithSequence(encodePassword, identifier,requestDto);
 
         userRepository.save(deliveryManager);
         return PostDeliveryManagerResponseDto.from(deliveryManager);

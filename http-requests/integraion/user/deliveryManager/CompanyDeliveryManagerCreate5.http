@@ -1,0 +1,198 @@
+### 배송 담당자는 master 권한으로 생성
+### 로그인 (JWT 발급)
+POST {{baseUrl}}/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "master",
+  "password": "Password1!"
+}
+> {%
+  let authHeader = response.headers.valueOf("Authorization");
+  if (authHeader) {
+    client.global.set("access_token", authHeader);
+  } else {
+    throw new Error("Authorization 헤더가 응답에 존재하지 않음");
+  }
+%}
+
+### 허브 배송 담당자 생성 전 관리자 권한으로 허브가 만들어져야 합니다.
+POST {{baseUrl}}/api/v1/hubs
+Content-Type: application/json
+Authorization: {{access_token}}
+#X-User-Id: 123
+#X-User-Role: MASTER_ADMIN
+
+{
+  "hubName": "테스트 데이터",
+  "locationApi": {
+    "address": "테스트 주소",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+  client.global.set("hubId", response.body.hubId)
+%}
+
+
+
+### 생성된 허브 아이디를 identifier에 하드 코딩 해야할 것 같습니다.....a1b2c3d4로 둘테니 replaceAll로 바꾸세요!
+### 허브 배송 담당자 생성(회원가입X) 배송 담당자는 master권한으로 요청해야 함.
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_41",
+  "slackEmail": "hub_41@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 1
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_42",
+  "slackEmail": "hub_42@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 2
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_43",
+  "slackEmail": "hub_43@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 3
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_44",
+  "slackEmail": "hub_44@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 4
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_45",
+  "slackEmail": "hub_45@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 5
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_46",
+  "slackEmail": "hub_46@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 6
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_47",
+  "slackEmail": "hub_47@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 7
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_48",
+  "slackEmail": "hub_48@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 8
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_49",
+  "slackEmail": "hub_49@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 9
+}
+
+###
+
+POST {{baseUrl}}/api/v1/users/delivery-managers/create
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "username": "hub_50",
+  "slackEmail": "hub_50@email.com",
+  "password": "Password1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "a1b2c3d4",
+  "deliverySequence": 10
+}

@@ -30,11 +30,11 @@ public abstract class DeliveryManager extends User {
     }
 
     public static DeliveryManager create(String username, String slackEmail, String password, UserRole role,
-                                         String identifier, DeliverySequence deliverySequence, DeliveryManagerType type) {
+                                         UUID identifier, DeliverySequence deliverySequence, DeliveryManagerType type) {
         if (type == DeliveryManagerType.HUB_DELIVERY_MANAGER) {
-            return new HubDeliveryManager(username, slackEmail, password, role, deliverySequence);
+            return new HubDeliveryManager(username, slackEmail, password, role, deliverySequence,identifier);
         } else if (type == DeliveryManagerType.COMPANY_DELIVERY_MANAGER) {
-            return new CompanyDeliveryManager(username, slackEmail, password, role, HubId.from(UUID.fromString(identifier)), deliverySequence);
+            return new CompanyDeliveryManager(username, slackEmail, password, role, HubId.from(identifier), deliverySequence);
         }
         throw new IllegalArgumentException("Invalid Delivery Manager Type");
     }
