@@ -27,7 +27,9 @@ import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.hub.hub.application.dto.feign.GetAllHubsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetRouteResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.HubToHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.service.HubServiceImpl;
+import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.HubToHubResponse;
 import takeoff.logistics_service.msa.hub.hubroute.application.service.HubRouteServiceImpl;
 import takeoff.logistics_service.msa.hub.hubroute.infrastructure.client.external.NaverDirectionWebClient;
 import takeoff.logistics_service.msa.hub.hubroute.infrastructure.dto.request.HubIds;
@@ -130,7 +132,7 @@ class HubInternalControllerTest {
         // HubService mock
         when(hubService.findByToHubIdAndFromHubId(any(
             takeoff.logistics_service.msa.hub.hub.application.dto.HubIdsDto.class)))
-            .thenReturn(List.of(getRouteResponseDto1, getRouteResponseDto2));
+            .thenReturn(HubToHubResponseDto.from(List.of(getRouteResponseDto1, getRouteResponseDto2)));
 
         // When & Then
         mockMvc.perform(post("/api/v1/app/hubs/stopover")

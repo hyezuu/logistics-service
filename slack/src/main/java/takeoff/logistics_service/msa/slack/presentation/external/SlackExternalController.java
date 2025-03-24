@@ -55,7 +55,7 @@ public class SlackExternalController {
                     requestDto.userId()))));
     }
 
-    @DeleteMapping("/{slackId}/")
+    @DeleteMapping("/{slackId}")
     @RoleCheck(roles = {UserRole.MASTER_ADMIN})
     public ResponseEntity<Void> deleteBySlack(
         @PathVariable("slackId") UUID slackId,

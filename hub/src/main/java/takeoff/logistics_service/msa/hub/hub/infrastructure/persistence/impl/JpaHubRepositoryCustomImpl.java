@@ -29,7 +29,8 @@ public class JpaHubRepositoryCustomImpl implements JpaHubRepositoryCustom {
             .from(hub)
             .where(
                 containsHubName(hubSearchCriteria.hubName()),
-                containsHubAddess(hubSearchCriteria.address())
+                containsHubAddess(hubSearchCriteria.address()),
+                hub.deletedAt.isNull()
             )
             .orderBy(getOrderSpecifier(hubSearchCriteria))
             .offset(hubSearchCriteria.page())

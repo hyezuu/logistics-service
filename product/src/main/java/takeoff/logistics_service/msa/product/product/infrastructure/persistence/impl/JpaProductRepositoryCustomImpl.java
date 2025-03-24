@@ -39,7 +39,8 @@ public class JpaProductRepositoryCustomImpl implements JpaProductRepositoryCusto
 		Long totalCount = queryFactory.select(product.count())
 			.from(product)
 			.where(
-				companyIdContains(criteria.companyId())
+				companyIdContains(criteria.companyId()),
+				product.deletedAt.isNull()
 			)
 			.fetchOne();
 

@@ -10,6 +10,8 @@ import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
 import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
 import takeoff.logistics_service.msa.user.domain.vo.HubId;
 
+import java.util.UUID;
+
 @Entity
 @DiscriminatorValue("HUB_DELIVERY_MANAGER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

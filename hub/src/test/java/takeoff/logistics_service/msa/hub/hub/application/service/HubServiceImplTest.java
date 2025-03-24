@@ -83,7 +83,7 @@ class HubServiceImplTest {
         PatchHubRequestDto patchRequestDto = new PatchHubRequestDto("updatedTest");
 
 
-        BDDMockito.given(hubRepository.findById(hubId)).willReturn(Optional.of(hub));
+        BDDMockito.given(hubRepository.findByIdAndDeletedAtIsNull(hubId)).willReturn(Optional.of(hub));
         BDDMockito.given(hubRepository.save(any(Hub.class)))
             .willAnswer(AdditionalAnswers.returnsFirstArg());
 
@@ -102,7 +102,7 @@ class HubServiceImplTest {
             .usingRecursiveComparison()
             .isEqualTo(expectedResponse);
 
-        verify(hubRepository, times(1)).findById(hubId);
+        verify(hubRepository, times(1)).findByIdAndDeletedAtIsNull(hubId);
         verify(hubRepository, times(1)).save(any(Hub.class));
     }
 
@@ -125,7 +125,7 @@ class HubServiceImplTest {
         GetHubResponseDto expectedResponse = GetHubResponseDto.from(hub);
 
 
-        BDDMockito.given(hubRepository.findById(hubId)).willReturn(Optional.of(hub));
+        BDDMockito.given(hubRepository.findByIdAndDeletedAtIsNull(hubId)).willReturn(Optional.of(hub));
 
         // when
         GetHubResponseDto actualResponse = hubserviceImpl.findByHubId(hubId);
@@ -135,7 +135,7 @@ class HubServiceImplTest {
             .usingRecursiveComparison()
             .isEqualTo(expectedResponse);
 
-        verify(hubRepository, times(1)).findById(hubId);
+        verify(hubRepository, times(1)).findByIdAndDeletedAtIsNull(hubId);
     }
     @DisplayName("허브 수정 실패 테스트")
     @Test
@@ -145,7 +145,7 @@ class HubServiceImplTest {
         PatchHubRequestDto patchRequestDto = new PatchHubRequestDto("updateTest");
 
         // 허브가 존재하지 않을 경우 예외가 발생해야 함
-        BDDMockito.given(hubRepository.findById(hubId))
+        BDDMockito.given(hubRepository.findByIdAndDeletedAtIsNull(hubId))
             .willReturn(Optional.empty());
 
         // when //then
@@ -158,7 +158,7 @@ class HubServiceImplTest {
         assertThat(exception.getErrorCode()).isEqualTo(HubErrorCode.HUB_NOT_FOUND);
 
 
-        verify(hubRepository, times(1)).findById(hubId);
+        verify(hubRepository, times(1)).findByIdAndDeletedAtIsNull(hubId);
     }
 
 }

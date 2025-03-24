@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public record PostOrderRequest(
     UUID supplierId,
+    UUID companyId,
     Long customerId,
     List<PostOrderItemRequest> orderItems,
     String deliveryAddress,

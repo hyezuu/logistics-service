@@ -115,10 +115,12 @@ tasks.register('setDocs') {
     }
 }
 
-// bootRun 실행 시 문서 생성 태스크를 실행합니다.
+// bootRun 실행 시 문서 생성 태스크를 실행합니다
 bootRun {
     dependsOn 'setDocs'
+    workingDir = rootProject.projectDir
 }
+
 
 // bootJar 실행 시 문서 생성 태스크를 실행합니다.
 bootJar {
