@@ -59,7 +59,7 @@ Content-Type: {{contentType}}
   "password": "Password1!",
   "role": "HUB_MANAGER",
   "hubFeignResponse": {
-  "hubId": "77c813b8-9c57-440c-a06d-e6a85fa34aac",
+  "hubId": "50e9c670-5195-4972-8a95-64d6bc33bbc4",
   "hubName": "서울특별시 센터",
   "address": "서울특별시 송파구 송파대로 55",
   "latitude": 37.514219,
@@ -92,7 +92,7 @@ POST localhost:19000/api/v1/app/users/validate
 Content-Type: {{contentType}}
 
 {
-  "username": "hubmanage",
+  "username": "hubmana",
   "password": "Password1!"
 }
 > {%
@@ -109,7 +109,7 @@ POST localhost:19000/api/v1/auth/login
 Content-Type: {{contentType}}
 
 {
-  "username": "hubmanage",
+  "username": "hubmana",
   "password": "Password1!"
 }
 > {%

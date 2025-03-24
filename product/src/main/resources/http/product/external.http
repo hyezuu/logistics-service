@@ -93,7 +93,7 @@ X-User-Role: {{role}}
 # @name createProduct
 POST http://localhost:19001/api/v1/products
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNjc3Njg0LCJleHAiOjE3NDI2ODEyODR9.7UJlCM3grooUAXTz6dFyOdFo-_l881GmMsWV_xOb35w
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNzYzNzE4LCJleHAiOjE3NDI3NjczMTh9.v8PFZhGBsmmBvdOjx7qhjXMiQHbC6rll_Jldorla1mw
 X-User-Id: 123
 X-User-Role: MASTER_ADMIN
 
@@ -111,7 +111,7 @@ X-User-Role: MASTER_ADMIN
 ### 상품 생성 요청 (재고 수량 미지정 - 기본값 0 적용)
 POST localhost:19000/api/v1/products
 Content-Type: {{contentType}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNzU5MDc5LCJleHAiOjE3NDI3NjI2Nzl9.BGaQ6heVUJrG41HXkmWyRzlqz24IaSpYNmCBHuh1w8g
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNzYzNzE4LCJleHAiOjE3NDI3NjczMTh9.v8PFZhGBsmmBvdOjx7qhjXMiQHbC6rll_Jldorla1mw
 
 {
   "name": "프리미엄 사과",
@@ -119,6 +119,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwicm9sZSI6IkhVQl9NQU5BR
   "hubId": "50e9c670-5195-4972-8a95-64d6bc33bbc4",
   "quantity": null
 }
+###
+GET localhost:19000/api/v1/app/users/managers/hub/users?managerId=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNzYzNzE4LCJleHAiOjE3NDI3NjczMTh9.v8PFZhGBsmmBvdOjx7qhjXMiQHbC6rll_Jldorla1mw
 
 ### 상품 생성 요청 (필수 필드만)
 POST {{host}}/api/v1/products
