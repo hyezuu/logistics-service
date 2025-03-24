@@ -6,7 +6,7 @@ import takeoff.logistics_service.msa.common.exception.BusinessException;
 @Getter
 public class DeliveryBusinessException extends BusinessException {
 
-  public DeliveryBusinessException(DeliveryErrorCode errorCode) {
+  private DeliveryBusinessException(DeliveryErrorCode errorCode) {
     super(errorCode);
   }
 

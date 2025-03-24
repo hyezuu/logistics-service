@@ -78,7 +78,6 @@ public class DeliveryRoute extends BaseEntity {
       case READY_FOR_DELIVERY -> this.status = DeliveryRouteStatus.READY_FOR_DELIVERY;
       case DELIVERING_COMPLETED -> this.status = DeliveryRouteStatus.DELIVERING_COMPLETED;
       default -> throw new IllegalArgumentException("Invalid status: " + status);
-      // TODO : 글로벌 예외로 변경
     }
   }
 
