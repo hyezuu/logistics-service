@@ -56,7 +56,7 @@ public class HubServiceImpl implements HubService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'")
+//    @Cacheable(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'")
     public GetHubResponseDto findByHubId(UUID hubId) {
         Hub hub = getHub(hubId);
         return GetHubResponseDto.from(hub);
