@@ -16,17 +16,41 @@ Content-Type: application/json
   }
 %}
 
+### 허브 배송 담당자 생성 전 관리자 권한으로 허브가 만들어져야 합니다.
+POST {{baseUrl}}/api/v1/hubs
+Content-Type: application/json
+Authorization: {{access_token}}
+#X-User-Id: 123
+#X-User-Role: MASTER_ADMIN
+
+{
+  "hubName": "테스트 데이터",
+  "locationApi": {
+    "address": "테스트 주소",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+  client.global.set("hubId", response.body.hubId)
+%}
+
+
+
+
 ### 허브 배송 담당자 생성(회원가입X) 배송 담당자는 master권한으로 요청해야함.
 POST {{baseUrl}}/api/v1/users/delivery-managers/create
 Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "username": "hub_dm1",
-  "slackEmail": "hub_dm1@email.com",
+  "username": "hub_dm10",
+  "slackEmail": "hub_dm10@email.com",
   "password": "Password1!",
   "role": "HUB_DELIVERY_MANAGER",
-  "deliveryManagerType": "HUB_DELIVERY_MANAGER"
+  "deliveryManagerType": "HUB_DELIVERY_MANAGER",
+  "identifier": {{hubId}},
+  "deliverySequence": 3
 }
 
 ### 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)

@@ -15,6 +15,7 @@ import java.util.UUID;
 @Table(name = "p_company_delivery_manager")
 @AttributeOverride(name = "hubId.hubIdentifier", column = @Column(name = "hub_id"))
 public class CompanyDeliveryManager extends DeliveryManager {
+
     @Embedded
     private HubId hubId;
 
@@ -22,13 +23,17 @@ public class CompanyDeliveryManager extends DeliveryManager {
         super(username, slackEmail, password, role, deliverySequence, DeliveryManagerType.COMPANY_DELIVERY_MANAGER);
         this.hubId = hubId;
     }
+
     @Override
     public String getIdentifier() {
-        return this.hubId.getHubIdentifier().toString();
+        return this.hubId != null ? this.hubId.getHubIdentifier().toString() : null;
     }
+
+    @Override
     public void updateIdentifier(String identifier) {
-        this.hubId = HubId.from(UUID.fromString(identifier));
+        this.hubId = HubId.from(UUID.fromString(identifier));  // UUID로 변경하여 HubId 설정
     }
+
     public static CompanyDeliveryManager create(String username, String slackEmail, String password, UserRole role, HubId hubId, DeliverySequence deliverySequence) {
         return new CompanyDeliveryManager(username, slackEmail, password, role, hubId, deliverySequence);
     }

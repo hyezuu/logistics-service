@@ -21,17 +21,22 @@ public class HubDeliveryManager extends DeliveryManager {
     @Embedded
     private HubId hubId;
 
-    protected HubDeliveryManager(String username, String slackEmail, String password, UserRole role, DeliverySequence deliverySequence) {
+    protected HubDeliveryManager(String username, String slackEmail, String password, UserRole role, DeliverySequence deliverySequence, UUID identify) {
         super(username, slackEmail, password, role, deliverySequence, DeliveryManagerType.HUB_DELIVERY_MANAGER);
+        this.hubId = HubId.from(identify);  // identifier를 hubId로 설정
     }
+
     @Override
     public String getIdentifier() {
-        return null;
+        return this.hubId != null ? this.hubId.getHubIdentifier().toString() : null;
     }
+
+    @Override
     public void updateIdentifier(String identifier) {
-        throw new UnsupportedOperationException("허브 배송 담당자는 식별자를 변경할 수 없습니다.");
+        this.hubId = HubId.from(UUID.fromString(identifier));
     }
-    public static HubDeliveryManager create(String username, String slackEmail, String password, UserRole role, DeliverySequence deliverySequence) {
-        return new HubDeliveryManager(username, slackEmail, password, role, deliverySequence);
+
+    public static HubDeliveryManager create(String username, String slackEmail, String password, UserRole role, DeliverySequence deliverySequence, UUID identifier) {
+        return new HubDeliveryManager(username, slackEmail, password, role, deliverySequence, identifier);
     }
 }
