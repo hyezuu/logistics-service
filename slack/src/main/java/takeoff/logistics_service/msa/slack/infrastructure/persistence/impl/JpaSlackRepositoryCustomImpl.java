@@ -31,7 +31,8 @@ public class JpaSlackRepositoryCustomImpl implements JpaSlackRepositoryCustom {
         List<Slack> fetch = queryFactory.select(slack)
             .from(slack)
             .where(
-                containsMessage(slackSearchCriteria.message())
+                containsMessage(slackSearchCriteria.message()),
+                slack.deletedAt.isNull()
             )
             .orderBy(getOrderSpecifier(slackSearchCriteria))
             .offset(slackSearchCriteria.page())
