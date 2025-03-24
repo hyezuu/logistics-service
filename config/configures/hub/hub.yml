@@ -1,4 +1,9 @@
 management:
+  tags:
+    clientName: client.name
+    http.method: method
+    http.status_code: status
+    http.url: uri
   endpoints:
     web:
       exposure:
