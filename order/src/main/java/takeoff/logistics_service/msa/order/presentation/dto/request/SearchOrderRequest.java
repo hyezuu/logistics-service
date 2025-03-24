@@ -6,8 +6,8 @@ import java.util.UUID;
 import takeoff.logistics_service.msa.order.application.dto.request.SearchOrderRequestDto;
 
 public record SearchOrderRequest(
-    Long customerId,
     UUID supplierId,
+    UUID hubId,
     LocalDateTime startDate,
     LocalDateTime endDate,
     Boolean isAsc,
@@ -25,8 +25,8 @@ public record SearchOrderRequest(
 
   public SearchOrderRequestDto toApplicationDto() {
     return new SearchOrderRequestDto(
-        customerId,
         supplierId,
+        hubId,
         startDate,
         endDate,
         isAsc,

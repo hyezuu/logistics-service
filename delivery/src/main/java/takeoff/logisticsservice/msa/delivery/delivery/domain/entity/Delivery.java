@@ -34,6 +34,12 @@ public class Delivery extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private DeliveryStatus status;
 
+  @Column(name = "customerId", nullable = false)
+  private Long customerId;
+
+  @Column(name = "deliveryManager_Id", nullable = false)
+  private Long deliveryManagerId;
+
   @Column(name = "from_hub_id", nullable = false)
   private UUID fromHubId;
 
@@ -41,13 +47,13 @@ public class Delivery extends BaseEntity {
   private UUID toHubId;
 
   @Builder
-  public Delivery(UUID orderId) {
+  public Delivery(UUID orderId, Long deliveryManagerId, Long customerId, UUID fromHubId, UUID toHubId) {
     this.orderId = orderId;
+    this.deliveryManagerId = deliveryManagerId;
+    this.customerId = customerId;
     this.status = DeliveryStatus.ORDERED;
-
-    // TODO : 배송 경로 관련 로직 추가 + 허브 서비스와 연결
-    this.fromHubId = UUID.randomUUID();
-    this.toHubId = UUID.randomUUID();
+    this.fromHubId = fromHubId;
+    this.toHubId = toHubId;
   }
 
   public void modifyStatus(String status) {
@@ -56,8 +62,11 @@ public class Delivery extends BaseEntity {
       case DELIVERING -> this.status = DeliveryStatus.DELIVERING;
       case COMPLETED -> this.status = DeliveryStatus.COMPLETED;
       default -> throw new IllegalArgumentException("Invalid status: " + status);
-      // TODO : 글로벌 예외로 변경
     }
+  }
+
+  public UUID getIdLiteral() {
+    return id.getId();
   }
 
   @Override
