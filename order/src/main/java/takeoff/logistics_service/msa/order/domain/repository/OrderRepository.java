@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.order.domain.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 import takeoff.logistics_service.msa.order.domain.entity.Order;
 import takeoff.logistics_service.msa.order.domain.entity.OrderId;
 import takeoff.logistics_service.msa.order.domain.repository.search.OrderSearchCriteria;

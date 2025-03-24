@@ -1,9 +1,13 @@
 package takeoff.logisticsservice.msa.delivery.delivery.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.entity.Delivery;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.entity.DeliveryId;
+import takeoff.logisticsservice.msa.delivery.delivery.domain.repository.search.DeliverySearchCriteria;
+import takeoff.logisticsservice.msa.delivery.delivery.domain.repository.search.DeliverySearchCriteriaResponse;
+import takeoff.logisticsservice.msa.delivery.delivery.domain.repository.search.PaginatedResult;
 
 public interface DeliveryRepository {
 
@@ -11,5 +15,9 @@ public interface DeliveryRepository {
 
   Optional<Delivery> findById(DeliveryId deliveryId);
 
-  Optional<Delivery> findByOrderId(UUID uuid);
+  List<Delivery> findAllByDeliveryManagerId(Long deliveryManagerId);
+
+  PaginatedResult<DeliverySearchCriteriaResponse> findAllBySearchParams(
+      DeliverySearchCriteria criteria
+  );
 }
