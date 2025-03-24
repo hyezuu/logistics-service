@@ -1,21 +1,243 @@
-### 회원가입 (Signup)
-POST http://localhost:19000/api/v1/users/signup
-Content-Type: application/json
+### 환경 변수 설정
+@host = http://localhost:19000
+@contentType = application/json
+
+### 1. 허브 조회 또는 생성
+# 허브 정보가 필요할 경우, 허브를 조회하거나 생성합니다
+POST {{host}}/api/v1/hubs
+Content-Type: {{contentType}}
+Authorization: {{access_token}}
+
+{
+  "hubName": "서울특별시 센터",
+  "locationApi": {
+    "address": "서울특별시 송파구 송파대로 55",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+    client.global.set("hubId", response.body.hubId)
+%}
+
+### 2. 업체 조회 또는 생성
+# 업체 정보가 필요할 경우, 업체를 조회하거나 생성합니다
+POST {{host}}/api/v1/companies
+Content-Type: {{contentType}}
+Authorization: {{access_token}}
+
+{
+  "companyName": "푸른 농장3",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123"
+}
+> {%
+    client.global.set("companyId", response.body.companyId)
+%}
+
+### 4. 허브 매니저 회원가입
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "hubman",
+  "slackEmail": "hub@example.com",
+  "password": "Password1!",
+  "role": "HUB_MANAGER",
+  "hubFeignResponse": {
+  "hubId": "{{hubId}}",
+  "hubName": "서울특별시 센터",
+  "address": "서울특별시 송파구 송파대로 55",
+  "latitude": 37.514219,
+  "longitude": 127.112628
+}
+}
+### 5. 업체 매니저 회원가입
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "compaer",
+  "slackEmail": "comany@example.com",
+  "password": "Password1!",
+  "role": "COMPANY_MANAGER",
+  "companyFeignResponse": {
+  "companyId": "{{companyId}}",
+  "companyName": "푸른 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123",
+  "createdAt": "2025-03-24T00:39:45.070923",
+  "updatedAt": "2025-03-24T00:39:45.070923"
+}
+}
+
+### 회원가입 (Signup) => 허브 관리자/업체 관리자는 위에서 가져온 Hubid 무조건 넣고 회원가입,, MASTER_ADMIN은 HubId, CompanyId 빼고 회원가입
+
+### 사용자 1
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser1",
+  "slackEmail": "testuser1@email.com",
+  "password": "Password1!",
+  "role": "HUB_MANAGER",
+  "hubFeignResponse": {
+  "hubId": "{{hubId}}",
+  "hubName": "서울특별시 센터",
+  "address": "서울특별시 송파구 송파대로 55",
+  "latitude": 37.514219,
+  "longitude": 127.112628
+}
+}
+### 사용자 2
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser2",
+  "slackEmail": "testuser2@email.com",
+  "password": "Password2!",
+  "role": "COMPANY_MANAGER",
+  "companyFeignResponse": {
+  "companyId": "{{companyId}}",
+  "companyName": "푸른 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123",
+  "createdAt": "2025-03-24T00:39:45.070923",
+  "updatedAt": "2025-03-24T00:39:45.070923"
+}
+}
+### 사용자 3
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser3",
+  "slackEmail": "testuser3@email.com",
+  "password": "Password3!",
+  "role": "HUB_MANAGER",
+  "hubFeignResponse": {
+  "hubId": "{{hubId}}",
+  "hubName": "서울특별시 센터",
+  "address": "서울특별시 송파구 송파대로 55",
+  "latitude": 37.514219,
+  "longitude": 127.112628
+}
+}
+### 사용자 4
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser4",
+  "slackEmail": "testuser4@email.com",
+  "password": "Password4!",
+  "role": "COMPANY_MANAGER",
+  "companyFeignResponse": {
+  "companyId": "{{companyId}}",
+  "companyName": "푸른 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123",
+  "createdAt": "2025-03-24T00:39:45.070923",
+  "updatedAt": "2025-03-24T00:39:45.070923"
+}
+}
+### 사용자 5
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser5",
+  "slackEmail": "testuser5@email.com",
+  "password": "Password5!",
+  "role": "HUB_MANAGER",
+  "hubFeignResponse": {
+  "hubId": "{{hubId}}",
+  "hubName": "서울특별시 센터",
+  "address": "서울특별시 송파구 송파대로 55",
+  "latitude": 37.514219,
+  "longitude": 127.112628
+}
+}
+### 사용자 6
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser6",
+  "slackEmail": "testuser6@email.com",
+  "password": "Password6!",
+  "role": "COMPANY_MANAGER",
+  "companyFeignResponse": {
+  "companyId": "{{companyId}}",
+  "companyName": "푸른 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123",
+  "createdAt": "2025-03-24T00:39:45.070923",
+  "updatedAt": "2025-03-24T00:39:45.070923"
+}
+}
+### 사용자 7
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
 
 {
   "username": "testuser7",
   "slackEmail": "testuser7@email.com",
-  "password": "Password1!",
-  "role": "HUB_MANAGER"
+  "password": "Password7!",
+  "role": "HUB_MANAGER",
+  "hubFeignResponse": {
+  "hubId": "{{hubId}}",
+  "hubName": "서울특별시 센터",
+  "address": "서울특별시 송파구 송파대로 55",
+  "latitude": 37.514219,
+  "longitude": 127.112628
 }
-
-### 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)
-POST http://localhost:19000/api/v1/app/users/validate
-Content-Type: application/json
+}
+### 사용자 8
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
 
 {
-  "username": "testuser7",
-  "password": "Password1!"
+  "username": "testuser8",
+  "slackEmail": "testuser8@email.com",
+  "password": "Password8!",
+  "role": "COMPANY_MANAGER",
+  "companyFeignResponse": {
+  "companyId": "{{companyId}}",
+  "companyName": "푸른 농장",
+  "companyType": "SUPPLIER",
+  "hubId": "{{hubId}}",
+  "address": "서울특별시 강남구 테헤란로 123",
+  "createdAt": "2025-03-24T00:39:45.070923",
+  "updatedAt": "2025-03-24T00:39:45.070923"
+}
+}
+### 사용자 9
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser9",
+  "slackEmail": "testuser9@email.com",
+  "password": "Password9!",
+  "role": "MASTER_ADMIN"
+}
+
+
+### 내부: 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)
+POST {{host}}/api/v1/app/users/validate
+Content-Type: {{contentType}}
+
+{
+  "username": "testuser9",
+  "password": "Password9!"
 }
 > {%
     if (response.body.userId) {
@@ -28,12 +250,12 @@ Content-Type: application/json
 %}
 
 ### 로그인 (JWT 발급)
-POST http://localhost:19000/api/v1/auth/login
-Content-Type: application/json
+POST {{host}}/api/v1/auth/login
+Content-Type: {{contentType}}
 
 {
-  "username": "testuser7",
-  "password": "Password1!"
+  "username": "testuser9",
+  "password": "Password9!"
 }
 > {%
     let authHeader = response.headers.valueOf("Authorization");
@@ -44,8 +266,233 @@ Content-Type: application/json
     }
 %}
 
-### 사용자 정보 조회 (Gateway에서 X-User-Id, X-User-Role 전달 확인)
-GET {{user}}/api/v1/users/1
+### 사용자 정보 조회 (로그인한 본인 모두 가능)
+GET {{host}}/api/v1/users/{{user_id}}
 Authorization: Bearer {{access_token}}
 X-User-Id: {{user_id}}
 X-User-Role: {{role}}
+
+
+### 사용자 전체 조회 (MASTER만 가능)
+GET {{host}}/api/v1/users
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+
+### 사용자 정보 수정 (본인만 가능)
+PATCH {{host}}/api/v1/users/{{user_id}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+{
+  "username": "testuser7_renamed",
+  "slackEmail": "testuser7_updated@email.com"
+}
+
+
+### 사용자 삭제 (MASTER만 가능)
+DELETE {{host}}/api/v1/users/{{user_id}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+
+### 배송 담당자 생성(업체 or 허브) (허브 관리자 or 마스터)
+
+### 업체 배송 담당자 1
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+{
+  "username": "company_dm1",
+  "slackEmail": "company_dm1@email.com",
+  "password": "Easy1!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "{{hubId}}"
+}
+
+### 업체 배송 담당자 2
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+{
+  "username": "company_dm2",
+  "slackEmail": "company_dm2@email.com",
+  "password": "Easy2!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "{{hubId}}"
+}
+
+### 업체 배송 담당자 3
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+{
+  "username": "company_dm3",
+  "slackEmail": "company_dm3@email.com",
+  "password": "Easy3!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "{{hubId}}"
+}
+
+### 업체 배송 담당자 4
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+{
+  "username": "company_dm4",
+  "slackEmail": "company_dm4@email.com",
+  "password": "Easy4!",
+  "role": "COMPANY_DELIVERY_MANAGER",
+  "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
+  "identifier": "{{hubId}}"
+}
+
+### 허브 배송 담당자 1
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: HUB_MANAGER
+
+{
+  "username": "hub_dm1",
+  "slackEmail": "hub_dm1@email.com",
+  "password": "Hard1!",
+  "role": "HUB_DELIVERY_MANAGER",
+  "deliveryManagerType": "HUB_DELIVERY_MANAGER"
+}
+
+### 허브 배송 담당자 2
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: HUB_MANAGER
+
+{
+  "username": "hub_dm2",
+  "slackEmail": "hub_dm2@email.com",
+  "password": "Hard2!",
+  "role": "HUB_DELIVERY_MANAGER",
+  "deliveryManagerType": "HUB_DELIVERY_MANAGER"
+}
+
+### 허브 배송 담당자 3
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: HUB_MANAGER
+
+{
+  "username": "hub_dm3",
+  "slackEmail": "hub_dm3@email.com",
+  "password": "Hard3!",
+  "role": "HUB_DELIVERY_MANAGER",
+  "deliveryManagerType": "HUB_DELIVERY_MANAGER"
+}
+
+### 허브 배송 담당자 4
+POST {{host}}/api/v1/delivery-managers/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: HUB_MANAGER
+
+{
+  "username": "hub_dm4",
+  "slackEmail": "hub_dm4@email.com",
+  "password": "Hard4!",
+  "role": "HUB_DELIVERY_MANAGER",
+  "deliveryManagerType": "HUB_DELIVERY_MANAGER"
+}
+
+
+### 배송 담당자 전체 조회 (허브 관리자 or 마스터)
+GET {{host}}/api/v1/delivery-managers
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+
+### 배송 담당자 단건 조회
+GET {{host}}/api/v1/delivery-managers/{{user_id}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+
+### 배송 담당자 정보 수정
+PATCH {{host}}/api/v1/delivery-managers/{{user_id}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+{
+  "slackEmail": "delivery007_updated@email.com",
+  "deliverySequence": 2,
+  "hubId": "2344324325-12343534543",
+  "companyId": "24354325432-6894894383"
+}
+
+
+### 배송 담당자 삭제
+DELETE {{host}}/api/v1/delivery-managers/{{user_id}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: {{role}}
+
+
+### 내부: 회사 매니저가 자신 회사 소속 유저 목록 조회
+GET {{host}}/api/v1/app/users/managers/company/users?managerId={{user_id}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: COMPANY_MANAGER
+
+
+### 내부: 허브 매니저가 자신 허브 소속 유저 목록 조회
+GET {{host}}/api/v1/app/users/managers/hub/users?managerId={{user_id}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: HUB_MANAGER
+
+
+### 내부: 배송 관리자 단건 조회
+GET {{host}}/api/v1/app/delivery-managers/1
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: MASTER_ADMIN
+
+
+### 내부: 허브 ID 기준으로 소속된 회사 배송 관리자 리스트 조회
+GET {{host}}/api/v1/app/delivery-managers/company?hubId={{hub_id}}
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: HUB_MANAGER
+
+
+### 내부: 전체 허브 배송 관리자 리스트 조회 (마스터만)
+GET {{host}}/api/v1/app/delivery-managers/hub
+Authorization: Bearer {{access_token}}
+X-User-Id: {{user_id}}
+X-User-Role: MASTER_ADMIN

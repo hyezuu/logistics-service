@@ -21,7 +21,7 @@ public class Company extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	@Column(name = "product_id")
+	@Column(name = "company_id")
 	private UUID id;
 
 	@Column(nullable = false, unique = true)

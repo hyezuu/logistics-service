@@ -23,7 +23,7 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
     Optional<User> findByUsername(String username);
 
     @Override
-    @Query("SELECT u FROM User u WHERE u.id = :userId AND u.deletedAt IS NULL")
+    @Query("SELECT u FROM User u WHERE u.id = :id AND u.deletedAt IS NULL")
     Optional<User> findById(Long id);
 
     @Override
