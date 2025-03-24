@@ -30,7 +30,8 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
         String path = request.getURI().getPath();
         log.debug("Request path: {}", path);
 
-        if (path.startsWith("/api/v1/users/signup") || path.startsWith("/api/v1/auth/login") || path.startsWith("/api/v1/auth/token/refresh")) {
+        if (path.startsWith("/api/v1/users/signup") || path.startsWith("/api/v1/auth/login")
+            || path.startsWith("/api/v1/auth/token/refresh") || path.startsWith("/api/v1/app/users/validate")) {
             log.debug("인증 예외 경로 → 필터 통과");
             return chain.filter(exchange);
         }

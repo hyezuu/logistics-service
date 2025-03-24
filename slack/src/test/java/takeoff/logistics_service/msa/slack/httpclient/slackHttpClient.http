@@ -4,10 +4,28 @@ POST http://localhost:19000/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "testuser6",
-  "slackEmail": "testuser6@email.com",
+  "username": "testuser7",
+  "slackEmail": "testuser7@email.com",
   "password": "Password1!",
-  "role": "HUB_MANAGER"
+  "role": "MASTER_ADMIN"
+}
+
+### 4. 허브 매니저 회원가입
+POST {{host}}/api/v1/users/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "hubmanage",
+  "slackEmail": "hub1@example.com",
+  "password": "Password1!",
+  "role": "HUB_MANAGER",
+  "hubFeignResponse": {
+  "hubId": "50e9c670-5195-4972-8a95-64d6bc33bbc4",
+  "hubName": "서울특별시 센터",
+  "address": "서울특별시 송파구 송파대로 55",
+  "latitude": 37.514219,
+  "longitude": 127.112628
+}
 }
 
 ### 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)
@@ -15,7 +33,7 @@ POST http://localhost:19000/api/v1/app/users/validate
 Content-Type: application/json
 
 {
-  "username": "testuser6",
+  "username": "testuser7",
   "password": "Password1!"
 }
 > {%
@@ -33,7 +51,7 @@ POST http://localhost:19000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "testuser6",
+  "username": "testuser7",
   "password": "Password1!"
 }
 > {%

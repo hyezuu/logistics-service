@@ -1,11 +1,14 @@
 ### External
-POST {{baseUrl}}/api/v1/hubs
+POST localhost:19000/api/v1/hubs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6Ik1BU1RFUl9BRE1JTiIsImlhdCI6MTc0Mjc1NDcyNiwiZXhwIjoxNzQyNzU4MzI2fQ.by4bFlswEJJRYy7wYiObVESvbl9JwKXXHwcCUf3xzV4
+#X-User-Id: 123
+#X-User-Role: MASTER_ADMIN
 
 {
-  "hubName": "테스트 데이터",
+  "hubName": "테스트 데이터2",
   "locationApi": {
-    "address": "테스트 주소",
+    "address": "테스트 주소2",
     "latitude": 37.514219,
     "longitude": 127.112628
   }

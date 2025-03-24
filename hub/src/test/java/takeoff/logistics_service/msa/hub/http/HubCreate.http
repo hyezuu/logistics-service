@@ -1,5 +1,56 @@
+### 회원가입 (Signup)
+POST http://localhost:19000/api/v1/users/signup
+Content-Type: application/json
+
+{
+  "username": "test",
+  "slackEmail": "test@email.com",
+  "password": "Password1!",
+  "role": "MASTER_ADMIN"
+}
+
+### 사용자 검증 (비밀번호 확인 및 userId, username, role 반환)
+POST http://localhost:19000/api/v1/app/users/validate
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "Password1!"
+}
+> {%
+  if (response.body.userId) {
+    client.global.set("user_id", response.body.userId.toString());
+  } else {
+    throw new Error("userId가 응답에 존재하지 않음");
+  }
+  client.global.set("username", response.body.username);
+  client.global.set("role", response.body.role);
+%}
+
+### 로그인 (JWT 발급)
+POST http://localhost:19000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "Password1!"
+}
+> {%
+  let authHeader = response.headers.valueOf("Authorization");
+  if (authHeader) {
+    client.global.set("access_token", authHeader);
+  } else {
+    throw new Error("Authorization 헤더가 응답에 존재하지 않음");
+  }
+%}
+
+
+
+###
+
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "서울특별시 센터",
@@ -10,10 +61,10 @@ Content-Type: application/json
   }
 }
 
-####
-
+###
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "경기 북부 센터",
@@ -28,6 +79,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "경기 남부 센터",
@@ -40,8 +92,9 @@ Content-Type: application/json
 
 ###
 
-POST /api/v1/hubs
+POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "부산광역시 센터",
@@ -56,6 +109,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "대구광역시 센터",
@@ -70,6 +124,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "인천광역시 센터",
@@ -84,6 +139,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "광주광역시 센터",
@@ -98,6 +154,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "대전광역시 센터",
@@ -112,6 +169,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "울산광역시 센터",
@@ -126,6 +184,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "세종특별자치시 센터",
@@ -140,6 +199,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "강원특별자치도 센터",
@@ -154,6 +214,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "충청북도 센터",
@@ -168,6 +229,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "충청남도 센터",
@@ -182,6 +244,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "전북특별자치도 센터",
@@ -196,6 +259,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "전라남도 센터",
@@ -210,6 +274,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "경상북도 센터",
@@ -224,6 +289,7 @@ Content-Type: application/json
 
 POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "경상남도 센터",
