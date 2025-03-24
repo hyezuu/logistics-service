@@ -1,0 +1,44 @@
+### INTERNAL
+
+### fromHub 부터 toHub까지 경로에 대한 허브 값을 반환
+POST {{baseUrl}}/api/v1/app/hubs/stopover
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "fromHubId": "5aad162b-4daa-468e-9199-b48190b923ef",
+  "toHubId": "4bf1196d-bc40-4f05-b1bd-72cac651a227"
+}
+> {%
+  client.global.set("hubRouteId", response.body.hubRouteId)
+%}
+
+### 모든 허브를 반환
+GET {{baseUrl}}/api/v1/app/hubs/allHub
+Authorization: {{access_token}}
+
+###
+POST {{baseUrl}}/api/v1/app/hubRoutes
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "fromHubId": "5aad162b-4daa-468e-9199-b48190b923ef",
+  "toHubId": "4bf1196d-bc40-4f05-b1bd-72cac651a227"
+}
+> {%
+  client.global.set("hubRouteId", response.body.hubRouteId)
+%}
+
+###배송 경로를 알고리즘 계산해 200km 이하일 때 P2P로 from, to hub 제공
+
+### 200km 이상일 때 중간 경유지가 담긴 List 경로 반환 ex)1-2, 2-3
+###200km 이하 P2P
+POST {{baseUrl}}/api/v1/app/hubRoutes/delivery
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "fromHubId": "5aad162b-4daa-468e-9199-b48190b923ef",
+  "toHubId": "4bf1196d-bc40-4f05-b1bd-72cac651a227"
+}

@@ -1,7 +1,37 @@
-### 네이버 map direction
-GET https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?goal=126.835836,37.649621&start=127.112628,37.514219
-X-NCP-APIGW-API-KEY-ID:
-X-NCP-APIGW-API-KEY:
+### fromHub 생성
+POST {{baseUrl}}/api/v1/hubs
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "hubName": "테스트 데이터",
+  "locationApi": {
+    "address": "테스트 주소",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+  fromHubId = response.body.id;
+%}
+
+
+### toHub 생성
+POST {{baseUrl}}/api/v1/hubs
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "hubName": "테스트 데이터",
+  "locationApi": {
+    "address": "테스트 주소",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+  toHubId = response.body.id;
+%}
 
 
 ###
@@ -10,8 +40,8 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "fromHubId": "0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7",
-  "toHubId": "fc5bcff8-dd48-44fa-b36a-80df0262b178"
+  "fromHubId": "{{fromHubId}}",
+  "toHubId":  "{{toHubId}}"
 }
 
 ###배송 경로를 알고리즘 계산해 200km 이하일 때 P2P로 from, to hub 제공

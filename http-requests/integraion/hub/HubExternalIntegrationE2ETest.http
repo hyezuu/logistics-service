@@ -1,0 +1,35 @@
+### External
+POST {{baseUrl}}/api/v1/hubs
+Content-Type: application/json
+Authorization: {{access_token}}
+#X-User-Id: 123
+#X-User-Role: MASTER_ADMIN
+
+{
+  "hubName": "테스트 데이터",
+  "locationApi": {
+    "address": "테스트 주소",
+    "latitude": 37.514219,
+    "longitude": 127.112628
+  }
+}
+> {%
+  client.global.set("hubId", response.body.hubId)
+%}
+
+###
+PATCH {{baseUrl}}/api/v1/hubs/{{hubId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "hubName": "수정된 허브 이름"
+}
+
+###
+DELETE {{baseUrl}}/api/v1/hubs/{{hubId}}
+Authorization: {{access_token}}
+
+###
+GET {{baseUrl}}/api/v1/hubs/search?hubName=테스트&address=테스트&isAsc=true&sortBy=createdAt&page=0&size=10
+Authorization: {{access_token}}

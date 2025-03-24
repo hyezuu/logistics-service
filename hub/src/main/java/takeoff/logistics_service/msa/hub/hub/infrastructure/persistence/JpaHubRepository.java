@@ -6,9 +6,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
 import takeoff.logistics_service.msa.hub.hub.domain.repository.HubRepository;
-import takeoff.logistics_service.msa.hub.hub.domain.repository.search.HubSearchCriteria;
-import takeoff.logistics_service.msa.hub.hub.domain.repository.search.HubSearchCriteriaResponse;
-import takeoff.logistics_service.msa.hub.hub.domain.repository.search.PaginatedResult;
 
 /**
  * @author : hanjihoon

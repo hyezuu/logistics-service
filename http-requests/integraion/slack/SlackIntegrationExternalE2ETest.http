@@ -1,0 +1,51 @@
+### 내부에서 사용하는 엔드포인트
+POST {{baseUrl}}/api/v1/app/slacks/message/1
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "orderNumber": 1,
+  "companyName": "해산물월드",
+  "productInfo": "마른 오징어 50박스",
+  "orderRequest": "12월 12일 3시까지는 보내주세요!",
+  "fromHubName": "경기도 고양시 덕양구 권율대로 570",
+  "stopoverHubNames": {
+    "hubNames": ["대전 서구 둔산로 100", "부산 동구 중앙대로 206"]
+  },
+  "toHubName": "부산시 사하구 낙동대로 1번길 1 해산물월드",
+  "deliveryUsers": {
+    "deliveryUserNames": ["김말숙 / msk@seafood.world"]
+  },
+  "companyDeliveryUserName": "고길동 / kdk@sparta.world"
+}
+> {%
+  client.global.set("slackId", response.body.slackId)
+%}
+
+###
+POST {{baseUrl}}/api/v1/app/slacks/message/users/1
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "postContentsRequest": {
+    "message": "주문 유저 채널에 발송되는 슬랙 메시지 입니다."
+  }
+}
+> {%
+  client.global.set("slackId", response.body.slackId)
+%}
+
+###
+POST {{baseUrl}}/api/v1/app/slacks/message/users/1
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "postContentsRequest": {
+    "message": "서킷 브레이커"
+  }
+}
+> {%
+  client.global.set("slackId", response.body.slackId)
+%}

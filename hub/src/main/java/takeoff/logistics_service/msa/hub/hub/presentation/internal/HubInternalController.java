@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import takeoff.logistics_service.msa.common.annotation.RoleCheck;
 import takeoff.logistics_service.msa.common.domain.UserRole;
+import takeoff.logistics_service.msa.hub.hub.application.dto.feign.GetAllHubsDto;
 import takeoff.logistics_service.msa.hub.hub.application.service.HubService;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.HubIds;
+import takeoff.logistics_service.msa.hub.hub.presentation.dto.feign.AllHubListResponse;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.feign.GetAllHubs;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetHubResponse;
+import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetRouteResponse;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.HubToHubResponse;
 
 /**
@@ -38,8 +41,10 @@ public class HubInternalController {
 
     @PostMapping("/stopover")
     @RoleCheck(roles = {UserRole.MASTER_ADMIN,UserRole.HUB_MANAGER,UserRole.HUB_DELIVERY_MANAGER})
-    public HubToHubResponse findByToHubIdAndFromHubId(@RequestBody HubIds hubIds) {
-        return HubToHubResponse.from(hubService.findByToHubIdAndFromHubId(hubIds.toApplicationDto()));
+    public List<GetRouteResponse> findByToHubIdAndFromHubId(@RequestBody HubIds hubIds) {
+        return hubService.findByToHubIdAndFromHubId(hubIds.toApplicationDto()).stream()
+            .map(GetRouteResponse::from)
+            .toList();
     }
 
     @GetMapping("/allHub")
@@ -47,9 +52,8 @@ public class HubInternalController {
         UserRole.MASTER_ADMIN,UserRole.COMPANY_MANAGER,UserRole.COMPANY_DELIVERY_MANAGER,
         UserRole.HUB_MANAGER,UserRole.HUB_DELIVERY_MANAGER})
     public List<GetAllHubs> findByAllHub() {
-        return hubService.findAllHub()
-            .stream()
+        return (hubService.findAllHub().stream()
             .map(GetAllHubs::from)
-            .toList();
+            .toList());
     }
 }

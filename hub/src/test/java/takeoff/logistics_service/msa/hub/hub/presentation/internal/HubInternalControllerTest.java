@@ -24,6 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.hub.hub.application.dto.feign.AllHubListResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.feign.GetAllHubsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetRouteResponseDto;
@@ -132,7 +133,7 @@ class HubInternalControllerTest {
         // HubService mock
         when(hubService.findByToHubIdAndFromHubId(any(
             takeoff.logistics_service.msa.hub.hub.application.dto.HubIdsDto.class)))
-            .thenReturn(HubToHubResponseDto.from(List.of(getRouteResponseDto1, getRouteResponseDto2)));
+            .thenReturn(List.of(getRouteResponseDto1, getRouteResponseDto2));
 
         // When & Then
         mockMvc.perform(post("/api/v1/app/hubs/stopover")

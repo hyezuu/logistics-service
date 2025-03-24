@@ -1,0 +1,26 @@
+###
+GET {{baseUrl}}/api/v1/slacks/{{slackId}}
+Authorization: {{access_token}}
+
+###
+PATCH {{baseUrl}}/api/v1/slacks/{{slackId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "userId": 1,
+  "patchContentsRequest": {
+    "message": "수정된 메시지 내용"
+  }
+}
+
+###
+DELETE {{baseUrl}}/api/v1/slacks/{{slackId}}
+Authorization: {{access_token}}
+
+###
+GET {{baseUrl}}/api/v1/slacks/search?message=주문&isAsc=true&sortBy=createdAt&page=0&size=10
+Authorization: {{access_token}}
+
+
+

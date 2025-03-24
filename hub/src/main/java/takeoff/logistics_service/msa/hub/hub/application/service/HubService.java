@@ -3,11 +3,13 @@ package takeoff.logistics_service.msa.hub.hub.application.service;
 import java.util.List;
 import java.util.UUID;
 import takeoff.logistics_service.msa.hub.hub.application.dto.HubIdsDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.feign.AllHubListResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.feign.GetAllHubsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PatchHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PostHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.SearchHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetRouteResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.HubToHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PaginatedResultHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PatchHubResponseDto;
@@ -29,7 +31,7 @@ public interface HubService {
 
     PaginatedResultHubResponseDto searchHub(SearchHubRequestDto requestDto);
 
-    HubToHubResponseDto findByToHubIdAndFromHubId(HubIdsDto applicationDto);
+    List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto applicationDto);
 
     List<GetAllHubsDto> findAllHub();
 }

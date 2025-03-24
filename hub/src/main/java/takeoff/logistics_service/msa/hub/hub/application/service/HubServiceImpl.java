@@ -75,14 +75,9 @@ public class HubServiceImpl implements HubService {
     }
 
     @Override
-    @Cacheable(value = "hubsRoute",
-        key = "'fromHub:' + #hubIdsDto.fromHubId() + "
-            + "'-toHub: ' + #hubIdsDto.toHubId()",
-        cacheManager = "hubListCacheManager"
-    )
-    public HubToHubResponseDto findByToHubIdAndFromHubId(HubIdsDto hubIdsDto) {
+    public List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto hubIdsDto) {
 
-        return HubToHubResponseDto.from(hubRepository.findByIdInAndDeletedAtIsNull(
+        return (hubRepository.findByIdInAndDeletedAtIsNull(
                 List.of(hubIdsDto.toHubId(), hubIdsDto.fromHubId()))
             .stream()
             .map(GetRouteResponseDto::from)
@@ -90,7 +85,6 @@ public class HubServiceImpl implements HubService {
     }
 
     @Override
-    @Cacheable(value = "hubs", key = "'allHubs'", cacheManager = "hubCacheManager")
     public List<GetAllHubsDto> findAllHub() {
         return hubRepository.findByDeletedAtIsNull()
             .stream()

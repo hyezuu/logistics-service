@@ -1,0 +1,29 @@
+POST {{baseUrl}}/api/v1/app/hubs/stopover
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "fromHubId": "5aad162b-4daa-468e-9199-b48190b923ef",
+  "toHubId": "4bf1196d-bc40-4f05-b1bd-72cac651a227"
+}
+
+
+###
+GET {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
+Authorization: {{access_token}}
+
+###
+PUT {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "fromHubId": "",
+  "toHubId": "",
+  "distance": {},
+  "duration": {}
+}
+
+###
+DELETE {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
+Authorization: {{access_token}}
