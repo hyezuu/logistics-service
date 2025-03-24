@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
 import takeoff.logistics_service.msa.user.domain.entity.CompanyManager;
 import takeoff.logistics_service.msa.user.domain.entity.HubManager;
 import takeoff.logistics_service.msa.user.domain.entity.User;
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public GetUserResponseDto getUserById(Long id) {
+    public GetUserResponseDto getUserById(Long id, UserInfoDto userInfoDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> UserBusinessException.from(USER_NOT_FOUND));
         return GetUserResponseDto.from(user);
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public PatchUserResponseDto updateUser(Long id, PatchUserRequestDto requestDto) {
+    public PatchUserResponseDto updateUser(Long id, PatchUserRequestDto requestDto, UserInfoDto userInfoDto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> UserBusinessException.from(USER_NOT_FOUND));
         user.updateUserInfo(
@@ -77,18 +78,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public DeleteUserResponseDto deleteUser(Long id, Long deletedBy) {
+    public DeleteUserResponseDto deleteUser(Long id, UserInfoDto deletedBy) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> UserBusinessException.from(USER_NOT_FOUND));
         if (user.isDeleted()) {
             throw UserBusinessException.from(ALREADY_DELETED);
         }
-        user.delete(deletedBy);
+        user.delete(deletedBy.userId());
         return DeleteUserResponseDto.from(user);
     }
 
     @Override
-    public GetUserListResponseDto getAllUsers(GetUserListRequestDto requestDto) {
+    public GetUserListResponseDto getAllUsers(GetUserListRequestDto requestDto, UserInfoDto userInfoDto) {
         UserSearchCondition condition = requestDto.toCondition();
         Pageable pageable = requestDto.toPageable();
         Page<User> users = searchQueryService.searchUsers(condition, pageable);
@@ -118,7 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GetManagerListInfoDto> getUsersByCompanyManagerId(Long managerId) {
+    public List<GetManagerListInfoDto> getUsersByCompanyManagerId(Long managerId, UserInfoDto userInfoDto) {
         CompanyManager manager = userRepository.findCompanyManagerById(managerId)
                 .orElseThrow(() -> UserBusinessException.from(DELIVERY_MANAGER_NOT_FOUND));
         return userRepository.findAllEmployeesByCompanyId(manager.getCompanyId()).stream()
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GetManagerListInfoDto> getUsersByHubManagerId(Long managerId) {
+    public List<GetManagerListInfoDto> getUsersByHubManagerId(Long managerId, UserInfoDto userInfoDto) {
         HubManager manager = userRepository.findHubManagerById(managerId)
                 .orElseThrow(() -> UserBusinessException.from(DELIVERY_MANAGER_NOT_FOUND));
         return userRepository.findAllEmployeesByHubId(manager.getHubId()).stream()

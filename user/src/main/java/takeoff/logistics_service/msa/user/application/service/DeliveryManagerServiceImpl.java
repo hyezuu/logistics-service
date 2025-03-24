@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
 import takeoff.logistics_service.msa.user.domain.entity.DeliveryManager;
+import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
 import takeoff.logistics_service.msa.user.domain.service.DeliveryManagerSearchCondition;
 import takeoff.logistics_service.msa.user.domain.service.SearchQueryService;
@@ -33,7 +35,7 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
 
     @Override
     @Transactional
-    public PostDeliveryManagerResponseDto createDeliveryManager(PostDeliveryManagerRequestDto requestDto) {
+    public PostDeliveryManagerResponseDto createDeliveryManager(PostDeliveryManagerRequestDto requestDto, UserInfoDto userInfoDto) {
         boolean isDuplicate = userRepository.findByUsername(requestDto.username())
                 .filter(user -> user.getRole().equals(requestDto.role()))
                 .isPresent();
@@ -63,7 +65,7 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
 
     @Override
     @Transactional
-    public PatchDeliveryManagerResponseDto updateDeliveryManager(Long id, PatchDeliveryManagerRequestDto requestDto) {
+    public PatchDeliveryManagerResponseDto updateDeliveryManager(Long id, PatchDeliveryManagerRequestDto requestDto, UserInfoDto userInfoDto) {
         DeliveryManager manager = userRepository.findDeliveryManagerById(id)
                 .orElseThrow(() -> UserBusinessException.from(DELIVERY_MANAGER_NOT_FOUND));
 
@@ -81,14 +83,14 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
     }
 
     @Override
-    public GetDeliveryManagerResponseDto getDeliveryManagerById(Long id) {
+    public GetDeliveryManagerResponseDto getDeliveryManagerById(Long id, UserInfoDto userInfoDto) {
         DeliveryManager manager = userRepository.findDeliveryManagerById(id)
                 .orElseThrow(() -> UserBusinessException.from(DELIVERY_MANAGER_NOT_FOUND));
         return GetDeliveryManagerResponseDto.from(manager);
     }
 
     @Override
-    public GetDeliveryManagerListResponseDto getAllDeliveryManagers(GetDeliveryManagerListRequestDto requestDto) {
+    public GetDeliveryManagerListResponseDto getAllDeliveryManagers(GetDeliveryManagerListRequestDto requestDto, UserInfoDto userInfoDto) {
         DeliveryManagerSearchCondition condition = requestDto.toCondition();
         Pageable pageable = requestDto.toPageable();
         Page<DeliveryManager> deliveryManagers = searchQueryService.searchDeliveryManagers(condition, pageable);
@@ -102,26 +104,26 @@ public class DeliveryManagerServiceImpl implements DeliveryManagerService {
 
     @Override
     @Transactional
-    public DeleteDeliveryManagerResponseDto deleteDeliveryManager(Long id, Long deletedBy) {
+    public DeleteDeliveryManagerResponseDto deleteDeliveryManager(Long id, UserInfoDto deletedBy) {
         DeliveryManager manager = userRepository.findDeliveryManagerById(id)
                 .orElseThrow(() -> UserBusinessException.from(DELIVERY_MANAGER_NOT_FOUND));
 
         if (manager.isDeleted()) {
             throw UserBusinessException.from(ALREADY_DELETED);
         }
-        manager.deleteDeliveryManager(deletedBy);
+        manager.deleteDeliveryManager(deletedBy.userId());
         return DeleteDeliveryManagerResponseDto.from(manager.getId());
     }
 
     @Override
-    public List<GetDeliveryManagerListInfoDto> getCompanyDeliveryManagersByHubId(UUID hubId) {
+    public List<GetDeliveryManagerListInfoDto> getCompanyDeliveryManagersByHubId(UUID hubId, UserInfoDto userInfoDto) {
         return userRepository.findAllCompanyDeliveryManagersByHubId(HubId.from(hubId)).stream()
                 .map(GetDeliveryManagerListInfoDto::from)
                 .toList();
     }
 
     @Override
-    public List<GetDeliveryManagerListInfoDto> getAllHubDeliveryManagers() {
+    public List<GetDeliveryManagerListInfoDto> getAllHubDeliveryManagers(UserInfoDto userInfoDto) {
         return userRepository.findAllHubDeliveryManagers().stream()
                 .map(GetDeliveryManagerListInfoDto::from)
                 .toList();

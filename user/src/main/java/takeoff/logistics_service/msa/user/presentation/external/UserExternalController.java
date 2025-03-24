@@ -5,11 +5,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import takeoff.logistics_service.msa.common.annotation.RoleCheck;
+import takeoff.logistics_service.msa.common.domain.UserInfo;
+import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.user.application.service.UserService;
 import takeoff.logistics_service.msa.user.presentation.dto.request.GetUserListRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.request.UserValidationRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.response.*;
 
 @Slf4j
@@ -27,40 +30,43 @@ public class UserExternalController {
         return ResponseEntity.ok(userService.signup(requestDto));
     }
 
+    @RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER, UserRole.COMPANY_DELIVERY_MANAGER, UserRole.HUB_DELIVERY_MANAGER})
     @GetMapping("/{userId}")
     public ResponseEntity<GetUserResponseDto> getUser(
             @PathVariable Long userId,
-            @RequestHeader(value = "X-User-Id", required = false) String requestUserId,
-            @RequestHeader(value = "X-User-Role", required = false) String requestUserRole
-    ) {
-        log.info("API Gateway에서 전달된 X-User-Id={}, X-User-Role={}", requestUserId, requestUserRole);
-
-        GetUserResponseDto responseDto = userService.getUserById(userId);
+            @UserInfo UserInfoDto userInfoDto
+            ) {
+        GetUserResponseDto responseDto = userService.getUserById(userId, userInfoDto);
         return ResponseEntity.ok(responseDto);
     }
 
+    @RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER, UserRole.COMPANY_DELIVERY_MANAGER, UserRole.HUB_DELIVERY_MANAGER})
     @PatchMapping("/{userId}")
     public ResponseEntity<PatchUserResponseDto> updateUser(
             @PathVariable Long userId,
-            @RequestBody @Valid PatchUserRequestDto requestDto
+            @RequestBody @Valid PatchUserRequestDto requestDto,
+            @UserInfo UserInfoDto userInfoDto
     ) {
-        PatchUserResponseDto responseDto = userService.updateUser(userId, requestDto);
+        PatchUserResponseDto responseDto = userService.updateUser(userId, requestDto, userInfoDto);
         return ResponseEntity.ok(responseDto);
     }
 
+    @RoleCheck(roles = {UserRole.MASTER_ADMIN})
     @DeleteMapping("/{userId}")
     public ResponseEntity<DeleteUserResponseDto> deleteUser(
             @PathVariable Long userId,
-            @RequestHeader("X-User-Id") Long requesterId
+            @UserInfo UserInfoDto userInfoDto
     ) {
-        DeleteUserResponseDto responseDto = userService.deleteUser(userId, requesterId);
+        DeleteUserResponseDto responseDto = userService.deleteUser(userId, userInfoDto);
         return ResponseEntity.ok(responseDto);
     }
 
+    @RoleCheck(roles = {UserRole.MASTER_ADMIN})
     @GetMapping
     public ResponseEntity<GetUserListResponseDto> getUsers(
-            @ModelAttribute GetUserListRequestDto requestDto
+            @ModelAttribute GetUserListRequestDto requestDto,
+            @UserInfo UserInfoDto userInfoDto
     ) {
-        return ResponseEntity.ok(userService.getAllUsers(requestDto));
+        return ResponseEntity.ok(userService.getAllUsers(requestDto, userInfoDto));
     }
 }

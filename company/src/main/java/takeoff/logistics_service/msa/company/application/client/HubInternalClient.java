@@ -1,5 +1,3 @@
-// package: takeoff.logistics_service.msa.company.infrastructure.client
-
 package takeoff.logistics_service.msa.company.application.client;
 
 import java.util.UUID;
