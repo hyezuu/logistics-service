@@ -1,14 +1,14 @@
 ### External
-POST localhost:19000/api/v1/hubs
+POST {{baseUrl}}/api/v1/hubs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6Ik1BU1RFUl9BRE1JTiIsImlhdCI6MTc0Mjc1NDcyNiwiZXhwIjoxNzQyNzU4MzI2fQ.by4bFlswEJJRYy7wYiObVESvbl9JwKXXHwcCUf3xzV4
+Authorization: {{access_token}}
 #X-User-Id: 123
 #X-User-Role: MASTER_ADMIN
 
 {
-  "hubName": "테스트 데이터2",
+  "hubName": "테스트 데이터51",
   "locationApi": {
-    "address": "테스트 주소2",
+    "address": "테스트 주소51",
     "latitude": 37.514219,
     "longitude": 127.112628
   }
@@ -20,6 +20,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6Ik1BU1RFUl9BR
 ###
 PATCH {{baseUrl}}/api/v1/hubs/{{hubId}}
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "hubName": "수정된 허브 이름"
@@ -27,22 +28,35 @@ Content-Type: application/json
 
 ###
 DELETE {{baseUrl}}/api/v1/hubs/{{hubId}}
+Authorization: {{access_token}}
 
 ###
 GET {{baseUrl}}/api/v1/hubs/search?hubName=테스트&address=테스트&isAsc=true&sortBy=createdAt&page=0&size=10
+Authorization: {{access_token}}
 
 ### INTERNAL
 ### 허브가 있는지 검증
 GET {{baseUrl}}/api/v1/app/hubs/{{hubId}}
+Authorization: {{access_token}}
+
+### 허브가 있는지 검증 1748536a-93bf-4359-bf51-06e79488d327
+GET {{baseUrl}}/api/v1/app/hubs/110205dd-93bd-4ca3-ad46-b7680c64c5fe
+Authorization: {{access_token}}
+
+### 허브가 있는지 검증 1748536a-93bf-4359-bf51-06e79488d327
+GET {{baseUrl}}/api/v1/app/hubs/1748536a-93bf-4359-bf51-06e79488d327
+Authorization: {{access_token}}
 
 ### fromHub 부터 toHub까지 경로에 대한 허브 값을 반환
 POST {{baseUrl}}/api/v1/app/hubs/stopover
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
-  "fromHubId": "",
-  "toHubId": ""
+  "fromHubId": "1748536a-93bf-4359-bf51-06e79488d327",
+  "toHubId": "110205dd-93bd-4ca3-ad46-b7680c64c5fe"
 }
 
 ### 모든 허브를 반환
 GET {{baseUrl}}/api/v1/app/hubs/allHub
+Authorization: {{access_token}}

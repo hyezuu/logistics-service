@@ -3,8 +3,8 @@ POST http://localhost:19000/api/v1/users/signup
 Content-Type: application/json
 
 {
-  "username": "test",
-  "slackEmail": "test@email.com",
+  "username": "test1",
+  "slackEmail": "test1@email.com",
   "password": "Password1!",
   "role": "MASTER_ADMIN"
 }
@@ -14,7 +14,7 @@ POST http://localhost:19000/api/v1/app/users/validate
 Content-Type: application/json
 
 {
-  "username": "test",
+  "username": "test1",
   "password": "Password1!"
 }
 > {%
@@ -32,7 +32,7 @@ POST http://localhost:19000/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "username": "test",
+  "username": "test1",
   "password": "Password1!"
 }
 > {%

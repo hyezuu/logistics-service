@@ -97,7 +97,7 @@ Authorization: {{access_token}}
 
 {
   "postContentsRequest": {
-    "message": "유저 채널에 발송되는 슬랙 메시지 입니다."
+    "message": "주문 유저 채널에 발송되는 슬랙 메시지 입니다."
   }
 }
 > {%
@@ -121,11 +121,12 @@ Authorization: {{access_token}}
 
 ###
 GET {{baseUrl}}/api/v1/slacks/{{slackId}}
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNjc3Njg0LCJleHAiOjE3NDI2ODEyODR9.7UJlCM3grooUAXTz6dFyOdFo-_l881GmMsWV_xOb35w
+Authorization: {{access_token}}
 
 ###
 PATCH {{baseUrl}}/api/v1/slacks/{{slackId}}
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "userId": 1,
@@ -136,10 +137,11 @@ Content-Type: application/json
 
 ###
 DELETE {{baseUrl}}/api/v1/slacks/{{slackId}}
+Authorization: {{access_token}}
 
 ###
 GET {{baseUrl}}/api/v1/slacks/search?message=주문&isAsc=true&sortBy=createdAt&page=0&size=10
-
+Authorization: {{access_token}}
 
 
 
@@ -148,6 +150,7 @@ GET {{baseUrl}}/api/v1/slacks/search?message=주문&isAsc=true&sortBy=createdAt&
 ###
 POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyC1j0Qm-sEsCj4KykvhNEGgDWo3pg7dS64
 content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "contents": [{
