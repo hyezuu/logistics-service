@@ -1,0 +1,78 @@
+### 재고 조회 API
+GET {{baseUrl}}/api/v1/stock
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+    "productId": "{{productId}}",
+    "hubId": "{{hubId}}"
+}
+
+### 재고 검색 API (기본 조건)
+GET {{baseUrl}}/api/v1/stock/search
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 재고 검색 API (productId 필터)
+GET {{baseUrl}}/api/v1/stock/search?productId={{productId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 재고 검색 API (hubId 필터)
+GET {{baseUrl}}/api/v1/stock/search?hubId={{hubId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 재고 검색 API (정렬 조건 - 최신순)
+GET {{baseUrl}}/api/v1/stock/search?sortBy=updatedAt&isAsc=false
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 재고 검색 API (페이징)
+GET {{baseUrl}}/api/v1/stock/search?page=0&size=10
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 재고 검색 API (모든 조건 조합)
+GET {{baseUrl}}/api/v1/stock/search?productId={{productId}}&hubId={{hubId}}&sortBy=updatedAt&isAsc=true&page=0&size=20
+Content-Type: application/json
+Authorization: {{access_token}}
+
+### 재고 삭제 API
+DELETE {{baseUrl}}/api/v1/stock
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+    "productId": "{{productId}}",
+    "hubId": "{{hubId}}"
+}
+
+### 재고 증가 API
+PATCH {{baseUrl}}/api/v1/stock/increase
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+    "stockId": {
+        "productId": "{{productId}}",
+        "hubId": "{{hubId}}"
+    },
+    "quantity": 105
+}
+
+
+
+### 재고 감소 API
+PATCH {{baseUrl}}/api/v1/stock/decrease
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+    "stockId": {
+        "productId": "{{productId}}",
+        "hubId": "{{hubId}}"
+    },
+    "quantity": 200
+}
+

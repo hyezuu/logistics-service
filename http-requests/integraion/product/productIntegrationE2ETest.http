@@ -1,0 +1,40 @@
+### 상품생성 (재고까지 같이생성) baseUserCompanyManager에서 생성후 진행 해야함.
+###//Role = 허브 매니저, 업체 매니저
+### 같은 허브, 상품id 인경우에 재고에서 충돌날수있어서, 새로운 허브/또는 업체로 재시도하면 됩니다!
+POST {{baseUrl}}/api/v1/products
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "name": "유기농 바나나",
+  "companyId": "{{companyId}}",
+  "hubId": "{{hubId}}",
+  "quantity": 100
+}
+> {%
+  client.global.set("productId", response.body.productId)
+%}
+
+### 상품 이름 수정 요청 - 생성된 ID 사용
+PATCH {{baseUrl}}/api/v1/products/{{productId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "name": "프리미엄 유기농 바나나"
+}
+> {%
+  client.global.set("productId", response.body.productId)
+%}
+
+### 상품 정보 조회 - 생성된 ID 사용
+GET {{baseUrl}}/api/v1/products/{{productId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+
+
+### 상품 정보 삭제 - 생성된 ID 사용
+DELETE {{baseUrl}}/api/v1/products/{{productId}}
+Content-Type: application/json
+Authorization: {{access_token}}
+

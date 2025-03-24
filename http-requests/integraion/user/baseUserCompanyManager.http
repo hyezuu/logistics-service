@@ -41,7 +41,7 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "companyName": "푸른 농장",
+  "companyName": "푸른 농장2",
   "companyType": "SUPPLIER",
   "hubId": "{{hubId}}",
   "address": "서울특별시 강남구 테헤란로 123"

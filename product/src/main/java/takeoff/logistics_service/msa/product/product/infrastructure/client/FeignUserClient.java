@@ -9,6 +9,6 @@ import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.r
 @FeignClient(name = "user", contextId = "product-user-client", configuration = FeignClientConfig.class)
 public interface FeignUserClient {
 
-	@GetMapping("/api/v1/app/users/managers/company/users}")
+	@GetMapping("/api/v1/app/users/managers/company/users")
 	GetManagerListResponse getUsersByCompanyManager (@RequestParam Long managerId);
 }
