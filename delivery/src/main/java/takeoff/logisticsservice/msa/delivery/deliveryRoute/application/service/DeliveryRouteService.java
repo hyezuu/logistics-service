@@ -61,9 +61,17 @@ public class DeliveryRouteService {
   }
 
   @Transactional
-  public void DeleteDeliveryRoutes(UUID deliveryId) {
+  public List<UUID> findAllDeliveryRoutes_DeliveryIdByDeliveryManagerId(Long deliveryManagerId) {
+    List<DeliveryRoute> deliveryRoutes = deliveryRouteRepository.findAllByDeliveryManagerId(
+        deliveryManagerId);
+    return deliveryRoutes.stream()
+        .map(DeliveryRoute::getDeliveryId)
+        .toList();
+  }
+
+  @Transactional
+  public void DeleteDeliveryRoutes(UUID deliveryId, Long userId) {
     List<DeliveryRoute> routes = deliveryRouteRepository.findAllByDeliveryId(deliveryId);
-    routes.forEach(deliveryRoute -> deliveryRoute.delete(1L));
-    // TODO : 아이디 추가
+    routes.forEach(deliveryRoute -> deliveryRoute.delete(userId));
   }
 }

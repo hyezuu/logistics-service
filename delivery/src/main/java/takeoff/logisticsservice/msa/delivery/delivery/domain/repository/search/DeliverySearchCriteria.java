@@ -1,14 +1,13 @@
-package takeoff.logistics_service.msa.order.domain.repository.search;
+package takeoff.logisticsservice.msa.delivery.delivery.domain.repository.search;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
-public record OrderSearchCriteria(
-    Long customerId,
-    UUID supplierId,
-    List<UUID> deliveryIds,
+public record DeliverySearchCriteria(
+    UUID orderId,
     UUID hubId,
+    Long customerId,
+    Long deliveryManagerId,
     LocalDateTime startDate,
     LocalDateTime endDate,
     Boolean isAsc,

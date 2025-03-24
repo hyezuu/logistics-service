@@ -1,13 +1,12 @@
-package takeoff.logistics_service.msa.order.presentation.dto.request;
+package takeoff.logisticsservice.msa.delivery.delivery.presentation.dto.request;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
-import takeoff.logistics_service.msa.order.application.dto.request.SearchOrderRequestDto;
+import takeoff.logisticsservice.msa.delivery.delivery.application.dto.request.SearchDeliveryRequestDto;
 
-public record SearchOrderRequest(
-    UUID supplierId,
-    UUID hubId,
+public record SearchDeliveryRequest(
+    UUID orderId,
     LocalDateTime startDate,
     LocalDateTime endDate,
     Boolean isAsc,
@@ -16,17 +15,16 @@ public record SearchOrderRequest(
     Integer size
 ) {
 
-  public SearchOrderRequest {
+  public SearchDeliveryRequest {
     isAsc = isAsc != null ? isAsc : false;
     sortBy = sortBy != null ? sortBy : "createdAt";
     size = (size != null && Set.of(10, 30, 50).contains(size)) ? size : 10;
     page = page != null ? page : 0;
   }
 
-  public SearchOrderRequestDto toApplicationDto() {
-    return new SearchOrderRequestDto(
-        supplierId,
-        hubId,
+  public SearchDeliveryRequestDto toApplicationDto() {
+    return new SearchDeliveryRequestDto(
+        orderId,
         startDate,
         endDate,
         isAsc,

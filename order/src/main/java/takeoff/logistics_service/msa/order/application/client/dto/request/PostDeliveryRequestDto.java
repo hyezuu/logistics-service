@@ -1,4 +1,4 @@
-package takeoff.logisticsservice.msa.delivery.delivery.presentation.dto.request;
+package takeoff.logistics_service.msa.order.application.client.dto.request;
 
 import java.util.UUID;
 

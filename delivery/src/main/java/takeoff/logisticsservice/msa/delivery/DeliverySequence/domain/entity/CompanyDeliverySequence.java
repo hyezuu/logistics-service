@@ -31,11 +31,11 @@ public class CompanyDeliverySequence {
   public void modifySequence(Integer nextSequence) {
     if (nextSequence == null) {
       throw new IllegalArgumentException("sequence is null");
-    } // TODO : 커스텀 예외로 변경
+    }
 
     if (nextSequence < 0) {
       throw new IllegalArgumentException("sequence is negative");
-    } // TODO : 커스텀 예외로 변경
+    }
 
     this.sequence = nextSequence;
   }

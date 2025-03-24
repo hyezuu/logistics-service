@@ -34,7 +34,7 @@ public class JpaOrderRepositoryCustomImpl extends
     JPQLQuery<OrderSearchCriteriaResponse> query = from(order)
         .select(Projections.constructor(
             OrderSearchCriteriaResponse.class,
-            order.id,
+            order.id.orderId,
             order.supplierId,
             order.orderItems,
             order.customerId,
@@ -47,7 +47,9 @@ public class JpaOrderRepositoryCustomImpl extends
         ))
         .where(
             customerIdEq(criteria.customerId()),
+            deliveryIdIn(criteria.deliveryIds()),
             supplierIdEq(criteria.supplierId()),
+            hubIdEq(criteria.hubId()),
             createdAtBetween(criteria.startDate(), criteria.endDate()),
             order.deletedAt.isNull()
         )
@@ -59,7 +61,7 @@ public class JpaOrderRepositoryCustomImpl extends
     List<OrderSearchCriteriaResponse> result = Optional.of(
             querydsl.applyPagination(pageable, query))
         .orElseThrow(
-            () -> new IllegalArgumentException("[Querydsl] 페이징 정보 생성 오류"))
+            () -> new IllegalArgumentException("[Order-Querydsl] 페이징 정보 생성 오류"))
         .fetch();
 
     long total = query.fetchCount();
@@ -75,6 +77,14 @@ public class JpaOrderRepositoryCustomImpl extends
 
   private BooleanExpression customerIdEq(Long customerId) {
     return customerId != null ? QOrder.order.customerId.eq(customerId) : null;
+  }
+
+  private BooleanExpression deliveryIdIn(List<UUID> deliveryIds) {
+    return deliveryIds != null ? QOrder.order.deliveryId.in(deliveryIds) : null;
+  }
+
+  private BooleanExpression hubIdEq(UUID hubId) {
+    return hubId != null ? QOrder.order.managedHubId.eq(hubId) : null;
   }
 
   private BooleanExpression supplierIdEq(UUID supplierId) {
