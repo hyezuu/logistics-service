@@ -1,9 +1,11 @@
 ###
 GET {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
+Authorization: {{access_token}}
 
 ###
 PUT {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
 Content-Type: application/json
+Authorization: {{access_token}}
 
 {
   "fromHubId": "",
@@ -14,3 +16,4 @@ Content-Type: application/json
 
 ###
 DELETE {{baseUrl}}/api/v1/hubRoutes/{{hubRouteId}}
+Authorization: {{access_token}}

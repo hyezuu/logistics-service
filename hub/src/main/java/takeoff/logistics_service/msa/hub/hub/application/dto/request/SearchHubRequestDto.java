@@ -31,13 +31,13 @@ public record SearchHubRequestDto(String hubName,
 
     //캐싱에 키를 조건에 따라 캐싱하기 위해 설정한 메서드
     //ex) hubs::page:1-size:10-sort:desc-hubName:테스트-address:테스트
-    public String toCacheKey() {
-        return String.format("page:%d-size:%d-sort:%s-hubName:%s-address:%s",
-            this.page,
-            this.size,
-            this.sortBy,
-            this.hubName != null ? this.hubName : "none",
-            this.address != null ? this.address : "none"
-        );
-    }
+//    public String toCacheKey() {
+//        return String.format("page:%d-size:%d-sort:%s-hubName:%s-address:%s",
+//            this.page,
+//            this.size,
+//            this.sortBy,
+//            this.hubName != null ? this.hubName : "none",
+//            this.address != null ? this.address : "none"
+//        );
+//    }
 }

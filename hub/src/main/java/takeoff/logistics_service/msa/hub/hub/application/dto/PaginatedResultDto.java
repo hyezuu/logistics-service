@@ -29,10 +29,4 @@ public record PaginatedResultDto<T>(List<T> content,
         );
     }
 
-    //ID들만 추출
-    public List<UUID> getHubIds() {
-        return content.stream()
-            .map(item -> ((SearchHubResponseDto) item).hubId())
-            .toList();
-    }
 }

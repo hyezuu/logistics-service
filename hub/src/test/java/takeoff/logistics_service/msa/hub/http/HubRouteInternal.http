@@ -5,9 +5,9 @@ X-NCP-APIGW-API-KEY:
 
 
 ###
-POST http://localhost:19042/api/v1/app/hubRoutes
+POST {{baseUrl}}/api/v1/app/hubRoutes
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwicm9sZSI6IkhVQl9NQU5BR0VSIiwiaWF0IjoxNzQyNjczNDI5LCJleHAiOjE3NDI2NzcwMjl9.FgBNaOvpz-ed__xR5SBOP1qmy7sxckP_niNe3aBjU3E
+Authorization: {{access_token}}
 
 {
   "fromHubId": "0d17ed4f-cb31-480d-9f2b-f17a2ca41ce7",

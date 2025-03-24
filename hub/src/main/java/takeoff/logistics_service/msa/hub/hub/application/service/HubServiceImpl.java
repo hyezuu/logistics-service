@@ -16,9 +16,10 @@ import takeoff.logistics_service.msa.hub.hub.application.dto.request.PostHubRequ
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.SearchHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetRouteResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.HubToHubResponseDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.PaginatedResultHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PatchHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PostHubResponseDto;
-import takeoff.logistics_service.msa.hub.hub.application.dto.response.SearchHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.exception.HubBusinessException;
 import takeoff.logistics_service.msa.hub.hub.application.exception.HubErrorCode;
 import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
@@ -36,17 +37,13 @@ public class HubServiceImpl implements HubService {
     private final HubRepository hubRepository;
 
     @Override
-    @Cacheable(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'")
     public PostHubResponseDto saveHub(PostHubRequestDto requestDto) {
         return PostHubResponseDto.from(hubRepository.save(requestDto.toEntity()));
     }
 
     @Override
     @Caching(evict = {
-        @CacheEvict(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'"),
-        //검색에 있는 모든 캐시를 삭제함..아쉽지만 더 공부하고 수정 예정..
-        @CacheEvict(value = "hubSearch", allEntries = true),
-        @CacheEvict(value = "hubsRoute", allEntries = true)
+        @CacheEvict(value = "hubs", key = "#hubId", cacheManager = "hubCacheManager")
     })
     public PatchHubResponseDto updateHub(UUID hubId, PatchHubRequestDto requestDto) {
         Hub hub = getHub(hubId);
@@ -56,7 +53,7 @@ public class HubServiceImpl implements HubService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "hubs", key = "#result != null ? #result.hubId : 'defaultKey'")
+    @Cacheable(value = "hubs", key = "#hubId", cacheManager = "hubCacheManager")
     public GetHubResponseDto findByHubId(UUID hubId) {
         Hub hub = getHub(hubId);
         return GetHubResponseDto.from(hub);
@@ -64,26 +61,38 @@ public class HubServiceImpl implements HubService {
 
 
     @Override
-    @Cacheable(value = "hubSearch", key = "'search:' + #requestDto.toCacheKey() + '-hubs:' + #result.getHubIds()")
-    public PaginatedResultDto<SearchHubResponseDto> searchHub(SearchHubRequestDto requestDto) {
-        return PaginatedResultDto.from(hubRepository.searchHub(requestDto.toSearchCriteria()));
+    @Cacheable(value = "hubSearch",
+        key = "'search:' + #requestDto.hubName() + "
+            + "'-adress:' + #requestDto.address() +"
+            + "'-isAcs:' + #requestDto.isAsc() +"
+            + "'-sortBy:' + #requestDto.sortBy() +"
+            + "'-page:' + #requestDto.page() +"
+            + "'-size:' + #requestDto.size() ",
+        cacheManager = "hubListCacheManager"
+    )
+    public PaginatedResultHubResponseDto searchHub(SearchHubRequestDto requestDto) {
+        return PaginatedResultHubResponseDto.from(PaginatedResultDto.from(hubRepository.searchHub(requestDto.toSearchCriteria())));
     }
 
     @Override
-    @Cacheable(value = "hubsRoute", key = "#hubIdsDto.toHubId() + '-' + #hubIdsDto.fromHubId()")
-    public List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto hubIdsDto) {
+    @Cacheable(value = "hubsRoute",
+        key = "'fromHub:' + #hubIdsDto.fromHubId() + "
+            + "'-toHub: ' + #hubIdsDto.toHubId()",
+        cacheManager = "hubListCacheManager"
+    )
+    public HubToHubResponseDto findByToHubIdAndFromHubId(HubIdsDto hubIdsDto) {
 
-        return hubRepository.findByIdIn(
+        return HubToHubResponseDto.from(hubRepository.findByIdInAndDeletedAtIsNull(
                 List.of(hubIdsDto.toHubId(), hubIdsDto.fromHubId()))
             .stream()
             .map(GetRouteResponseDto::from)
-            .toList();
+            .toList());
     }
 
     @Override
-    @Cacheable(value = "hubs", key = "'allHubs'")
+    @Cacheable(value = "hubs", key = "'allHubs'", cacheManager = "hubCacheManager")
     public List<GetAllHubsDto> findAllHub() {
-        return hubRepository.findAll()
+        return hubRepository.findByDeletedAtIsNull()
             .stream()
             .map(GetAllHubsDto::from)
             .toList();
@@ -91,9 +100,10 @@ public class HubServiceImpl implements HubService {
 
     @Override
     @Caching(evict = {
-        @CacheEvict(value = "hubs", key = "'allHubs'"),
-        @CacheEvict(value = "hubs", key = "#hubId"),
-        @CacheEvict(value = "hubsRoute", allEntries = true)
+        @CacheEvict(value = "hubs", key = "'allHubs'", cacheManager = "hubCacheManager"),
+        @CacheEvict(value = "hubs", key = "#hubId", cacheManager = "hubCacheManager"),
+        @CacheEvict(value = "hubsRoute", allEntries = true, cacheManager = "hubListCacheManager"),
+        @CacheEvict(value = "hubSearch", allEntries = true, cacheManager = "hubListCacheManager")
     })
     public void deleteHub(UUID hubId, Long userId) {
         Hub hub = getHub(hubId);
@@ -101,7 +111,7 @@ public class HubServiceImpl implements HubService {
     }
 
     private Hub getHub(UUID hubId) {
-        return hubRepository.findById(hubId)
+        return hubRepository.findByIdAndDeletedAtIsNull(hubId)
             .orElseThrow(() -> HubBusinessException.from(HubErrorCode.HUB_NOT_FOUND));
     }
 }

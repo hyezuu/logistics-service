@@ -16,11 +16,11 @@ public interface HubRepository {
 
     Hub save(Hub hub);
 
-    Optional<Hub> findById(UUID hubId);
+    Optional<Hub> findByIdAndDeletedAtIsNull(UUID hubId);
 
     PaginatedResult<HubSearchCriteriaResponse> searchHub(HubSearchCriteria hubSearchCriteria);
 
-    List<Hub> findByIdIn(List<UUID> ids);
+    List<Hub> findByIdInAndDeletedAtIsNull(List<UUID> ids);
 
-    List<Hub> findAll();
+    List<Hub> findByDeletedAtIsNull();
 }

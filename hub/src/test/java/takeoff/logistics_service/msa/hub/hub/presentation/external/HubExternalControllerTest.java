@@ -32,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
 import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.hub.hub.application.dto.PaginatedResultDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.PaginatedResultDtoList;
+import takeoff.logistics_service.msa.hub.hub.application.dto.response.PaginatedResultHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PatchHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PostHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.SearchHubResponseDto;
@@ -212,9 +214,11 @@ class HubExternalControllerTest {
             1L,
             1
         );
+        PaginatedResultHubResponseDto pageResult = new PaginatedResultHubResponseDto(
+            PaginatedResultDtoList.from(paginatedResult));
 
         // HubService mock
-        when(hubService.searchHub(any())).thenReturn(paginatedResult);
+        when(hubService.searchHub(any())).thenReturn(pageResult);
 
         // When & Then
         mockMvc.perform(get("/api/v1/hubs")

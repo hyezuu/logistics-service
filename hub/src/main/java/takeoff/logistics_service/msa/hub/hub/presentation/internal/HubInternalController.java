@@ -15,7 +15,7 @@ import takeoff.logistics_service.msa.hub.hub.application.service.HubService;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.HubIds;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.feign.GetAllHubs;
 import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetHubResponse;
-import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.GetRouteResponse;
+import takeoff.logistics_service.msa.hub.hub.presentation.dto.response.HubToHubResponse;
 
 /**
  * @author : hanjihoon
@@ -38,11 +38,8 @@ public class HubInternalController {
 
     @PostMapping("/stopover")
     @RoleCheck(roles = {UserRole.MASTER_ADMIN,UserRole.HUB_MANAGER,UserRole.HUB_DELIVERY_MANAGER})
-    public List<GetRouteResponse> findByToHubIdAndFromHubId(@RequestBody HubIds hubIds) {
-        return (hubService.findByToHubIdAndFromHubId(hubIds.toApplicationDto()))
-            .stream()
-            .map(GetRouteResponse::from)
-            .toList();
+    public HubToHubResponse findByToHubIdAndFromHubId(@RequestBody HubIds hubIds) {
+        return HubToHubResponse.from(hubService.findByToHubIdAndFromHubId(hubIds.toApplicationDto()));
     }
 
     @GetMapping("/allHub")
