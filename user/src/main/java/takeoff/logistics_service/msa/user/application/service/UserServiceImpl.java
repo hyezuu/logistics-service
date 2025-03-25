@@ -1,5 +1,13 @@
 package takeoff.logistics_service.msa.user.application.service;
 
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.ALREADY_DELETED;
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.DELIVERY_MANAGER_NOT_FOUND;
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.EMAIL_ALREADY_EXISTS;
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.INVALID_PASSWORD;
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.USERNAME_ALREADY_EXISTS;
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.USER_NOT_FOUND;
+
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -8,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.user.application.exception.UserBusinessException;
 import takeoff.logistics_service.msa.user.domain.entity.CompanyManager;
 import takeoff.logistics_service.msa.user.domain.entity.HubManager;
 import takeoff.logistics_service.msa.user.domain.entity.User;
@@ -20,11 +29,14 @@ import takeoff.logistics_service.msa.user.presentation.dto.request.GetUserListRe
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchUserRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostSignupRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.UserValidationRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.response.*;
-import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.*;
-import takeoff.logistics_service.msa.user.application.exception.UserBusinessException;
-
-import java.util.List;
+import takeoff.logistics_service.msa.user.presentation.dto.response.DeleteUserResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetManagerListInfoDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetUserListInfoDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetUserListResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetUserResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.PatchUserResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.PostSignupResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.UserValidationResponseDto;
 
 @Service
 @RequiredArgsConstructor

@@ -2,6 +2,6 @@ package takeoff.logisticsservice.msa.delivery.deliveryRoute.application.client.d
 
 import java.util.List;
 
-public record PostHubRouteResponseDto(List<HubRoute> routes) {
+public record PostHubRouteResponseDto(List<FindHubRoutes> hubAllListResponseList) {
 
 }

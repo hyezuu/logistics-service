@@ -2,7 +2,6 @@ package takeoff.logistics_service.msa.common.annotation;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Set;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
 import takeoff.logistics_service.msa.common.exception.code.CommonErrorCode;
-import takeoff.logistics_service.msa.common.exception.code.ErrorCode;
 
 /**
  * @author : hanjihoon

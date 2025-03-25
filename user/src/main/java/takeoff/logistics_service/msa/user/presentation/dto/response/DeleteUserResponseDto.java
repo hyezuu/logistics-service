@@ -1,9 +1,8 @@
 package takeoff.logistics_service.msa.user.presentation.dto.response;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import takeoff.logistics_service.msa.user.domain.entity.User;
-
-import java.time.LocalDateTime;
 
 @Builder
 public record DeleteUserResponseDto(

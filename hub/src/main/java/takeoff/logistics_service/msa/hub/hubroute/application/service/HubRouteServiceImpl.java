@@ -15,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.FindHubRoutesDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubAllListResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubRoutesDto;
-import takeoff.logistics_service.msa.hub.hubroute.application.dto.client.HubClient;
-import takeoff.logistics_service.msa.hub.hubroute.application.dto.client.NaverRequestClient;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.HubIdsDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.PostDeliveryHubRouteRequestDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.PostHubRouteRequestDto;
@@ -28,6 +26,8 @@ import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.PostH
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.response.PutHubRouteResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.exception.HubRouteBusinessException;
 import takeoff.logistics_service.msa.hub.hubroute.application.exception.HubRouteErrorCode;
+import takeoff.logistics_service.msa.hub.hubroute.application.service.client.HubClient;
+import takeoff.logistics_service.msa.hub.hubroute.application.service.client.NaverRequestClient;
 import takeoff.logistics_service.msa.hub.hubroute.domain.entity.HubRoute;
 import takeoff.logistics_service.msa.hub.hubroute.domain.repository.HubRouteRepository;
 

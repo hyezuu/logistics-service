@@ -1,13 +1,12 @@
 package takeoff.logistics_service.msa.user.presentation.dto.request;
 
+import java.util.List;
 import lombok.Builder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import takeoff.logistics_service.msa.user.domain.service.DeliveryManagerSearchCondition;
 import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
-
-import java.util.List;
 
 @Builder
 public record GetDeliveryManagerListRequestDto(

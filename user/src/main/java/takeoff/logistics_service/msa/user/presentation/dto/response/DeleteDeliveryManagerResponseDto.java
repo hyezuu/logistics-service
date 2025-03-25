@@ -1,8 +1,7 @@
 package takeoff.logistics_service.msa.user.presentation.dto.response;
 
-import lombok.Builder;
-
 import java.time.LocalDateTime;
+import lombok.Builder;
 
 @Builder
 public record DeleteDeliveryManagerResponseDto(

@@ -1,4 +1,4 @@
-package takeoff.logistics_service.msa.hub.hubroute.application.dto.client;
+package takeoff.logistics_service.msa.hub.hubroute.application.service.client;
 
 import java.util.List;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubAllListResponseDto;

@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActualArrivalInfo {
 
-  @Column(name = "actual_distance", nullable = false)
+  @Column(name = "actual_distance")
   private Integer actualDistance;
 
-  @Column(name = "actual_duration", nullable = false)
+  @Column(name = "actual_duration")
   private Integer actualDuration;
 
   public static ActualArrivalInfo of(Integer actualDuration, Integer actualDistance) {

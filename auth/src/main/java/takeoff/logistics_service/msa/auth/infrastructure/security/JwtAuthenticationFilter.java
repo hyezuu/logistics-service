@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,8 +19,6 @@ import takeoff.logistics_service.msa.auth.application.exception.AuthErrorCode;
 import takeoff.logistics_service.msa.auth.domain.service.RedisTokenService;
 import takeoff.logistics_service.msa.auth.presentation.dto.request.LoginRequestDto;
 import takeoff.logistics_service.msa.auth.presentation.dto.response.LoginResponseDto;
-
-import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Slf4j

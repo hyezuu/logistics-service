@@ -1,11 +1,10 @@
 package takeoff.logistics_service.msa.user.presentation.dto.response;
 
+import java.util.List;
 import lombok.Builder;
 import org.springframework.data.domain.Page;
 import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.presentation.common.dto.PaginationDto;
-
-import java.util.List;
 
 @Builder
 public record GetUserListResponseDto(

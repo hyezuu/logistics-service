@@ -1,11 +1,10 @@
 package takeoff.logistics_service.msa.user.presentation.dto.response;
 
+import java.util.UUID;
 import lombok.Builder;
 import takeoff.logistics_service.msa.user.domain.entity.Employee;
 import takeoff.logistics_service.msa.user.domain.vo.CompanyId;
 import takeoff.logistics_service.msa.user.domain.vo.HubId;
-
-import java.util.UUID;
 @Builder
 public record GetManagerListInfoDto(
         Long userId,

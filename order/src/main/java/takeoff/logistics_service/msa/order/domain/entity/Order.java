@@ -51,10 +51,12 @@ public class Order extends BaseEntity {
       Long customerId,  String address, String requestNotes) {
     this.id = OrderId.from(id);
     this.supplierId = supplierId;
-    this.orderItems = orderItems;
     this.customerId = customerId;
     this.address = address;
     this.requestNotes = requestNotes;
+
+    this.orderItems = orderItems != null ? orderItems : new ArrayList<>();
+    this.orderItems.forEach(item -> item.enrollOrder(this));
   }
 
   public void registerHub(UUID managedHubId) {

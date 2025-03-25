@@ -2,7 +2,6 @@ package takeoff.logistics_service.msa.common.resolver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
-import org.apache.catalina.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;

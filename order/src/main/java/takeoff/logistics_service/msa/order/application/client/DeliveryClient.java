@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import takeoff.logistics_service.msa.common.config.FeignClientConfig;
 import takeoff.logistics_service.msa.order.application.client.dto.request.PostDeliveryRequestDto;
@@ -26,8 +27,8 @@ public interface DeliveryClient {
   @DeleteMapping("/api/v1/app/deliveries/{deliveryId}")
   void deleteDelivery(@PathVariable("deliveryId") UUID deliveryId);
 
-  @PostMapping("api/v1/app/deliveryRoutes")
-  List<UUID> saveDeliveryRoute(PostDeliveryRoutesRequestDto dto);
+  @PostMapping("/api/v1/app/deliveryRoutes")
+  List<UUID> saveDeliveryRoute(@RequestBody PostDeliveryRoutesRequestDto dto);
 
   @GetMapping("api/v1/app/deliveryRoutes/{deliveryManagerId}")
   List<UUID> findAllDeliveryRoutes_DeliveryIdByDeliveryManagerId(

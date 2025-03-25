@@ -31,7 +31,6 @@ public class HubRouteInternalController {
     }
 
     @PostMapping("/delivery")
-    @RoleCheck(roles = {UserRole.MASTER_ADMIN,UserRole.HUB_DELIVERY_MANAGER})
     public HubRoutes getDeliveryHubRouteList(@RequestBody PostDeliveryHubRouteRequest request) {
         return HubRoutes.from(hubRouteService.getDeliveryHubRouteList(request.toApplication()));
     }

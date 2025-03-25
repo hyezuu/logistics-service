@@ -11,9 +11,6 @@ import takeoff.logistics_service.msa.user.domain.entity.CompanyManager;
 import takeoff.logistics_service.msa.user.domain.entity.HubManager;
 import takeoff.logistics_service.msa.user.domain.entity.User;
 import takeoff.logistics_service.msa.user.domain.entity.UserRole;
-import takeoff.logistics_service.msa.user.domain.vo.SlackId;
-
-import java.util.UUID;
 
 @Builder
 public record PostSignupRequestDto(

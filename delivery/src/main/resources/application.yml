@@ -1,42 +1,87 @@
-#spring:
-#  application:
-#    name: delivery
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/delivery
-#    username: sa
-#    password: sa
-#    driver-class-name: org.postgresql.Driver
-#  jpa:
-#    defer-datasource-initialization: true
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
-##  sql:
-##    init:
-##      mode: always
-#
-##server:
-##  port: 19014
-#
-##eureka:
-##  client:
-##    service-url:
-##      defaultZone: http://localhost:18999/eureka/
-##  instance:
-##    hostname: localhost
-##    prefer-ip-address: true
-#
-##
-##springdoc:
-##  swagger-ui:
-##    enabled: true
-##    path: /docs
-##    url: /springdoc/openapi3-delivery-service.json
-##    operations-sorter: method
-##    tags-sorter: alpha
-##  api-docs:
-##    enabled: true
-##    path: /api-docs-delivery-service
+# <<<<<<< feature/#146
+# #spring:
+# #  application:
+# #    name: delivery
+# #  datasource:
+# #    url: jdbc:postgresql://localhost:5432/delivery
+# #    username: sa
+# #    password: sa
+# #    driver-class-name: org.postgresql.Driver
+# #  jpa:
+# #    defer-datasource-initialization: true
+# #    hibernate:
+# #      ddl-auto: update
+# #    show-sql: true
+# #    properties:
+# #      hibernate:
+# #        format_sql: true
+# ##  sql:
+# ##    init:
+# ##      mode: always
+# #
+# ##server:
+# ##  port: 19014
+# #
+# ##eureka:
+# ##  client:
+# ##    service-url:
+# ##      defaultZone: http://localhost:18999/eureka/
+# ##  instance:
+# ##    hostname: localhost
+# ##    prefer-ip-address: true
+# #
+# ##
+# ##springdoc:
+# ##  swagger-ui:
+# ##    enabled: true
+# ##    path: /docs
+# ##    url: /springdoc/openapi3-delivery-service.json
+# ##    operations-sorter: method
+# ##    tags-sorter: alpha
+# ##  api-docs:
+# ##    enabled: true
+# ##    path: /api-docs-delivery-service
+# =======
+# spring:
+#   application:
+#     name: delivery
+#   datasource:
+#     url: jdbc:postgresql://localhost:5432/delivery
+#     username: sa
+#     password: sa
+#     driver-class-name: org.postgresql.Driver
+#   jpa:
+#     defer-datasource-initialization: true
+#     hibernate:
+#       ddl-auto: create
+#     show-sql: true
+#     properties:
+#       hibernate:
+#         format_sql: true
+#   sql:
+#     init:
+#       mode: always
+
+# server:
+#   port: 19014
+
+# eureka:
+#   client:
+#     service-url:
+#       defaultZone: http://localhost:18999/eureka/
+#   instance:
+#     hostname: localhost
+#     prefer-ip-address: true
+
+
+# springdoc:
+#   swagger-ui:
+#     enabled: true
+#     path: /docs
+#     url: /springdoc/openapi3-delivery-service.json
+#     operations-sorter: method
+#     tags-sorter: alpha
+#   api-docs:
+#     enabled: true
+#     path: /api-docs-delivery-service
+# >>>>>>> dev
