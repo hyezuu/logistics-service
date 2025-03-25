@@ -1,0 +1,33 @@
+management:
+  zipkin:
+    tracing:
+      endpoint: "http://localhost:9411/api/v2/spans"
+  tracing:
+    sampling:
+      probability: 1.0
+
+server:
+  port: 19022
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs
+    url: /springdoc/openapi3-auth-service.json
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    enabled: true
+    path: /api-docs-auth-service
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  access-expiration: ${JWT_ACCESS_EXPIRATION}
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION}

@@ -1,30 +1,30 @@
-server:
-  port: 19022
+#server:
+#  port: 19022
+#
+#spring:
+#  application:
+#    name: auth
+#  data:
+#    redis:
+#      host: redis
+#      port: 6379
+#      password:
+#  autoconfigure:
+#    exclude:
+#      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+#      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+#
+#jwt:
+#  secret: ${JWT_SECRET_KEY}
+#  access-expiration: ${JWT_ACCESS_EXPIRATION}
+#  refresh-expiration: ${JWT_REFRESH_EXPIRATION}
 
-spring:
-  application:
-    name: auth
-  data:
-    redis:
-      host: redis
-      port: 6379
-      password:
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 
-jwt:
-  secret: "cJI/zwDDsqA6ZN9XEZ+jnB86KV0iAx7AF4sXHrmEJkg="
-  access-expiration: 3600000  # AccessToken 만료 시간 (1시간)
-  refresh-expiration: 604800000  # RefreshToken 만료 시간 (7일)
-
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:18999/eureka/
-  instance:
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:18999/eureka/
+#  instance:
+#    prefer-ip-address: true
