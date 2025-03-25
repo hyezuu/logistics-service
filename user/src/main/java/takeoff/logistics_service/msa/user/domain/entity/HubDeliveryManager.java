@@ -4,13 +4,12 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
 import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
 import takeoff.logistics_service.msa.user.domain.vo.HubId;
-
-import java.util.UUID;
 
 @Entity
 @DiscriminatorValue("HUB_DELIVERY_MANAGER")

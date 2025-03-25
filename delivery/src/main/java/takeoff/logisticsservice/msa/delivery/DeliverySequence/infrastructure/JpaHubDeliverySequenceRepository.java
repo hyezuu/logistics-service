@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import takeoff.logisticsservice.msa.delivery.DeliverySequence.domain.entity.HubDeliverySequence;
-import takeoff.logisticsservice.msa.delivery.DeliverySequence.domain.repository.CompanyDeliverySequenceRepository;
 import takeoff.logisticsservice.msa.delivery.DeliverySequence.domain.repository.HubDeliverySequenceRepository;
 
 public interface JpaHubDeliverySequenceRepository extends

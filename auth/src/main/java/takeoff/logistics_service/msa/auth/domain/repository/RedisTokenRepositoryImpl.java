@@ -1,11 +1,10 @@
 package takeoff.logistics_service.msa.auth.domain.repository;
 
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Repository
 @RequiredArgsConstructor

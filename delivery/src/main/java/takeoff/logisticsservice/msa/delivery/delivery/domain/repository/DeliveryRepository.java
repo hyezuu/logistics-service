@@ -2,7 +2,6 @@ package takeoff.logisticsservice.msa.delivery.delivery.domain.repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.entity.Delivery;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.entity.DeliveryId;
 import takeoff.logisticsservice.msa.delivery.delivery.domain.repository.search.DeliverySearchCriteria;

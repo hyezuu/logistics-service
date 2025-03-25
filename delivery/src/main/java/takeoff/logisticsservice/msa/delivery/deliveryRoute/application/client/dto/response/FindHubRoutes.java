@@ -3,7 +3,7 @@ package takeoff.logisticsservice.msa.delivery.deliveryRoute.application.client.d
 import java.util.Objects;
 import java.util.UUID;
 
-public record HubRoute(
+public record FindHubRoutes(
     UUID hubRouteId,
     UUID fromHubId,
     UUID toHubId,
@@ -38,10 +38,10 @@ public record HubRoute(
     if (this == o) {
       return true;
     }
-    if (!(o instanceof HubRoute hubRoute)) {
+    if (!(o instanceof FindHubRoutes findHubRoutes)) {
       return false;
     }
-    return Objects.equals(hubRouteId, hubRoute.hubRouteId);
+    return Objects.equals(hubRouteId, findHubRoutes.hubRouteId);
   }
 
   @Override

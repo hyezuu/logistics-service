@@ -7,7 +7,6 @@ import static takeoff.logistics_service.msa.product.product.application.exceptio
 
 import feign.FeignException;
 import feign.FeignException.FeignClientException;
-import java.util.Arrays;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

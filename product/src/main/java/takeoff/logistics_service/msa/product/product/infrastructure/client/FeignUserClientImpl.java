@@ -7,7 +7,6 @@ import static takeoff.logistics_service.msa.product.product.application.exceptio
 
 import feign.FeignException;
 import feign.FeignException.FeignClientException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import takeoff.logistics_service.msa.common.exception.BusinessException;
@@ -15,7 +14,6 @@ import takeoff.logistics_service.msa.common.exception.code.CommonErrorCode;
 import takeoff.logistics_service.msa.product.product.application.dto.response.GetUserResponseDto;
 import takeoff.logistics_service.msa.product.product.application.exception.ProductBusinessException;
 import takeoff.logistics_service.msa.product.product.application.service.UserClient;
-import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.response.GetManagerListResponse;
 import takeoff.logistics_service.msa.product.product.infrastructure.client.dto.response.GetUserResponse;
 
 @RequiredArgsConstructor

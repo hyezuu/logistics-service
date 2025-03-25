@@ -1,5 +1,11 @@
 package takeoff.logistics_service.msa.user.application.service;
 
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.ALREADY_DELETED;
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.DELIVERY_MANAGER_NOT_FOUND;
+import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.USERNAME_ALREADY_EXISTS;
+
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -8,26 +14,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
+import takeoff.logistics_service.msa.user.application.exception.UserBusinessException;
 import takeoff.logistics_service.msa.user.domain.entity.DeliveryManager;
-
-import takeoff.logistics_service.msa.user.domain.entity.UserRole;
-
 import takeoff.logistics_service.msa.user.domain.repository.UserRepository;
 import takeoff.logistics_service.msa.user.domain.service.DeliveryManagerSearchCondition;
 import takeoff.logistics_service.msa.user.domain.service.SearchQueryService;
-import takeoff.logistics_service.msa.user.domain.vo.DeliveryManagerType;
 import takeoff.logistics_service.msa.user.domain.vo.DeliverySequence;
 import takeoff.logistics_service.msa.user.domain.vo.HubId;
 import takeoff.logistics_service.msa.user.presentation.common.dto.PaginationDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.GetDeliveryManagerListRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PatchDeliveryManagerRequestDto;
 import takeoff.logistics_service.msa.user.presentation.dto.request.PostDeliveryManagerRequestDto;
-import takeoff.logistics_service.msa.user.presentation.dto.response.*;
-import static takeoff.logistics_service.msa.user.application.exception.UserErrorCode.*;
-import takeoff.logistics_service.msa.user.application.exception.UserBusinessException;
-
-import java.util.List;
-import java.util.UUID;
+import takeoff.logistics_service.msa.user.presentation.dto.response.DeleteDeliveryManagerResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerListInfoDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerListResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.GetDeliveryManagerResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.PatchDeliveryManagerResponseDto;
+import takeoff.logistics_service.msa.user.presentation.dto.response.PostDeliveryManagerResponseDto;
 
 @Service
 @RequiredArgsConstructor

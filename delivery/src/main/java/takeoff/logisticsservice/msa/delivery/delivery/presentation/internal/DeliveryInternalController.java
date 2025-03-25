@@ -32,7 +32,7 @@ public class DeliveryInternalController {
   }
 
   @PostMapping
-  @RoleCheck(roles = {UserRole.MASTER_ADMIN})
+  @RoleCheck
   public UUID saveDelivery(@RequestBody PostDeliveryRequestDto dto) {
     return deliveryService.saveDelivery(dto);
   }

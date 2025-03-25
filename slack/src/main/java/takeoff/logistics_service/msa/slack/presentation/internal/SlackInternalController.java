@@ -2,15 +2,12 @@ package takeoff.logistics_service.msa.slack.presentation.internal;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import takeoff.logistics_service.msa.common.annotation.RoleCheck;
 import takeoff.logistics_service.msa.common.domain.UserInfo;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
-import takeoff.logistics_service.msa.common.domain.UserRole;
 import takeoff.logistics_service.msa.slack.application.service.SlackService;
 import takeoff.logistics_service.msa.slack.presentation.dto.request.PostSlackRequest;
 import takeoff.logistics_service.msa.slack.presentation.dto.request.PostUserSlackRequest;

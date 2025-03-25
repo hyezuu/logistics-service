@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.common.exception;
 
-import static takeoff.logistics_service.msa.common.exception.code.CommonErrorCode.*;
+import static takeoff.logistics_service.msa.common.exception.code.CommonErrorCode.CONSTRAINT_VIOLATION;
+import static takeoff.logistics_service.msa.common.exception.code.CommonErrorCode.VALIDATION_ERROR;
 
 import jakarta.validation.ConstraintViolation;
 import java.util.Collections;

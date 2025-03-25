@@ -57,10 +57,11 @@ public class DeliveryRoute extends BaseEntity {
   private DeliveryRouteStatus status;
 
   @Builder
-  public DeliveryRoute(UUID deliveryId, Long deliveryManagerId, Integer sequenceNumber,
+  public DeliveryRoute(UUID id, UUID deliveryId, Long deliveryManagerId, Integer sequenceNumber,
       UUID fromHubId, UUID toHubId,  Integer estimatedDuration,
-      Integer estimatedDistance
+      Integer estimatedDistance, Integer actualDuration, Integer actualDistance
   ) {
+    this.id = DeliveryRouteId.from(id);
     this.deliveryId = deliveryId;
     this.deliveryManagerId = deliveryManagerId;
     this.sequenceNumber = sequenceNumber;
@@ -68,6 +69,7 @@ public class DeliveryRoute extends BaseEntity {
     this.toHubId = toHubId;
     this.status = DeliveryRouteStatus.WAITING_HUB;
     this.estimatedArrivalInfo = EstimatedArrivalInfo.of(estimatedDuration, estimatedDistance);
+    this.actualArrivalInfo = ActualArrivalInfo.of(actualDuration, actualDistance);
   }
 
   public void modifyStatus(String status) {

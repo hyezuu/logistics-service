@@ -16,7 +16,6 @@ import takeoff.logistics_service.msa.hub.hub.application.dto.request.PostHubRequ
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.SearchHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.GetRouteResponseDto;
-import takeoff.logistics_service.msa.hub.hub.application.dto.response.HubToHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PaginatedResultHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PatchHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PostHubResponseDto;

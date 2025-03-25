@@ -1,43 +1,43 @@
-### 배송 담당자는 master 권한으로 생성
-### 로그인 (JWT 발급)
-POST {{baseUrl}}/api/v1/auth/login
-Content-Type: application/json
+#### 배송 담당자는 master 권한으로 생성
+#### 로그인 (JWT 발급)
+#POST {{baseUrl}}/api/v1/auth/login
+#Content-Type: application/json
+#
+#{
+#  "username": "master",
+#  "password": "Password1!"
+#}
+#> {%
+#  let authHeader = response.headers.valueOf("Authorization");
+#  if (authHeader) {
+#    client.global.set("access_token", authHeader);
+#  } else {
+#    throw new Error("Authorization 헤더가 응답에 존재하지 않음");
+#  }
+#%}
+#
+#### 허브 배송 담당자 생성 전 관리자 권한으로 허브가 만들어져야 합니다.
+#POST {{baseUrl}}/api/v1/hubs
+#Content-Type: application/json
+#Authorization: {{access_token}}
+##X-User-Id: 123
+##X-User-Role: MASTER_ADMIN
+#
+#{
+#  "hubName": "테스트 데이터",
+#  "locationApi": {
+#    "address": "테스트 주소",
+#    "latitude": 37.514219,
+#    "longitude": 127.112628
+#  }
+#}
+#> {%
+#  client.global.set("hubId", response.body.hubId)
+#%}
 
-{
-  "username": "master",
-  "password": "Password1!"
-}
-> {%
-  let authHeader = response.headers.valueOf("Authorization");
-  if (authHeader) {
-    client.global.set("access_token", authHeader);
-  } else {
-    throw new Error("Authorization 헤더가 응답에 존재하지 않음");
-  }
-%}
-
-### 허브 배송 담당자 생성 전 관리자 권한으로 허브가 만들어져야 합니다.
-POST {{baseUrl}}/api/v1/hubs
-Content-Type: application/json
-Authorization: {{access_token}}
-#X-User-Id: 123
-#X-User-Role: MASTER_ADMIN
-
-{
-  "hubName": "테스트 데이터",
-  "locationApi": {
-    "address": "테스트 주소",
-    "latitude": 37.514219,
-    "longitude": 127.112628
-  }
-}
-> {%
-  client.global.set("hubId", response.body.hubId)
-%}
 
 
-
-### 생성된 허브 아이디를 identifier에 하드 코딩 해야할 것 같습니다.....a1b2c3d4로 둘테니 replaceAll로 바꾸세요!
+### 생성된 허브 아이디를 identifier에 하드 코딩 해야할 것 같습니다.....0ade4814-ac61-400e-bd33-ef6ccae82928로 둘테니 replaceAll로 바꾸세요!
 ### 허브 배송 담당자 생성(회원가입X) 배송 담당자는 master권한으로 요청해야 함.
 POST {{baseUrl}}/api/v1/users/delivery-managers/create
 Content-Type: application/json
@@ -49,7 +49,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 1
 }
 
@@ -65,7 +65,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 2
 }
 
@@ -81,7 +81,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 3
 }
 
@@ -97,7 +97,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 4
 }
 
@@ -113,7 +113,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 5
 }
 
@@ -129,7 +129,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 6
 }
 
@@ -145,7 +145,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 7
 }
 
@@ -161,7 +161,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 8
 }
 
@@ -177,7 +177,7 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 9
 }
 
@@ -193,6 +193,6 @@ Authorization: {{access_token}}
   "password": "Password1!",
   "role": "COMPANY_DELIVERY_MANAGER",
   "deliveryManagerType": "COMPANY_DELIVERY_MANAGER",
-  "identifier": "a1b2c3d4",
+  "identifier": "0ade4814-ac61-400e-bd33-ef6ccae82928",
   "deliverySequence": 10
 }

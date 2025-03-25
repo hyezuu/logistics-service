@@ -10,10 +10,10 @@ public record PostDeliveryRoutesRequest(
 ) {
 
   public PostDeliveryRoutesRequestDto toApplicationDto() {
-    return new PostDeliveryRoutesRequestDto(
-        deliveryId,
-        departureHubId,
-        destinationHubId
-    );
+    return PostDeliveryRoutesRequestDto.builder()
+        .deliveryId(deliveryId)
+        .departureHubId(departureHubId)
+        .destinationHubId(destinationHubId)
+        .build();
   }
 }

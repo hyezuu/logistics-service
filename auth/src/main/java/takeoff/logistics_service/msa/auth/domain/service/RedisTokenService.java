@@ -1,11 +1,10 @@
 package takeoff.logistics_service.msa.auth.domain.service;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.auth.domain.repository.RedisTokenRepository;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

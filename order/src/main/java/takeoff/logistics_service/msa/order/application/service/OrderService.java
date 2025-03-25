@@ -6,6 +6,7 @@ import static takeoff.logistics_service.msa.common.domain.UserRole.HUB_MANAGER;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserRole;
@@ -37,6 +38,7 @@ import takeoff.logistics_service.msa.order.presentation.dto.response.PatchOrderR
 import takeoff.logistics_service.msa.order.presentation.dto.response.PostOrderResponse;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -69,6 +71,8 @@ public class OrderService {
         fromHubId,
         toHubId
     ));
+    log.info(String.valueOf(fromHubId));
+    log.info(String.valueOf(toHubId));
 
     order.modifyDeliveryId(deliveryId);
     // TODO : 비동기로직으로 수정
@@ -84,6 +88,7 @@ public class OrderService {
 
     PrePareStockRequestDto prePareStockRequestDto = new PrePareStockRequestDto(stocks);
     stockClient.prepareStock(prePareStockRequestDto);
+
     orderRepository.save(order);
     return PostOrderResponse.from(order);
 

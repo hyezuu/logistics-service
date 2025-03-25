@@ -1,7 +1,7 @@
 package takeoff.logistics_service.msa.user.presentation.dto.response;
 
-import lombok.Builder;
 import java.util.List;
+import lombok.Builder;
 
 @Builder
 public record GetDeliveryManagerListInternalResponseDto(

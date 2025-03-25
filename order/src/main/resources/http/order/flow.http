@@ -10,7 +10,7 @@ POST {{host}}/api/v1/users/signup
 Content-Type: {{contentType}}
 
 {
-  "username": "masteradmin",
+  "username": "mast",
   "slackEmail": "admin@example.com",
   "password": "Password1!",
   "role": "MASTER_ADMIN"
@@ -22,7 +22,7 @@ POST {{host}}/api/v1/auth/login
 Content-Type: {{contentType}}
 
 {
-  "username": "masteradmin",
+  "username": "mast",
   "password": "Password1!"
 }
 
@@ -70,7 +70,7 @@ Authorization: {{access_token}}
 }
 
 > {%
-  client.global.set("destinationHubId", response.body.hubId);
+  client.global.set("toHubId", response.body.hubId);
 %}
 
 ### 5. 공급업체 생성
@@ -98,7 +98,7 @@ Authorization: {{access_token}}
 
 {
   "companyName": "푸드마켓",
-  "companyType": "CLIENT",
+  "companyType": "CUSTOMER",
   "hubId": "{{destinationHubId}}",
   "address": "경기도 성남시 분당구 판교로 123"
 }
@@ -113,7 +113,7 @@ POST {{host}}/api/v1/users/signup
 Content-Type: {{contentType}}
 
 {
-  "username": "hubmanager",
+  "username": "hubmana",
   "slackEmail": "hub@example.com",
   "password": "Password1!",
   "role": "HUB_MANAGER",
@@ -136,7 +136,7 @@ POST {{host}}/api/v1/auth/login
 Content-Type: {{contentType}}
 
 {
-  "username": "hubmanager",
+  "username": "hubmana",
   "password": "Password1!"
 }
 
