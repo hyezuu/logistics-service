@@ -159,7 +159,10 @@ services:
       dockerfile: auth/Dockerfile
     container_name: auth
     depends_on:
-      - user
+      user:
+        condition: service_started
+      redis:
+        condition: service_healthy
     ports:
       - "19022:19022"
     networks:

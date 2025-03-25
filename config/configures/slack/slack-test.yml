@@ -15,7 +15,7 @@ spring:
         default_batch_fetch_size: 30
   data:
     redis:
-      host: {REDIS_HOST}
+      host: ${REDIS_HOST}
       port: 6379
       username: ${REDIS_USERNAME}
       password: ${REDIS_PASSWORD}
