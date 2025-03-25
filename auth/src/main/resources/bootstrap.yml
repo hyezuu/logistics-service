@@ -10,7 +10,7 @@ spring:
       uri: http://config:8888
 eureka:
   instance:
-    hostname: localhost
+    prefer-ip-address: true
   client:
     service-url:
       defaultZone: http://server:18999/eureka/
