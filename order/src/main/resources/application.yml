@@ -1,32 +1,32 @@
-spring:
-  profiles:
-    active: order
-  application:
-    name: order
-  datasource:
-    url: jdbc:postgresql://localhost:5432/orders
-    username: sa
-    password: sa
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-  sql:
-    init:
-      mode: always
-
-server:
-  port: 19011
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:18999/eureka/
-  instance:
-    hostname: localhost
-    prefer-ip-address: true
+#spring:
+#  profiles:
+#    active: order
+#  application:
+#    name: order
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/orders
+#    username: sa
+#    password: sa
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    defer-datasource-initialization: true
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+#  sql:
+#    init:
+#      mode: always
+#
+#server:
+#  port: 19011
+#
+##eureka:
+##  client:
+##    service-url:
+##      defaultZone: http://localhost:18999/eureka/
+##  instance:
+##    hostname: localhost
+##    prefer-ip-address: true
