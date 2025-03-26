@@ -1,16 +1,17 @@
 # take_off
 
-[![프로젝트 소개](https://img.shields.io/badge/📌-프로젝트_소개-1F3A53?style=flat-square&logoColor=white)](#-프로젝트-소개) 
-[![기술 스택](https://img.shields.io/badge/🛠️-기술_스택-24435C?style=flat-square&logoColor=white)](#-기술-스택) 
-[![실행 방법](https://img.shields.io/badge/💻-실행_방법-294C65?style=flat-square&logoColor=white)](#-실행-방법) 
-[![설계 산출물](https://img.shields.io/badge/📐-설계_산출물-2E556E?style=flat-square&logoColor=white)](#-설계-산출물) 
-[![컨벤션](https://img.shields.io/badge/📋-컨벤션-335E77?style=flat-square&logoColor=white)](#-컨벤션) 
-[![공통 관심사](https://img.shields.io/badge/🌐-공통_관심사-335E77?style=flat-square&logoColor=white)](#-공통-관심사) 
-[![트러블슈팅](https://img.shields.io/badge/🔍-트러블슈팅-2E556E?style=flat-square&logoColor=white)](#-트러블슈팅) 
-[![리팩토링](https://img.shields.io/badge/♻️-리팩토링-294C65?style=flat-square&logoColor=white)](#-리팩토링) 
-[![API 산출](https://img.shields.io/badge/📜-API_산출-24435C?style=flat-square&logoColor=white)](#-api-산출) 
-[![요구사항](https://img.shields.io/badge/📝-요구사항-1F3A53?style=flat-square&logoColor=white)](#-요구사항) 
-[![팀원 소개](https://img.shields.io/badge/👥-팀원_소개-1A314A?style=flat-square&logoColor=white)](#-팀원-소개회고)
+[![프로젝트 소개](https://img.shields.io/badge/📌-프로젝트_소개-1F3A53?style=flat-square&logoColor=white)](#프로젝트-개요)
+[![기술 스택](https://img.shields.io/badge/🛠️-기술_스택-24435C?style=flat-square&logoColor=white)](#기술)
+[![실행 방법](https://img.shields.io/badge/💻-실행_방법-294C65?style=flat-square&logoColor=white)](#실행-방법) 
+[![설계 산출물](https://img.shields.io/badge/📐-설계_산출물-2E556E?style=flat-square&logoColor=white)](#설계산출물) 
+[![컨벤션](https://img.shields.io/badge/📋-컨벤션-335E77?style=flat-square&logoColor=white)](#컨벤션)
+[![공통 관심사](https://img.shields.io/badge/🌐-공통_관심사-335E77?style=flat-square&logoColor=white)](#공통-관심사)
+[![트러블슈팅](https://img.shields.io/badge/🔍-트러블슈팅-2E556E?style=flat-square&logoColor=white)](#트러블슈팅)
+[![리팩토링](https://img.shields.io/badge/♻️-리팩토링-294C65?style=flat-square&logoColor=white)](#리팩토링)
+[![API 산출](https://img.shields.io/badge/📜-API_산출-24435C?style=flat-square&logoColor=white)](#api-산출)
+[![요구사항](https://img.shields.io/badge/📝-요구사항-1F3A53?style=flat-square&logoColor=white)](#요구사항)
+[![팀원 소개](https://img.shields.io/badge/👥-팀원_소개-1A314A?style=flat-square&logoColor=white)](#팀원-소개)
+
 > MSA로 설계된 B2B로 각 업체간 상품을 제공하고 허브를 관리하는 프로젝트 입니다.
 > ### 👩🏻‍💻 How to Execute the Project:실행 방법
 > 1️⃣ **git clone https://github.com/takeoff-26/logistics-service.git**
