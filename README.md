@@ -11,7 +11,7 @@
 [![트러블슈팅](https://img.shields.io/badge/🔍-트러블슈팅-2E556E?style=flat-square&logoColor=white)](#-트러블슈팅)
 [![리팩토링](https://img.shields.io/badge/♻️-리팩토링-294C65?style=flat-square&logoColor=white)](#️-리팩토링)
 [![요구사항](https://img.shields.io/badge/📝-요구사항-1F3A53?style=flat-square&logoColor=white)](#-요구사항)
-[![팀원 소개](https://img.shields.io/badge/👥-팀원_소개-1A314A?style=flat-square&logoColor=white)](#️-팀원-소개)
+[![팀원 소개](https://img.shields.io/badge/👥-팀원_소개-1A314A?style=flat-square&logoColor=white)](#️-팀원소개)
 
 ---
 
