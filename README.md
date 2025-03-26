@@ -49,7 +49,7 @@
 - [package structure](https://github.com/takeoff-26/logistics-service/wiki/package-structure)
 ### global concerns
 - [common: MSA 서비스 권한 체크](https://github.com/takeoff-26/logistics-service/wiki/common:-Auditing)
-- [common: Auditing](https://github.com/toyland/toyland-project/wiki/%EA%B3%B5%ED%86%B5-%EA%B4%80%EC%8B%AC%EC%82%AC#test-code%EC%84%9C%EB%B9%84%EC%8A%A4-%ED%86%B5%ED%95%A9-%ED%85%8C%EC%8A%A4%ED%8A%B8)
+- [common: Auditing](https://github.com/takeoff-26/logistics-service/wiki/common:-Auditing)
 - [common: exception handling policy](https://github.com/takeoff-26/logistics-service/wiki/common:-exception-handling-policy)
 
 ## 🐥 Troubleshooting:트러블슈팅
