@@ -57,7 +57,9 @@ git clone https://github.com/takeoff-26/logistics-service.git
 | **Containerization**| Docker, Docker Compose                                        |
 | **Service Discovery** | Spring Cloud Eureka                                         |
 | **Circuit Breaker** | Resilience4j                                                  |
-| **Spring Cloud**    | Spring Cloud                                                  |
+| **Config Server**    | Spring Cloud Config                                                 |
+| **API Gateway**    | Spring Cloud Gateway                                                 |
+| **HTTP Client**    | OpenFeign, WebClient                                                |
 | **Metric**         | Prometheus                                                     |
 | **Monitoring**     | Grafana                                                        |
 
