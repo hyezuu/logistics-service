@@ -1,7 +1,10 @@
 package takeoff.logistics_service.msa.company.application.service;
 
+import static takeoff.logistics_service.msa.company.application.exception.CompanyErrorCode.*;
+
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
@@ -18,6 +21,7 @@ import takeoff.logistics_service.msa.company.application.exception.CompanyErrorC
 import takeoff.logistics_service.msa.company.domain.entity.Company;
 import takeoff.logistics_service.msa.company.domain.repository.CompanyRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
@@ -36,16 +40,16 @@ public class CompanyServiceImpl implements CompanyService {
 
 	private void validateCompanyName(String companyName) {
 		if(companyRepository.existsByCompanyName(companyName)){
-			throw CompanyBusinessException.from(CompanyErrorCode.COMPANY_NAME_CONFLICT);
+			throw CompanyBusinessException.from(COMPANY_NAME_CONFLICT);
 		}
 	}
 
 	private void validateHubExists(UUID hubId) {
 		try {
-			hubInternalClient.checkHubExists(hubId); // 호출 시 404면 예외 발생
+			hubInternalClient.checkHubExists(hubId);
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw CompanyBusinessException.from(CompanyErrorCode.HUB_NOT_FOUND);
+			log.error(e.getMessage());
+			throw CompanyBusinessException.from(HUB_NOT_FOUND);
 		}
 	}
 
@@ -62,7 +66,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 	private Company getCompany(UUID companyId) {
 		return companyRepository.findByIdAndDeletedAtIsNull(companyId)
-			.orElseThrow(() -> CompanyBusinessException.from(CompanyErrorCode.COMPANY_NOT_FOUND));
+			.orElseThrow(() -> CompanyBusinessException.from(COMPANY_NOT_FOUND));
 	}
 
 	@Override
