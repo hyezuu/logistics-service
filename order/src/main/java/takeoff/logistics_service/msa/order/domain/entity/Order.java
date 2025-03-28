@@ -47,7 +47,7 @@ public class Order extends BaseEntity {
   private String requestNotes;
 
   @Builder
-  Order(UUID id, UUID supplierId, List<OrderItem> orderItems,
+  private Order(UUID id, UUID supplierId, List<OrderItem> orderItems,
       Long customerId,  String address, String requestNotes) {
     this.id = OrderId.from(id);
     this.supplierId = supplierId;
@@ -63,7 +63,6 @@ public class Order extends BaseEntity {
     this.managedHubId = managedHubId;
   }
 
-
   public void modifyDeliveryId(UUID deliveryId) {
     this.deliveryId = deliveryId;
   }
@@ -77,21 +76,5 @@ public class Order extends BaseEntity {
 
       orderItem.modifyQuantity(command.quantity());
     });
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof Order order)) {
-      return false;
-    }
-    return Objects.equals(id, order.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(id);
   }
 }

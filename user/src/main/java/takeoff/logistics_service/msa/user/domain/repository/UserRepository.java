@@ -17,9 +17,11 @@ import takeoff.logistics_service.msa.user.domain.vo.HubId;
 
 public interface UserRepository {
     User save(User user);
-    Optional<User> findById(Long id);
+    Optional<User> findByIdAndDeletedAtIsNull(Long id);
     Optional<User> findBySlackEmail(String slackEmail);
     Optional<User> findByUsername(String username);
+    boolean existsByUsername(String username);
+    boolean existsBySlackEmail(String slackEmail);
     Page<User> findAll(Specification<User> spec, Pageable pageable);
     Page<DeliveryManager> findAllDeliveryManagers(Specification<DeliveryManager> spec, Pageable pageable);
     Optional<DeliveryManager> findDeliveryManagerById(Long id);

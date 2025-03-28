@@ -3,7 +3,6 @@ package takeoff.logistics_service.msa.order.domain.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -29,19 +28,4 @@ public class OrderItemId implements Serializable {
     return new OrderItemId(orderItemId);
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof OrderItemId that)) {
-      return false;
-    }
-    return Objects.equals(orderItemId, that.orderItemId);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(orderItemId);
-  }
 }

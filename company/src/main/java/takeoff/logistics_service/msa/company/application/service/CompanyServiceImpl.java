@@ -51,11 +51,11 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	@Transactional
-	public PutCompanyResponseDto updateCompany(UUID companyId, PutCompanyRequestDto requestDto, UserInfoDto userInfoDto) {
+	public PutCompanyResponseDto updateCompany(
+		UUID companyId, PutCompanyRequestDto requestDto, UserInfoDto userInfoDto) {
 
 		validateCompanyName(requestDto.companyName());
 		validateHubExists(requestDto.hubId());
-
 		Company company = getCompany(companyId).modify(requestDto.toCommand());
 		return PutCompanyResponseDto.from(company);
 	}
@@ -79,7 +79,9 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public PaginatedResultDto<GetCompanyResponseDto> searchCompany(SearchCompanyRequestDto requestDto, UserInfoDto userInfoDto) {
+	public PaginatedResultDto<GetCompanyResponseDto> searchCompany(
+		SearchCompanyRequestDto requestDto, UserInfoDto userInfoDto) {
+
 		return PaginatedResultDto
 			.from(companyRepository.search(requestDto.toSearchCriteria()));
 	}

@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.gateway.security;
 
 import jakarta.annotation.PostConstruct;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -17,53 +18,89 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class GatewayJwtFilter implements GlobalFilter, Ordered {
 
-    private final JwtUtil jwtUtil;
+	private final JwtUtil jwtUtil;
+	private static final List<String> EXCLUDED_PATHS = List.of(
+		"/api/v1/users/signup",
+		"/api/v1/auth/login",
+		"/api/v1/auth/token/refresh",
+		"/api/v1/app/users/validate",
+		"/springdoc/"
+	);
 
-    @PostConstruct
-    public void init() {
-        log.info("bean 초기화");
-    }
+	@PostConstruct
+	public void init() {
+		log.info("JWT Filter 초기화 완료");
+	}
 
-    @Override
-    public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest();
-        String path = request.getURI().getPath();
-        log.debug("Request path: {}", path);
+	@Override
+	public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+		ServerHttpRequest request = exchange.getRequest();
+		String path = request.getURI().getPath();
+		log.debug("Request path: {}", path);
 
-        if (path.startsWith("/api/v1/users/signup") || path.startsWith("/api/v1/auth/login")
-            || path.startsWith("/api/v1/auth/token/refresh") || path.startsWith("/api/v1/app/users/validate") || path.startsWith("/springdoc/")) {
-            log.debug("인증 예외 경로 → 필터 통과");
-            return chain.filter(exchange);
-        }
-        String token = request.getHeaders().getFirst("Authorization");
+		if (isExcludedPath(path)) {
+			log.debug("인증 예외 경로 → 필터 통과: {}", path);
+			return chain.filter(exchange);
+		}
 
-        if (token == null || !token.startsWith("Bearer ")) {
-            log.warn("JWT 토큰 누락 또는 형식 오류 → 401 Unauthorized");
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();
-        }
+		TokenInfo tokenInfo = validateToken(request);
 
-        token = token.substring(7);
+		if (tokenInfo == null) {
+			return rejectRequest(exchange);
+		}
 
-        if (!jwtUtil.validateToken(token)) {
-            log.warn("유효하지 않은 JWT 토큰 → 요청 차단");
-            return exchange.getResponse().setComplete();
-        }
+		log.info("Id = {}, Role = {}", tokenInfo.userId, tokenInfo.role);
 
-        String userId = jwtUtil.getUserIdFromToken(token);
-        String role = jwtUtil.getUserRoleFromToken(token);
+		return chain.filter(exchange.mutate()
+				.request(addUserContext(request, tokenInfo))
+				.build());
+	}
 
-        log.info("인증 완료: userId={}, role={}", userId, role);
+	// 토큰 추출 및 검증 메서드 수정
+	private TokenInfo validateToken(ServerHttpRequest request) {
+		String authHeader = request.getHeaders().getFirst("Authorization");
 
-        // 요청에 헤더 추가
-        ServerHttpRequest modifiedRequest = request.mutate()
-                .header("X-User-Id", userId)
-                .header("X-User-Role", role)
-                .build();
-        return chain.filter(exchange.mutate().request(modifiedRequest).build());
-    }
-    @Override
-    public int getOrder() {
-        return Ordered.LOWEST_PRECEDENCE;
-    }
+		if (isNotBearer(authHeader) || isNotValid(authHeader)) {
+			log.warn("JWT 토큰 누락 또는 형식 오류");
+			return null;
+		}
+
+		return new TokenInfo(jwtUtil.getUserId(authHeader), jwtUtil.getUserRole(authHeader));
+	}
+
+	private boolean isNotValid(String authHeader) {
+		return !jwtUtil.isValid(authHeader);
+	}
+
+	private static boolean isNotBearer(String authHeader) {
+		return authHeader == null || !authHeader.startsWith("Bearer ");
+	}
+
+
+	// 인증 예외 경로 확인 메서드
+	private boolean isExcludedPath(String path) {
+		return EXCLUDED_PATHS.stream()
+			.anyMatch(path::startsWith);
+	}
+
+	// 요청 헤더 추가 메서드
+	private ServerHttpRequest addUserContext(ServerHttpRequest request, TokenInfo tokenInfo) {
+		return request.mutate()
+			.header("X-User-Id", tokenInfo.userId())
+			.header("X-User-Role", tokenInfo.role())
+			.build();
+	}
+
+	// 인증 실패 응답 생성 메서드
+	private Mono<Void> rejectRequest(ServerWebExchange exchange) {
+		exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+		return exchange.getResponse().setComplete();
+	}
+
+	private record TokenInfo(String userId, String role) {}
+
+	@Override
+	public int getOrder() {
+		return Ordered.LOWEST_PRECEDENCE;
+	}
 }

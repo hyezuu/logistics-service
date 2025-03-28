@@ -19,17 +19,9 @@ import takeoff.logistics_service.msa.user.domain.vo.HubId;
 import takeoff.logistics_service.msa.user.infrastructure.persistence.custom.CustomUserRepository;
 
 public interface JpaUserRepository extends JpaRepository<User, Long>, UserRepository, JpaSpecificationExecutor<User>, CustomUserRepository {
-    @Override
-    @Query("SELECT u FROM User u WHERE u.slackEmail = :slackEmail AND u.deletedAt IS NULL")
-    Optional<User> findBySlackEmail(String slackEmail);
 
     @Override
-    @Query("SELECT u FROM User u WHERE u.username = :username AND u.deletedAt IS NULL")
-    Optional<User> findByUsername(String username);
-
-    @Override
-    @Query("SELECT u FROM User u WHERE u.id = :id AND u.deletedAt IS NULL")
-    Optional<User> findById(Long id);
+    Optional<User> findByIdAndDeletedAtIsNull(Long id);
 
     @Override
     @Query("SELECT d FROM DeliveryManager d WHERE d.id = :id AND d.deletedAt IS NULL")
@@ -68,5 +60,10 @@ public interface JpaUserRepository extends JpaRepository<User, Long>, UserReposi
     @Query("SELECT COUNT(m) FROM HubDeliveryManager m WHERE m.hubId = :hubId AND m.deletedAt IS NULL")
     int countHubDeliveryManagersByHubId(HubId hubId);
 
+    @Override
+    boolean existsByUsername(String username);
+
+    @Override
+    boolean existsBySlackEmail(String slackEmail);
 
 }

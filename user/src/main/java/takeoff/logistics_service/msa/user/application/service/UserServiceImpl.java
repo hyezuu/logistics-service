@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public GetUserResponseDto getUserById(Long id, UserInfoDto userInfoDto) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> UserBusinessException.from(USER_NOT_FOUND));
         return GetUserResponseDto.from(user);
     }
@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public PatchUserResponseDto updateUser(Long id, PatchUserRequestDto requestDto, UserInfoDto userInfoDto) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> UserBusinessException.from(USER_NOT_FOUND));
         user.updateUserInfo(
                 requestDto.username() != null ? requestDto.username() : user.getUsername(),
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public DeleteUserResponseDto deleteUser(Long id, UserInfoDto deletedBy) {
-        User user = userRepository.findById(id)
+        User user = userRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> UserBusinessException.from(USER_NOT_FOUND));
         if (user.isDeleted()) {
             throw UserBusinessException.from(ALREADY_DELETED);
