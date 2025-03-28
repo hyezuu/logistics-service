@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.FindHubRoutesDto;
@@ -235,7 +236,11 @@ public class HubRouteServiceImpl implements HubRouteService {
     }
 
     @Override
-    @CacheEvict(value = "hubRoutes", allEntries = true)
+    @Caching(evict = {
+        @CacheEvict(value = "hubRoutes", allEntries = true),
+        @CacheEvict(value = "hubRouteSearch", allEntries = true),
+        @CacheEvict(value = "CreateHubRouteSearch", allEntries = true)
+    })
     public PutHubRouteResponseDto updateHubRoute(UUID hubRouteId,
         PutHubRouteRequestDto requestDto) {
         HubRoute hubRoute = getHubRoute(
@@ -250,7 +255,11 @@ public class HubRouteServiceImpl implements HubRouteService {
 
 
     @Override
-    @CacheEvict(value = "hubRoutes", allEntries = true)
+    @Caching(evict = {
+        @CacheEvict(value = "hubRoutes", allEntries = true),
+        @CacheEvict(value = "hubRouteSearch", allEntries = true),
+        @CacheEvict(value = "CreateHubRouteSearch", allEntries = true)
+    })
     public void deleteHubRoute(UUID hubRouteId, Long userId) {
         HubRoute hubRoute = getHubRoute(hubRouteId);
         hubRoute.delete(userId);
