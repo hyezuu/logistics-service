@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.hub.hub.application.dto.HubIdsDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.feign.GetAllHubsDto;
+import takeoff.logistics_service.msa.hub.hub.application.dto.kafka.KafkaFromToHubDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PatchHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.PostHubRequestDto;
 import takeoff.logistics_service.msa.hub.hub.application.dto.request.SearchHubRequestDto;
@@ -21,6 +22,7 @@ import takeoff.logistics_service.msa.hub.hub.application.dto.response.PatchHubRe
 import takeoff.logistics_service.msa.hub.hub.application.dto.response.PostHubResponseDto;
 import takeoff.logistics_service.msa.hub.hub.application.exception.HubBusinessException;
 import takeoff.logistics_service.msa.hub.hub.application.exception.HubErrorCode;
+import takeoff.logistics_service.msa.hub.hub.application.service.kafka.HubEventProducer;
 import takeoff.logistics_service.msa.hub.hub.domain.entity.Hub;
 import takeoff.logistics_service.msa.hub.hub.domain.repository.HubRepository;
 
@@ -34,6 +36,7 @@ import takeoff.logistics_service.msa.hub.hub.domain.repository.HubRepository;
 public class HubServiceImpl implements HubService {
 
     private final HubRepository hubRepository;
+    private final HubEventProducer hubEventProducer;
 
     @Override
     public PostHubResponseDto saveHub(PostHubRequestDto requestDto) {
@@ -89,6 +92,17 @@ public class HubServiceImpl implements HubService {
             .stream()
             .map(GetAllHubsDto::from)
             .toList();
+    }
+
+    @Override
+    public void findByToHubIdAndFromHubIdToKafka(HubIdsDto hubIdsDto) {
+        List<GetRouteResponseDto> resultList = hubRepository.findByIdInAndDeletedAtIsNull(
+                List.of(hubIdsDto.toHubId(), hubIdsDto.fromHubId()))
+            .stream()
+            .map(GetRouteResponseDto::from)
+            .toList();
+
+        hubEventProducer.sendToHubRoute(KafkaFromToHubDto.toKafka(resultList));
     }
 
     @Override
