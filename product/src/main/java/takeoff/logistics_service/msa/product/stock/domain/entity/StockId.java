@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import takeoff.logistics_service.msa.product.stock.domain.command.CreateStockId;
 
 @Getter
 @Embeddable

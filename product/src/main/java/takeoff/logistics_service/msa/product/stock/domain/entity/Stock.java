@@ -7,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import takeoff.logistics_service.msa.common.domain.BaseEntity;
-import takeoff.logistics_service.msa.product.stock.domain.command.CreateStock;
 
 @Getter
 @Entity
