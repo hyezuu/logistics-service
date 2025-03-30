@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import takeoff.logistics_service.msa.hub.hub.infrastructure.kafka.serializer.DtoSerializer;
 
 /**
  * @author : hanjihoon
@@ -21,16 +21,16 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 public class KafkaHubProducerConfig {
 
     @Bean
-    public ProducerFactory<String, Object> producerFactory() {
+    public <T> ProducerFactory<String, T> producerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, DtoSerializer.class);
         return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
-    public KafkaTemplate<String, Object> kafkaTemplate() {
+    public <T> KafkaTemplate<String, T> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }

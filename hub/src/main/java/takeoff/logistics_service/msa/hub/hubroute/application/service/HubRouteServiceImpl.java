@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.FindHubRoutesDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubAllListResponseDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.HubRoutesDto;
+import takeoff.logistics_service.msa.hub.hubroute.application.dto.kafka.KafkaFromToHubListDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.HubIdsDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.PostDeliveryHubRouteRequestDto;
 import takeoff.logistics_service.msa.hub.hubroute.application.dto.request.PostHubRouteRequestDto;
@@ -181,14 +182,39 @@ public class HubRouteServiceImpl implements HubRouteService {
         return new HubRoutesDto(hubRoutesList);
     }
 
+    //kafka 실행 허브 라우트 -> 허브 -> 허브 라우트
     @Override
-    public String CreateHubRouteKafka(PostHubRouteRequestDto application) {
+    public String CreateHubRouteKafkaRequest(PostHubRouteRequestDto application) {
         try {
             hubRouteEventKafkaProducer.sendToHub(application);
         } catch (Exception e) {
             return KAFKA_FAIL_MESSAGE;
         }
         return KAFKA_SUCCESS_MESSAGE;
+    }
+
+    //kafka 허브 경로 생성 실행 메서드
+    @Override
+    public PostHubRouteResponseDto createHubRouteExecute(KafkaFromToHubListDto event) {
+
+        GetHubRouteNaverResponseDto result = naverRequestClient.sendRequestToNaver(event.fromToHubList())
+            .onErrorMap(error -> {
+                log.error("NaverAPI 응답을 받을 수 없습니다.", error);
+                return HubRouteBusinessException.from(HubRouteErrorCode.NAVER_ERROR);
+            })
+            .block();
+
+        HubRoute hubRoute = result.toEntity(
+            result,
+            PostHubRouteRequestDto.createDto(
+            event.fromToHubList().get(0).hubId(),
+            event.fromToHubList().get(1).hubId()
+            )
+        );
+        HubRoute savedHubRoute = hubRouteRepository.save(hubRoute);
+
+        return PostHubRouteResponseDto.from(savedHubRoute);
+
     }
 
 

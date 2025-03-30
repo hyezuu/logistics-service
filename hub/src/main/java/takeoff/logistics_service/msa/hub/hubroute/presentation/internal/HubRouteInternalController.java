@@ -1,6 +1,5 @@
 package takeoff.logistics_service.msa.hub.hubroute.presentation.internal;
 
-import brave.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +39,7 @@ public class HubRouteInternalController {
     @PostMapping("/kafka")
     @RoleCheck(roles = {UserRole.MASTER_ADMIN,UserRole.HUB_DELIVERY_MANAGER})
     public ResponseEntity<String> CreateHubRouteKafka(@RequestBody PostHubRouteRequest request) {
-        return ResponseEntity.ok(hubRouteService.CreateHubRouteKafka(request.toApplication()));
+        return ResponseEntity.ok(hubRouteService.CreateHubRouteKafkaRequest(request.toApplication()));
     }
 
 

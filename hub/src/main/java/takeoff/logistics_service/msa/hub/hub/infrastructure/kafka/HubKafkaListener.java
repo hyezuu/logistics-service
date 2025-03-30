@@ -18,10 +18,13 @@ public class HubKafkaListener {
 
     private final HubService hubService;
 
-    @KafkaListener(topics = "hubRoute-events", groupId = "saga-takeoff-group")
-    public void handleHubListResponse(Object event) {
+    @KafkaListener(
+        topics = "hubRoute-events",
+        containerFactory = "hubIdsDtoKafkaListenerContainerFactory"
+    )
+    public void handleHubListResponse(HubIdsDto event) {
         log.info("허브 리스트 응답 수신: {}", event);
-        hubService.findByToHubIdAndFromHubIdToKafka((HubIdsDto) event);
+        hubService.findByToHubIdAndFromHubIdToKafka(event);
     }
 
 

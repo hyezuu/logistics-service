@@ -11,7 +11,8 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import takeoff.logistics_service.msa.hub.hub.application.dto.HubIdsDto;
+import takeoff.logistics_service.msa.hub.hub.infrastructure.kafka.serializer.DtoDeserializer;
 
 /**
  * @author : hanjihoon
@@ -23,27 +24,30 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 public class KafkaHubConsumerConfig {
 
     @Bean
-    public ConsumerFactory<String, Object> consumerFactory() {
+    public <T> ConsumerFactory<String, T> consumerFactory(Class<T> targetType) {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "my-group");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*"); // 패키지 신뢰 설정 추가
-
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, DtoDeserializer.class);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "saga-takeoff-group");
         return new DefaultKafkaConsumerFactory<>(
             props,
             new StringDeserializer(),
-            new JsonDeserializer<>(Object.class, false) // 기본 Object 클래스로 역직렬화
+            new DtoDeserializer<>(targetType)
         );
     }
 
+    // HubIdsDto를 위한 타입 안전한 컨슈머 팩토리
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Object> factory =
-            new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
+    public ConsumerFactory<String, HubIdsDto> hubIdsDtoConsumerFactory() {
+        return consumerFactory(HubIdsDto.class);
+    }
+
+    // HubIdsDto 전용 리스너 컨테이너 팩토리
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, HubIdsDto> hubIdsDtoKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, HubIdsDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(hubIdsDtoConsumerFactory());
         return factory;
     }
 }
