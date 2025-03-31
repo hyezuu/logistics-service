@@ -15,9 +15,11 @@ import takeoff.logistics_service.msa.hub.hub.application.service.kafka.HubEventP
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class HubRouteEventKafkaProducer implements HubEventProducer {
+public class HubEventKafkaProducer implements HubEventProducer {
 
     private final KafkaTemplate<String, KafkaFromToHubDto> kafkaTemplate;
+
+
     private final String hubTopicName;
 
     @Override

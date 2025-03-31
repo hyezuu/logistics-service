@@ -10,11 +10,10 @@ import org.springframework.context.annotation.Configuration;
  * @Date : 2025. 03. 30.
  */
 @Configuration
-@ComponentScan("takeoff.logistics_service.msa.hub.hubroute")
 public class KafkaHubRouteTopicConfig {
 
     private static final String HUB_ROUTE_TOPIC_NAME = "hubRoute-events";
-    private static final String HUB_TOPIC_NAME = "hubRoute-events";
+    private static final String HUB_TOPIC_NAME = "hub-events";
     @Bean
     public NewTopic hubTopic() {
         return new NewTopic("hub-events", 3, (short) 1);
