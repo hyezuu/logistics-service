@@ -24,7 +24,7 @@ import takeoff.logistics_service.msa.hub.hubroute.infrastructure.kafka.serialize
 public class KafkaHubRouteConsumerConfig {
 
     @Bean
-    public <T> ConsumerFactory<String, T> consumerFactory(Class<T> targetType) {
+    public <T> ConsumerFactory<String, T> consumerHubRouteFactory(Class<T> targetType) {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -36,14 +36,11 @@ public class KafkaHubRouteConsumerConfig {
             new DtoDeserializer<>(targetType)
         );
     }
-
-    // HubIdsDto를 위한 타입 안전한 컨슈머 팩토리
     @Bean
     public ConsumerFactory<String, KafkaFromToHubListDto> kafkaFromToHubListDtoConsumerFactory() {
-        return consumerFactory(KafkaFromToHubListDto.class);
+        return consumerHubRouteFactory(KafkaFromToHubListDto.class);
     }
 
-    // HubIdsDto 전용 리스너 컨테이너 팩토리
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, KafkaFromToHubListDto> kafkaFromToHubListDtoContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, KafkaFromToHubListDto> factory = new ConcurrentKafkaListenerContainerFactory<>();

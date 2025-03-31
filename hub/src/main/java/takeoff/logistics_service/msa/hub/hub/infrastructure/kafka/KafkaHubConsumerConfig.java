@@ -1,4 +1,4 @@
-package takeoff.logistics_service.msa.hub.hub.infrastructure.persistence.config;
+package takeoff.logistics_service.msa.hub.hub.infrastructure.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +24,7 @@ import takeoff.logistics_service.msa.hub.hub.infrastructure.kafka.serializer.Dto
 public class KafkaHubConsumerConfig {
 
     @Bean
-    public <T> ConsumerFactory<String, T> consumerFactory(Class<T> targetType) {
+    public <T> ConsumerFactory<String, T> consumerHubFactory(Class<T> targetType) {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -40,7 +40,7 @@ public class KafkaHubConsumerConfig {
     // HubIdsDto를 위한 타입 안전한 컨슈머 팩토리
     @Bean
     public ConsumerFactory<String, HubIdsDto> hubIdsDtoConsumerFactory() {
-        return consumerFactory(HubIdsDto.class);
+        return consumerHubFactory(HubIdsDto.class);
     }
 
     // HubIdsDto 전용 리스너 컨테이너 팩토리

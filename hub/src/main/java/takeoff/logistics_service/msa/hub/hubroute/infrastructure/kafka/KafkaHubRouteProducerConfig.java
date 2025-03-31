@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -17,11 +16,10 @@ import takeoff.logistics_service.msa.hub.hub.infrastructure.kafka.serializer.Dto
  * @Date : 2025. 03. 30.
  */
 @Configuration
-@ComponentScan("takeoff.logistics_service.msa.hub.hubroute")
 public class KafkaHubRouteProducerConfig {
 
     @Bean
-    public <T> ProducerFactory<String, T> producerFactory() {
+    public <T> ProducerFactory<String, T> producerHubRouteFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -30,7 +28,7 @@ public class KafkaHubRouteProducerConfig {
     }
 
     @Bean
-    public <T> KafkaTemplate<String, T> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public <T> KafkaTemplate<String, T> KafkaTemplate() {
+        return new KafkaTemplate<>(producerHubRouteFactory());
     }
 }

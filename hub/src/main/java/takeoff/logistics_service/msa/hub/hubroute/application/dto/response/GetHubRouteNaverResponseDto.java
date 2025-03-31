@@ -14,7 +14,7 @@ import takeoff.logistics_service.msa.hub.hubroute.domain.entity.HubRoute;
 public record GetHubRouteNaverResponseDto(Integer distance,
                                           Integer duration) {
 
-    public static HubRoute toEntity(GetHubRouteNaverResponseDto getHubRouteNaverResponseDto,
+    public HubRoute toEntity(GetHubRouteNaverResponseDto getHubRouteNaverResponseDto,
         PostHubRouteRequestDto postHubRouteRequestDto) {
         return HubRoute.builder()
             .toHubId(postHubRouteRequestDto.toHubId())
