@@ -71,6 +71,6 @@ Content-Type: application/json
 Authorization: {{access_token}}
 
 {
-  "fromHubId": "61d7810d-38da-4d62-aa9c-85c06efee6ff",
-  "toHubId": "be1f170b-90c3-4d22-99d8-e9ea69ef45af"
+  "fromHubId": "036a77a2-6708-41fe-a54b-34024daf9bc6",
+  "toHubId": "50e9c670-5195-4972-8a95-64d6bc33bbc4"
 }

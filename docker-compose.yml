@@ -55,7 +55,7 @@ services:
       - grafana-storage:/var/lib/grafana  # Grafana 데이터 저장소
 
   zookeeper:
-    image: bitnami/zookeeper:latest
+    image: bitnami/zookeeper:3.9.3
     platform: linux/amd64
     ports:
       - "2181:2181"
@@ -66,7 +66,7 @@ services:
 
 
   kafka:
-    image: bitnami/kafka:latest
+    image: bitnami/kafka:3.8.1
     platform: linux/amd64
     ports:
       - "9092:9092"
