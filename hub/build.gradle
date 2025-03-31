@@ -47,6 +47,10 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'com.h2database:h2'
 
+	//kafka
+	implementation 'org.springframework.kafka:spring-kafka'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
+
 	//wireMock 의존성
 	testImplementation 'org.springframework.cloud:spring-cloud-contract-wiremock'
 

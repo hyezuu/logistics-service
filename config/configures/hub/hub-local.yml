@@ -19,3 +19,11 @@ spring:
       port: 6379
       username: ${REDIS_USERNAME}
       password: ${REDIS_PASSWORD}
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: saga-takeoff-group
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: "*"

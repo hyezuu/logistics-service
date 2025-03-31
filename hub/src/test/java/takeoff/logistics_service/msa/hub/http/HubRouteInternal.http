@@ -64,3 +64,13 @@ Content-Type: application/json
   "fromHubId": "8eb343e4-ddd8-478a-8dae-c561a4d72062",
   "toHubId": "bd022638-f752-4bde-abd6-096441f68907"
 }
+
+###kafka
+POST http://localhost:19000/api/v1/app/hubRoutes/kafka
+Content-Type: application/json
+Authorization: {{access_token}}
+
+{
+  "fromHubId": "61d7810d-38da-4d62-aa9c-85c06efee6ff",
+  "toHubId": "be1f170b-90c3-4d22-99d8-e9ea69ef45af"
+}

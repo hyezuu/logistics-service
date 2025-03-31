@@ -32,4 +32,6 @@ public interface HubService {
     List<GetRouteResponseDto> findByToHubIdAndFromHubId(HubIdsDto applicationDto);
 
     List<GetAllHubsDto> findAllHub();
+
+    void findByToHubIdAndFromHubIdToKafka(HubIdsDto applicationDto);
 }

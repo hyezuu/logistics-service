@@ -1,6 +1,7 @@
 package takeoff.logistics_service.msa.hub.hubroute.presentation.internal;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,12 @@ public class HubRouteInternalController {
     @PostMapping("/delivery")
     public HubRoutes getDeliveryHubRouteList(@RequestBody PostDeliveryHubRouteRequest request) {
         return HubRoutes.from(hubRouteService.getDeliveryHubRouteList(request.toApplication()));
+    }
+
+    @PostMapping("/kafka")
+    @RoleCheck(roles = {UserRole.MASTER_ADMIN,UserRole.HUB_DELIVERY_MANAGER})
+    public ResponseEntity<String> CreateHubRouteKafka(@RequestBody PostHubRouteRequest request) {
+        return ResponseEntity.ok(hubRouteService.CreateHubRouteKafkaRequest(request.toApplication()));
     }
 
 
