@@ -9,16 +9,20 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.PaginatedResult;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockIdSearchCriteriaResponse;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteria;
 import takeoff.logistics_service.msa.product.stock.domain.repository.search.StockSearchCriteriaResponse;
 import takeoff.logistics_service.msa.product.stock.infrastructure.persistence.JpaStockRepositoryCustom;
 
-@RequiredArgsConstructor
 public class JpaStockRepositoryCustomImpl implements JpaStockRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
+
+	public JpaStockRepositoryCustomImpl(@Qualifier("stockJpaQueryFactory") JPAQueryFactory queryFactory) {
+		this.queryFactory = queryFactory;
+	}
 
 	@Override
 	public PaginatedResult<StockSearchCriteriaResponse> search(StockSearchCriteria criteria) {
