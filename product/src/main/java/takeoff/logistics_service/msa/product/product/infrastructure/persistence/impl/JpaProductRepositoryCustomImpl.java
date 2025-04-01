@@ -9,15 +9,19 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import takeoff.logistics_service.msa.product.product.domain.repository.search.PaginatedResult;
 import takeoff.logistics_service.msa.product.product.domain.repository.search.ProductSearchCriteria;
 import takeoff.logistics_service.msa.product.product.domain.repository.search.ProductSearchCriteriaResponse;
 import takeoff.logistics_service.msa.product.product.infrastructure.persistence.JpaProductRepositoryCustom;
 
-@RequiredArgsConstructor
 public class JpaProductRepositoryCustomImpl implements JpaProductRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
+
+	public JpaProductRepositoryCustomImpl(@Qualifier("productJpaQueryFactory") JPAQueryFactory queryFactory) {
+		this.queryFactory = queryFactory;
+	}
 
 	public PaginatedResult<ProductSearchCriteriaResponse> search(ProductSearchCriteria criteria) {
 		List<ProductSearchCriteriaResponse> content = queryFactory

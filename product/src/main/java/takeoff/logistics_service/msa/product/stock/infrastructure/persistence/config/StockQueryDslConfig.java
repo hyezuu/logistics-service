@@ -1,0 +1,22 @@
+package takeoff.logistics_service.msa.product.stock.infrastructure.persistence.config;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@RequiredArgsConstructor
+@ComponentScan("takeoff.logistics_service.msa.product.stock")
+public class StockQueryDslConfig {
+
+    private final EntityManager em;
+
+    @Bean(name = "stockJpaQueryFactory")
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(em);
+    }
+
+}
