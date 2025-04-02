@@ -44,6 +44,15 @@ public class ProductExternalController {
 				productService.saveProduct(requestDto.toApplicationDto(), userInfo)));
 	}
 
+	//카프카 상품 생성 event
+	@PostMapping("/publish")
+	public ResponseEntity<Void> createProduct(
+		@Valid @RequestBody PostProductRequest requestDto, @UserInfo UserInfoDto userInfo) {
+
+		productService.create(requestDto.toApplicationDto(), userInfo);
+		return ResponseEntity.accepted().build();
+	}
+
 	@PatchMapping("/{productId}")
 	@RoleCheck(roles = {UserRole.MASTER_ADMIN, UserRole.HUB_MANAGER, UserRole.COMPANY_MANAGER})
 	public ResponseEntity<PatchProductResponse> updateProductName(

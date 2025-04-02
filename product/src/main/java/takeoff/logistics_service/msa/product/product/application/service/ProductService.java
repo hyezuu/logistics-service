@@ -12,6 +12,8 @@ import takeoff.logistics_service.msa.product.product.application.dto.response.Po
 
 public interface ProductService {
 
+	void create(PostProductRequestDto requestDto, UserInfoDto userInfo);
+
 	PostProductResponseDto saveProduct(PostProductRequestDto requestDto, UserInfoDto userInfo);
 
 	PatchProductResponseDto updateProductName(

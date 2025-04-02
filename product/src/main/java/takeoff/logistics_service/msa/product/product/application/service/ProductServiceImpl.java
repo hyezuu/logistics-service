@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.common.domain.UserInfoDto;
 import takeoff.logistics_service.msa.common.domain.UserRole;
+import takeoff.logistics_service.msa.product.product.application.client.CompanyClient;
+import takeoff.logistics_service.msa.product.product.application.client.HubClient;
+import takeoff.logistics_service.msa.product.product.application.client.StockClient;
+import takeoff.logistics_service.msa.product.product.application.client.UserClient;
 import takeoff.logistics_service.msa.product.product.application.dto.PaginatedResultDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PatchProductRequestDto;
 import takeoff.logistics_service.msa.product.product.application.dto.request.PostProductRequestDto;
@@ -20,6 +24,8 @@ import takeoff.logistics_service.msa.product.product.application.dto.response.Ge
 import takeoff.logistics_service.msa.product.product.application.dto.response.PatchProductResponseDto;
 import takeoff.logistics_service.msa.product.product.application.dto.response.PostProductResponseDto;
 import takeoff.logistics_service.msa.product.product.application.dto.response.PostStockResponseDto;
+import takeoff.logistics_service.msa.product.product.application.event.ProductCreatedEvent;
+import takeoff.logistics_service.msa.product.product.application.event.ProductEventPublisher;
 import takeoff.logistics_service.msa.product.product.application.exception.ProductBusinessException;
 import takeoff.logistics_service.msa.product.product.domain.entity.Product;
 import takeoff.logistics_service.msa.product.product.domain.repository.ProductRepository;
@@ -34,6 +40,16 @@ public class ProductServiceImpl implements ProductService {
 	private final HubClient hubClient;
 	private final CompanyClient companyClient;
 	private final UserClient userClient;
+	private final ProductEventPublisher eventPublisher;
+
+	@Override
+	public void create(PostProductRequestDto requestDto, UserInfoDto userInfo) {
+		validateRequest(requestDto.hubId(), requestDto.companyId());
+		validateAccessToCompany(requestDto.companyId(), userInfo);
+		Product product = getSavedProduct(requestDto);
+		eventPublisher.publish(ProductCreatedEvent
+			.from(PostStockRequestDto.of(product.getId(), requestDto)));
+	}
 
 	@Override
 	public PostProductResponseDto saveProduct(
@@ -65,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
 		PostProductRequestDto requestDto, Product savedProduct) {
 		try {
 			return stockClient.saveStock(
-				PostStockRequestDto.from(savedProduct.getId(), requestDto));
+				PostStockRequestDto.of(savedProduct.getId(), requestDto));
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			productRepository.delete(savedProduct);

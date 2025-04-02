@@ -33,9 +33,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import takeoff.logistics_service.msa.product.product.application.dto.response.PostStockResponseDto;
-import takeoff.logistics_service.msa.product.product.application.service.CompanyClient;
-import takeoff.logistics_service.msa.product.product.application.service.HubClient;
-import takeoff.logistics_service.msa.product.product.application.service.StockClient;
+import takeoff.logistics_service.msa.product.product.application.client.CompanyClient;
+import takeoff.logistics_service.msa.product.product.application.client.HubClient;
+import takeoff.logistics_service.msa.product.product.application.client.StockClient;
 import takeoff.logistics_service.msa.product.product.presentation.dto.request.PatchProductRequest;
 import takeoff.logistics_service.msa.product.product.presentation.dto.request.PostProductRequest;
 
